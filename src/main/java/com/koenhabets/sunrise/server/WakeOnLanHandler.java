@@ -3,16 +3,15 @@ package com.koenhabets.sunrise.server;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import java.io.*;
+import java.net.*;
 
 /**
  * Created by koenh on 9-8-2016.
  */
 public class WakeOnLanHandler implements HttpHandler {
     public static final int PORT = 9;
+    String response;
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String ipStr = "192.168.2.45";
@@ -33,10 +32,20 @@ public class WakeOnLanHandler implements HttpHandler {
             socket.send(packet);
             socket.close();
 
+            response = "Wake-on-LAN packet sent.";
             System.out.println("Wake-on-LAN packet sent.");
+            httpExchange.sendResponseHeaders(200, response.length());
+            OutputStream os = httpExchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
         }
         catch (Exception e) {
             System.out.println("Failed to send Wake-on-LAN packet: + e");
+            response = "Failed to send Wake-on-LAN packet: + e";
+            httpExchange.sendResponseHeaders(500, response.length());
+            OutputStream os = httpExchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
             System.exit(1);
         }
     }
