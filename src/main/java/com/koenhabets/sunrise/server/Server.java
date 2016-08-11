@@ -16,6 +16,7 @@ public class Server {
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/sunset-sunrise", new SunSetHandler());
         server.createContext("/wol", new WakeOnLanHandler());
+        server.createContext("/weather", new WeatherHandler());
         server.start();
         System.out.println("Server started.");
     }
