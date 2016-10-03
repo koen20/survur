@@ -5,9 +5,6 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-/**
- * Created by koenh on 8-5-2016.
- */
 public class Server {
 
     public static void main(String args[]) throws IOException {
@@ -17,6 +14,7 @@ public class Server {
         server.createContext("/sunset-sunrise", new SunSetHandler());
         server.createContext("/wol", new WakeOnLanHandler());
         server.createContext("/weather", new WeatherHandler());
+        server.createContext("/temp", new TemperatureHandler());
         server.start();
         System.out.println("Server started.");
     }

@@ -10,9 +10,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
-/**
- * Created by koenh on 8-5-2016.
- */
 public class SunSetHandler implements HttpHandler {
     private final String USER_AGENT = "Mozilla/5.0";
     String sunset;
@@ -47,6 +44,7 @@ public class SunSetHandler implements HttpHandler {
         int sunrise1 = Integer.parseInt(Spart1) + 2;
         int sunrise2 = Integer.parseInt(Spart2);
         response += ";" + sunrise1 + "." + sunrise2;
+        response += ";200";
 
         he.sendResponseHeaders(200, response.length());
         OutputStream os = he.getResponseBody();

@@ -33,8 +33,6 @@ public class WeatherHandler implements HttpHandler {
         try {
             jsonObject = new JSONObject(data);
             JSONObject jsonMain = jsonObject.getJSONObject("main");
-            //JSONArray jsonArray = jsonObject.getJSONArray("weather");
-            //JSONObject jsonWeather = jsonArray.getJSONObject(0);
             temp = jsonMain.getInt("temp");
         } catch (JSONException e) {
             e.printStackTrace();

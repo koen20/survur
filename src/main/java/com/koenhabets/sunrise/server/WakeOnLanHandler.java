@@ -6,12 +6,9 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.*;
 import java.net.*;
 
-/**
- * Created by koenh on 9-8-2016.
- */
 public class WakeOnLanHandler implements HttpHandler {
     public static final int PORT = 9;
-    String response;
+    private String response;
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String ipStr = "192.168.2.45";
