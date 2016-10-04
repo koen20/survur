@@ -15,6 +15,8 @@ public class Server {
         server.createContext("/wol", new WakeOnLanHandler());
         server.createContext("/weather", new WeatherHandler());
         server.createContext("/temp", new TemperatureHandler());
+        server.createContext("/voice", new VoiceHandler());
+        server.createContext("/action", new ActionHandler());
         server.start();
         System.out.println("Server started.");
     }
