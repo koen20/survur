@@ -17,7 +17,7 @@ public class ActionHandler implements HttpHandler {
         if (Objects.equals(action, "Wake-up")){
             try {
                 int temp = WeatherHandler.getTemp();
-                VoiceHandler.sendPost("Goeiemorgen Koen. Het is "+ temp + "graden buiten.", "voice");
+                VoiceHandler.sendPost("Goedemorgen Koen. Het is "+ temp + " graden buiten.", "voice");
             } catch (Exception e) {
                 e.printStackTrace();
             }

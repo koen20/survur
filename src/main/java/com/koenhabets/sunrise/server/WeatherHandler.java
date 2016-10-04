@@ -8,48 +8,24 @@ import org.json.JSONObject;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
 
-/**
- * Created by koenh on 8/11/2016.
- */
 public class WeatherHandler implements HttpHandler {
-    String data;
     String response;
+    static int hour = 25;
+    static int minute = 65;
+    static int temp = 500;
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        int temp = 400;
         System.out.println("Weather request received");
-        try {
-            data = sendWeatherPost();
-        } catch (Exception e) {
-            e.printStackTrace();
-            response = "500";
-            httpExchange.sendResponseHeaders(500, response.length());
-            OutputStream os = httpExchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        }
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(data);
-            JSONObject jsonMain = jsonObject.getJSONObject("main");
-            temp = jsonMain.getInt("temp");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            response = "500";
-            httpExchange.sendResponseHeaders(500, response.length());
-            OutputStream os = httpExchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        }
-        response = temp + "";
+        response = getTemp() + "";
         httpExchange.sendResponseHeaders(200, response.length());
         OutputStream os = httpExchange.getResponseBody();
         os.write(response.getBytes());
         os.close();
     }
     public static String sendWeatherPost() throws Exception {
-        String url = "http://api.openweathermap.org/data/2.5/weather?q=Landgraaf,nl&appid=4f2475b85b4857b421da5d7cd87931d4&units=metric";
+        String url = "http://api.openweathermap.org/data/2.5/weather?q=Landgraaf,nl&appid="+KeyHolder.getWeatherKey()+"&units=metric";
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -80,23 +56,38 @@ public class WeatherHandler implements HttpHandler {
         return response.toString();
     }
     public static int getTemp(){
-        int temp = 400;
-        try {
-            JSONObject jsonObject = null;
-            String d = null;
+        Calendar calendar = Calendar.getInstance();
+        int hourc = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutec = calendar.get(Calendar.MINUTE);
+        int minuted = minutec - minute;
+        if(hourc != hour ||minuted >= 15){
+            getTime();
             try {
-                d = sendWeatherPost();
+                try {
+                    JSONObject jsonObject = null;
+                    String d = null;
+                    try {
+                        d = sendWeatherPost();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    jsonObject = new JSONObject(d);
+                    JSONObject jsonMain = null;
+                    jsonMain = jsonObject.getJSONObject("main");
+                    temp = jsonMain.getInt("temp");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            jsonObject = new JSONObject(d);
-            JSONObject jsonMain = null;
-            jsonMain = jsonObject.getJSONObject("main");
-            temp = jsonMain.getInt("temp");
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } else {
         }
-
         return temp;
+    }
+    public static void getTime(){
+        Calendar calendar = Calendar.getInstance();
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        minute = calendar.get(Calendar.MINUTE);
     }
 }

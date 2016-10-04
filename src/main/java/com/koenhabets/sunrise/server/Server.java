@@ -18,6 +18,5 @@ public class Server {
         server.createContext("/voice", new VoiceHandler());
         server.createContext("/action", new ActionHandler());
         server.start();
-        System.out.println("Server started.");
     }
 }
