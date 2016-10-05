@@ -17,6 +17,7 @@ public class Server {
         server.createContext("/temp", new TemperatureHandler());
         server.createContext("/voice", new VoiceHandler());
         server.createContext("/action", new ActionHandler());
+        server.createContext("/calendar", new CalendarHandler());
         server.start();
     }
 }

@@ -7,24 +7,22 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Objects;
 
-public class ActionHandler implements HttpHandler {
-    String response = "sent";
+public class CalendarHandler implements HttpHandler {
+    static String response = "";
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String parm = httpExchange.getRequestURI().getQuery();
         String[] parts = parm.split("=");
-        String action = parts[1];
-        if (Objects.equals(action, "Wake-up")){
-            try {
-                int temp = WeatherHandler.getTemp();
-                VoiceHandler.sendPost("Goedemorgen Koen. Het is "+ temp + " graden buiten. Je volgende afspraak is: "+ CalendarHandler.getResponse(), "voice");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if(Objects.equals(parts[0], "calendar")){
+            response = parts[1];
         }
+
         httpExchange.sendResponseHeaders(200, response.length());
         OutputStream os = httpExchange.getResponseBody();
         os.write(response.getBytes());
         os.close();
+    }
+    static String getResponse(){
+        return response;
     }
 }
