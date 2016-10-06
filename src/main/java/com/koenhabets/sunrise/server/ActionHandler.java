@@ -20,6 +20,7 @@ public class ActionHandler implements HttpHandler {
             try {
                 int temp = WeatherHandler.getTemp();
                 VoiceHandler.sendPost("Goedemorgen Koen. Het is "+ temp + " graden buiten. Je volgende afspraak is: "+ CalendarHandler.getResponse(), "voice");
+                VoiceHandler.sendPost("scholica","app");
             } catch (Exception e) {
                 e.printStackTrace();
             }
