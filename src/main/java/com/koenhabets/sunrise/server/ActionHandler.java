@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class ActionHandler implements HttpHandler {
     String response = "sent";
-    int code = 200;
+    private int code = 200;
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String parm = httpExchange.getRequestURI().getQuery();
