@@ -18,6 +18,7 @@ public class Server {
         server.createContext("/voice", new VoiceHandler());
         server.createContext("/action", new ActionHandler());
         server.createContext("/calendar", new CalendarHandler());
+        server.createContext("/response", new ResponseHandler());
         server.start();
     }
 }
