@@ -5,12 +5,12 @@ import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Calendar;
 import java.util.Objects;
 
 public class ActionHandler implements HttpHandler {
     String response = "sent";
     private int code = 200;
+    static boolean sleeping = false;
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String parm = httpExchange.getRequestURI().getQuery();
@@ -25,7 +25,8 @@ public class ActionHandler implements HttpHandler {
                 e.printStackTrace();
             }
         } else if(Objects.equals(action, "Prep-Sleep")){
-                LcdHandler.disableBacklight();
+                //LcdHandler.disableBacklight();
+                sleeping = true;
                 try {
                     //// TODO: 10/5/2016 Controle of ik het eerste uur vrij heb
                     VoiceHandler.sendPost("Welterusten. Wil je morgen douchen?;Prep-Sleep", "voice");

@@ -8,20 +8,12 @@ import java.io.OutputStream;
 import java.util.Calendar;
 
 public class TemperatureHandler implements HttpHandler {
-    String response = "500";
-    int hour = 25;
-    int minute = 65;
+    static String response = "500";
+    static int hour = 25;
+    static int minute = 65;
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        System.out.println("Temp request received");
-        Calendar calendar = Calendar.getInstance();
-        int hourc = calendar.get(Calendar.HOUR_OF_DAY);
-        int minutec = calendar.get(Calendar.MINUTE);
-        if(hourc != hour || minutec != minute){
-            getTime();
-            response = getTemp();
-        } else {
-        }
+        response = getTemp();
 
         httpExchange.sendResponseHeaders(200, response.length());
         OutputStream os = httpExchange.getResponseBody();
@@ -29,12 +21,21 @@ public class TemperatureHandler implements HttpHandler {
         os.close();
     }
     public static String getTemp(){
-        System.out.println("Getting inside temp");
-        ExecuteShellCommand com = new ExecuteShellCommand();
-        String response = com.executeCommand("bash /var/www/html/cgi-bin/temp.py");
+        Calendar calendar = Calendar.getInstance();
+        int hourc = calendar.get(Calendar.HOUR_OF_DAY);
+        int minutec = calendar.get(Calendar.MINUTE);
+        int minuted = minutec - minute;
+        if(hourc != hour ||minuted >= 15){
+            getTime();
+            ExecuteShellCommand com = new ExecuteShellCommand();
+            response = com.executeCommand("bash /var/www/html/cgi-bin/temp.py");
+        } else {
+        }
+
+
         return response;
     }
-    public void getTime(){
+    public static void getTime(){
         Calendar calendar = Calendar.getInstance();
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
