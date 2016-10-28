@@ -19,6 +19,7 @@ public class Server {
         server.createContext("/action", new ActionHandler());
         server.createContext("/calendar", new CalendarHandler());
         server.createContext("/response", new ResponseHandler());
+        server.createContext("/lcd", new LcdHandler());
         server.start();
     }
 }

@@ -25,7 +25,7 @@ public class ActionHandler implements HttpHandler {
                 e.printStackTrace();
             }
         } else if(Objects.equals(action, "Prep-Sleep")){
-
+                LcdHandler.disableBacklight();
                 try {
                     //// TODO: 10/5/2016 Controle of ik het eerste uur vrij heb
                     VoiceHandler.sendPost("Welterusten. Wil je morgen douchen?;Prep-Sleep", "voice");
