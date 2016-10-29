@@ -17,15 +17,16 @@ public class ActionHandler implements HttpHandler {
         String[] parts = parm.split("=");
         String action = parts[1];
         if (Objects.equals(action, "Wake-up")){
+            sleeping = false;
             try {
                 int temp = WeatherHandler.getTemp();
                 VoiceHandler.sendPost("Goedemorgen Koen. Het is "+ temp + " graden buiten. Je volgende afspraak is: "+ CalendarHandler.getResponse(), "voice");
-                VoiceHandler.sendPost("scholica","app");
+                //VoiceHandler.sendPost("scholica","app");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if(Objects.equals(action, "Prep-Sleep")){
-                //LcdHandler.disableBacklight();
+                LcdHandler.disableBacklight();
                 sleeping = true;
                 try {
                     //// TODO: 10/5/2016 Controle of ik het eerste uur vrij heb
