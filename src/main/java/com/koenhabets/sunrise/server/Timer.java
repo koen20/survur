@@ -6,10 +6,17 @@ import java.util.TimerTask;
 
 public class timer extends TimerTask {
     int d = 0;
+    int counter = 500;
 
     @Override
     public void run() {
-        if (!ActionHandler.sleeping) {
+        counter++;
+        if (!ActionHandler.inside && counter >= 499) {
+            counter = 0;
+        } else if (ActionHandler.inside) {
+            counter = 500;
+        }
+        if (!ActionHandler.sleeping && ActionHandler.inside) {
             Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minute = calendar.get(Calendar.MINUTE);
@@ -23,6 +30,9 @@ public class timer extends TimerTask {
                 d = 0;
             }
 
+        }
+        if (counter == 4) {
+            LcdHandler.disableBacklight();
         }
     }
 
