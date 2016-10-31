@@ -17,7 +17,7 @@ public class calendarScholica {
     static String schedule;
     public static int count;
 
-    public static void getCalendar() throws Exception {
+    public static String getCalendar(int day) throws Exception {
         String url = "https://api.scholica.com/2.0/communities/1/calendar/schedule";
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -27,7 +27,7 @@ public class calendarScholica {
         //con.setRequestProperty("User-Agent", USER_AGENT);
         //con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-        String urlParameters = "token=" + requestToken.requestToken + "&time=" + getStartOfDayInMillis() / 1000;
+        String urlParameters = "token=" + requestToken.requestToken + "&time=" + getStartOfDayInMillis(day) / 1000;
 
         // Send post request
         con.setDoOutput(true);
@@ -46,11 +46,19 @@ public class calendarScholica {
         }
         in.close();
         schedule = response.toString();
+        return schedule;
     }
 
     public static void checkSchedule() throws JSONException {
         try {
-            getCalendar();
+            requestToken.requestToken();
+            Calendar cal = Calendar.getInstance();
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            day++;
+            if (day > 31) {
+                day = 1;
+            }
+            getCalendar(day);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,13 +83,26 @@ public class calendarScholica {
         }
     }
 
-    public static long getStartOfDayInMillis() {
-        Calendar cal = Calendar.getInstance();
-        int currentDay = cal.get(Calendar.DAY_OF_MONTH);
-        currentDay = currentDay + 1;
-        if (currentDay > 31) {
-            currentDay = 1;
+    public static String getNextSubject() throws JSONException {
+        try {
+            requestToken.requestToken();
+            Calendar cal = Calendar.getInstance();
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            schedule = getCalendar(day);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        JSONObject jsonObject = new JSONObject(schedule);
+        JSONObject jsonMain = jsonObject.getJSONObject("result");
+        JSONArray jsonArray = jsonMain.getJSONArray("items");
+
+        JSONObject vak = jsonArray.getJSONObject(0);
+        String title;
+        title = vak.getString("title");
+        return title.substring(2);
+    }
+
+    public static long getStartOfDayInMillis(int currentDay) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);

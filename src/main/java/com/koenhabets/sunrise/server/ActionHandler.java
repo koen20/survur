@@ -1,5 +1,6 @@
 package com.koenhabets.sunrise.server;
 
+import com.koenhabets.sunrise.server.ScholicaApi.calendarScholica;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -22,7 +23,7 @@ public class ActionHandler implements HttpHandler {
             sleeping = false;
             try {
                 int temp = WeatherHandler.getTemp();
-                VoiceHandler.sendPost("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse(), "voice");
+                VoiceHandler.sendPost("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse()+". Je hebt dalijk: "+ calendarScholica.getNextSubject(), "voice");
                 //VoiceHandler.sendPost("scholica","app");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -31,7 +32,6 @@ public class ActionHandler implements HttpHandler {
             LcdHandler.disableBacklight();
             sleeping = true;
             try {
-                //// TODO: 10/5/2016 Controle of ik het eerste uur vrij heb
                 VoiceHandler.sendPost("Welterusten. Wil je morgen douchen?;Prep-Sleep", "voice");
                 VoiceHandler.sendPost("", "response");
             } catch (Exception e) {
