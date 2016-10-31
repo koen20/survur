@@ -46,11 +46,11 @@ public class ActionHandler implements HttpHandler {
                 e.printStackTrace();
             }
         } else if (Objects.equals(action, "Enter")) {
-            if(!sleeping) {
+            if (!sleeping) {
                 inside = true;
             }
         } else if (Objects.equals(action, "Leave")) {
-            if(!sleeping) {
+            if (!sleeping) {
                 inside = false;
             }
         }

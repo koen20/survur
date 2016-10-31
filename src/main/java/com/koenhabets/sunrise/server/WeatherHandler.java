@@ -15,6 +15,7 @@ public class WeatherHandler implements HttpHandler {
     static int hour = 25;
     static int minute = 65;
     static int temp = 500;
+
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         System.out.println("Weather request received");
@@ -24,8 +25,9 @@ public class WeatherHandler implements HttpHandler {
         os.write(response.getBytes());
         os.close();
     }
+
     public static String sendWeatherPost() throws Exception {
-        String url = "http://api.openweathermap.org/data/2.5/weather?q=Landgraaf,nl&appid="+KeyHolder.getWeatherKey()+"&units=metric";
+        String url = "http://api.openweathermap.org/data/2.5/weather?q=Landgraaf,nl&appid=" + KeyHolder.getWeatherKey() + "&units=metric";
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -55,12 +57,13 @@ public class WeatherHandler implements HttpHandler {
 
         return response.toString();
     }
-    public static int getTemp(){
+
+    public static int getTemp() {
         Calendar calendar = Calendar.getInstance();
         int hourc = calendar.get(Calendar.HOUR_OF_DAY);
         int minutec = calendar.get(Calendar.MINUTE);
         int minuted = minutec - minute;
-        if(hourc != hour ||minuted >= 15){
+        if (hourc != hour || minuted >= 15) {
             getTime();
             try {
                 try {
@@ -85,7 +88,8 @@ public class WeatherHandler implements HttpHandler {
         }
         return temp;
     }
-    public static void getTime(){
+
+    public static void getTime() {
         Calendar calendar = Calendar.getInstance();
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);

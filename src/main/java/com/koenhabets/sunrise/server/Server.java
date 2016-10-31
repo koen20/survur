@@ -1,5 +1,6 @@
 package com.koenhabets.sunrise.server;
 
+import com.koenhabets.sunrise.server.ScholicaApi.calendarScholica;
 import com.koenhabets.sunrise.server.ScholicaApi.requestToken;
 import com.sun.net.httpserver.HttpServer;
 
@@ -22,11 +23,6 @@ public class Server {
         server.createContext("/response", new ResponseHandler());
         server.createContext("/lcd", new LcdHandler());
         server.start();
-        timer.main();
-        try {
-            requestToken.requestToken();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        //timer.main();
     }
 }

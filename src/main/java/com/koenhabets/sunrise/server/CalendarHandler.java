@@ -11,11 +11,12 @@ import java.util.Objects;
 
 public class CalendarHandler implements HttpHandler {
     static String response = "";
+
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String parm = httpExchange.getRequestURI().getQuery();
         String[] parts = parm.split("=");
-        if(Objects.equals(parts[0], "calendar")){
+        if (Objects.equals(parts[0], "calendar")) {
             response = parts[1];
         }
 
@@ -24,12 +25,13 @@ public class CalendarHandler implements HttpHandler {
         os.write(response.getBytes());
         os.close();
     }
-    static String getResponse(){
+
+    static String getResponse() {
         return response;
     }
 
     public static String setAlarm(String hour, String minute) throws Exception {
-        String url = "https://autoremotejoaomgcd.appspot.com/sendmessage?key=" + KeyHolder.getArKey2() + "&message=" + "alarm" + ";" + hour+";"+minute;
+        String url = "https://autoremotejoaomgcd.appspot.com/sendmessage?key=" + KeyHolder.getArKey2() + "&message=" + "alarm" + ";" + hour + ";" + minute;
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
