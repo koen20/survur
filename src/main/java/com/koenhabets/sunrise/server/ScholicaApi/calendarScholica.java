@@ -83,7 +83,7 @@ public class calendarScholica {
         }
     }
 
-    public static String getNextSubject() throws JSONException {
+    public static String getNextSubject() {
         try {
             requestToken.requestToken();
             Calendar cal = Calendar.getInstance();
@@ -92,13 +92,20 @@ public class calendarScholica {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        JSONObject jsonObject = new JSONObject(schedule);
-        JSONObject jsonMain = jsonObject.getJSONObject("result");
-        JSONArray jsonArray = jsonMain.getJSONArray("items");
+        JSONObject jsonObject = null;
+        String title = "geen les";
+        try {
+            jsonObject = new JSONObject(schedule);
 
-        JSONObject vak = jsonArray.getJSONObject(0);
-        String title;
-        title = vak.getString("title");
+            JSONObject jsonMain = jsonObject.getJSONObject("result");
+            JSONArray jsonArray = jsonMain.getJSONArray("items");
+
+            JSONObject vak = jsonArray.getJSONObject(0);
+
+            title = vak.getString("title");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return title.substring(2);
     }
 

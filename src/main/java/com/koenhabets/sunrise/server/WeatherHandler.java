@@ -63,7 +63,7 @@ public class WeatherHandler implements HttpHandler {
         int hourc = calendar.get(Calendar.HOUR_OF_DAY);
         int minutec = calendar.get(Calendar.MINUTE);
         int minuted = minutec - minute;
-        if (hourc != hour || minuted >= 15) {
+        if (hourc != hour || minuted >= 20) {
             getTime();
             try {
                 try {

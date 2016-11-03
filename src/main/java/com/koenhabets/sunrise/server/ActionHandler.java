@@ -23,7 +23,8 @@ public class ActionHandler implements HttpHandler {
             sleeping = false;
             try {
                 int temp = WeatherHandler.getTemp();
-                VoiceHandler.sendPost("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse()+". Je hebt dalijk: "+ calendarScholica.getNextSubject(), "voice");
+                VoiceHandler.sendPost("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse() +
+                        ". Je hebt dalijk: " + calendarScholica.getNextSubject(), "voice");
                 //VoiceHandler.sendPost("scholica","app");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -45,6 +46,8 @@ public class ActionHandler implements HttpHandler {
                 code = 500;
                 e.printStackTrace();
             }
+        } else if (Objects.equals(action, "Sleep")) {
+            sleeping = true;
         } else if (Objects.equals(action, "Enter")) {
             if (!sleeping) {
                 inside = true;
