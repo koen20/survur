@@ -23,43 +23,56 @@ public class ActionHandler implements HttpHandler {
             sleeping = false;
             try {
                 int temp = WeatherHandler.getTemp();
-                VoiceHandler.sendPost("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse() +
-                        ". Je hebt dalijk: " + calendarScholica.getNextSubject(), "voice");
-                //VoiceHandler.sendPost("scholica","app");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (Objects.equals(action, "Prep-Sleep")) {
-            LcdHandler.disableBacklight();
-            sleeping = true;
-            try {
-                VoiceHandler.sendPost("Welterusten. Wil je morgen douchen?;Prep-Sleep", "voice");
-                VoiceHandler.sendPost("", "response");
-            } catch (Exception e) {
-                code = 500;
-                e.printStackTrace();
-            }
-            try {
-                VoiceHandler.sendPost("Welterusten. Wil je morgen douchen?;Prep-Sleep", "voice");
-                VoiceHandler.sendPost("", "response");
-            } catch (Exception e) {
-                code = 500;
-                e.printStackTrace();
-            }
-        } else if (Objects.equals(action, "Sleep")) {
-            sleeping = true;
-        } else if (Objects.equals(action, "Enter")) {
-            if (!sleeping) {
-                inside = true;
-            }
-        } else if (Objects.equals(action, "Leave")) {
-            if (!sleeping) {
-                inside = false;
-            }
+                String nextSubject = calendarScholica.getNextSubject();
+                if (Objects.equals(nextSubject, "geen les")) {
+                    VoiceHandler.sendPost("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse(), "voice");
+                } else {
+                    VoiceHandler.sendPost("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse() +
+                            ". Je hebt dalijk: " + nextSubject, "voice");
+                }
+            //VoiceHandler.sendPost("scholica","app");
+        } catch(Exception e){
+            e.printStackTrace();
         }
-        httpExchange.sendResponseHeaders(code, response.length());
-        OutputStream os = httpExchange.getResponseBody();
+    } else if(Objects.equals(action,"Prep-Sleep"))
+
+    {
+        LcdHandler.disableBacklight();
+        sleeping = true;
+        try {
+            VoiceHandler.sendPost("Welterusten. Wil je morgen douchen?;Prep-Sleep", "voice");
+            VoiceHandler.sendPost("", "response");
+        } catch (Exception e) {
+            code = 500;
+            e.printStackTrace();
+        }
+        try {
+            VoiceHandler.sendPost("Welterusten. Wil je morgen douchen?;Prep-Sleep", "voice");
+            VoiceHandler.sendPost("", "response");
+        } catch (Exception e) {
+            code = 500;
+            e.printStackTrace();
+        }
+    } else if(Objects.equals(action,"Sleep"))
+
+    {
+        sleeping = true;
+    } else if(Objects.equals(action,"Enter"))
+
+    {
+        if (!sleeping) {
+            inside = true;
+        }
+    } else if(Objects.equals(action,"Leave"))
+
+    {
+        if (!sleeping) {
+            inside = false;
+        }
+    }
+        httpExchange.sendResponseHeaders(code,response.length());
+    OutputStream os = httpExchange.getResponseBody();
         os.write(response.getBytes());
         os.close();
-    }
+}
 }
