@@ -25,7 +25,7 @@ public class TemperatureHandler implements HttpHandler {
         int hourc = calendar.get(Calendar.HOUR_OF_DAY);
         int minutec = calendar.get(Calendar.MINUTE);
         int minuted = minutec - minute;
-        if(hourc != hour ||minuted >= 15){
+        if(hourc != hour ||minuted >= 10){
             getTime();
             ExecuteShellCommand com = new ExecuteShellCommand();
             response = com.executeCommand("bash /var/www/html/cgi-bin/temp.py");
