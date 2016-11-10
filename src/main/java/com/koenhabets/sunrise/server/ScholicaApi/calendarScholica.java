@@ -16,6 +16,8 @@ import java.util.Objects;
 public class calendarScholica {
     static String schedule;
     public static int count;
+    static String nextSubject;
+    static int day;
 
     public static String getCalendar(int day) throws Exception {
         String url = "https://api.scholica.com/2.0/communities/1/calendar/schedule";
@@ -84,6 +86,18 @@ public class calendarScholica {
     }
 
     public static String getNextSubject() {
+        Calendar calendarc = Calendar.getInstance();
+        int dayc = calendarc.get(Calendar.DAY_OF_MONTH);
+        if (dayc != day) {
+            nextSubject = getSubject();
+            getTime();
+        }
+        return nextSubject;
+    }
+
+
+    public static String getSubject() {
+
         try {
             requestToken.requestToken();
             Calendar cal = Calendar.getInstance();
@@ -117,5 +131,9 @@ public class calendarScholica {
         calendar.set(Calendar.MILLISECOND, 0);
         calendar.set(Calendar.DAY_OF_MONTH, currentDay);
         return calendar.getTimeInMillis();
+    }
+    public static void getTime(){
+        Calendar cale = Calendar.getInstance();
+        day = cale.get(Calendar.DAY_OF_MONTH);
     }
 }

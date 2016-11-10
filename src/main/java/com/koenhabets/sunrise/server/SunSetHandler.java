@@ -16,7 +16,6 @@ public class SunSetHandler implements HttpHandler {
     String sunrise;
     @Override
     public void handle(HttpExchange he) throws IOException {
-        System.out.println("Sunset-sunrise request received.");
         String response = null;
         try {
             response = sendPost();

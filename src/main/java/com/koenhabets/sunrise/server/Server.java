@@ -20,6 +20,7 @@ public class Server {
         server.createContext("/calendar", new CalendarHandler());
         server.createContext("/response", new ResponseHandler());
         server.createContext("/lcd", new LcdHandler());
+        server.createContext("/info", new InfoHandler());
         server.start();
         timer.main();
     }

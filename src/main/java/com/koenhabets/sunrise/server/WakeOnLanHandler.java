@@ -30,7 +30,6 @@ public class WakeOnLanHandler implements HttpHandler {
             socket.close();
 
             response = "Wake-on-LAN packet sent.";
-            System.out.println("Wake-on-LAN packet sent.");
             httpExchange.sendResponseHeaders(200, response.length());
             OutputStream os = httpExchange.getResponseBody();
             os.write(response.getBytes());
