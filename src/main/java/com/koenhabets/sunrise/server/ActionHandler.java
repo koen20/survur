@@ -23,7 +23,7 @@ public class ActionHandler implements HttpHandler {
             sleeping = false;
             try {
                 int temp = WeatherHandler.getTemp();
-                String nextSubject = calendarScholica.getNextSubject();
+                String nextSubject = calendarScholica.nextSubject;
                 if (Objects.equals(nextSubject, "geen les")) {
                     VoiceHandler.sendPost("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse(), "voice");
                 } else {

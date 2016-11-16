@@ -16,7 +16,7 @@ import java.util.Objects;
 public class calendarScholica {
     static String schedule;
     public static int count;
-    static String nextSubject;
+    public static String nextSubject;
     static int day;
 
     public static String getCalendar(int day) throws Exception {
@@ -85,14 +85,23 @@ public class calendarScholica {
         }
     }
 
-    public static String getNextSubject() {
+    public static void update() {
         Calendar calendarc = Calendar.getInstance();
         int dayc = calendarc.get(Calendar.DAY_OF_MONTH);
         if (dayc != day) {
+            try {
+                requestToken.requestToken();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             nextSubject = getSubject();
+            try {
+                checkSchedule();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             getTime();
         }
-        return nextSubject;
     }
 
 
@@ -101,7 +110,13 @@ public class calendarScholica {
         try {
             requestToken.requestToken();
             Calendar cal = Calendar.getInstance();
-            int day = cal.get(Calendar.DAY_OF_MONTH);
+            int day;
+            if(cal.get(Calendar.HOUR_OF_DAY ) >= 16){
+                day = cal.get(Calendar.DAY_OF_MONTH) + 1;
+            } else {
+                day = cal.get(Calendar.DAY_OF_MONTH);
+            }
+
             schedule = getCalendar(day);
         } catch (Exception e) {
             e.printStackTrace();

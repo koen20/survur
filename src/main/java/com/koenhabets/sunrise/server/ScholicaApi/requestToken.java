@@ -9,11 +9,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by koenh on 31-10-2016.
- */
 public class requestToken {
     static String requestToken;
+
     public static void requestToken() throws Exception {
         String url = "https://api.scholica.com/2.0/communities/1/authenticate";
         URL obj = new URL(url);
@@ -47,6 +45,5 @@ public class requestToken {
         JSONObject responsetoken = new JSONObject(response.toString());
         JSONObject jsonMain = responsetoken.getJSONObject("result");
         requestToken = jsonMain.getString("request_token");
-        System.out.println(requestToken);
     }
 }

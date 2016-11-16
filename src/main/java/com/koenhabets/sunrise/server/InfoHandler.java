@@ -14,13 +14,15 @@ public class InfoHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         JSONObject jo = new JSONObject();
+        calendarScholica.update();
         try {
             jo.put("inside-temp", TemperatureHandler.getTemp());
             jo.put("outside-temp", WeatherHandler.getTemp());
             jo.put("sleeping", ActionHandler.sleeping);
             jo.put("inside", ActionHandler.inside);
             jo.put("next-appointment", CalendarHandler.getResponse());
-            jo.put("nextSubject", calendarScholica.getNextSubject());
+            jo.put("nextSubject", calendarScholica.nextSubject);
+            jo.put("vrij", calendarScholica.count);
         } catch (JSONException e) {
             e.printStackTrace();
         }
