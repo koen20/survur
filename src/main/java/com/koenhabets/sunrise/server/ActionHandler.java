@@ -53,10 +53,9 @@ public class ActionHandler implements HttpHandler {
                 code = 500;
                 e.printStackTrace();
             }
-        } else if (Objects.equals(action, "Sleep"))
-
-        {
+        } else if (Objects.equals(action, "Sleep")) {
             sleeping = true;
+            LcdHandler.disableBacklight();
         } else if (Objects.equals(action, "Enter"))
 
         {

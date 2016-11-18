@@ -52,6 +52,7 @@ public class calendarScholica {
     }
 
     public static void checkSchedule() throws JSONException {
+        count = 0;
         try {
             requestToken.requestToken();
             Calendar cal = Calendar.getInstance();
