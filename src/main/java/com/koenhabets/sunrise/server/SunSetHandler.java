@@ -33,14 +33,14 @@ public class SunSetHandler implements HttpHandler {
         String[] parts = sunset.split(":");
         String part1 = parts[0];
         String part2 = parts[1];
-        int sunset1 = Integer.parseInt(part1) + 14;
+        int sunset1 = Integer.parseInt(part1) + 13;
         int sunset2 = Integer.parseInt(part2);
         response = sunset1 + "." + sunset2;
 
         String[] Spart = sunrise.split(":");
         String Spart1 = Spart[0];
         String Spart2 = Spart[1];
-        int sunrise1 = Integer.parseInt(Spart1) + 2;
+        int sunrise1 = Integer.parseInt(Spart1) + 1;
         int sunrise2 = Integer.parseInt(Spart2);
         response += ";" + sunrise1 + "." + sunrise2;
         response += ";200";
