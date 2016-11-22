@@ -6,6 +6,9 @@ import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ActionHandler implements HttpHandler {
@@ -30,41 +33,40 @@ public class ActionHandler implements HttpHandler {
                     VoiceHandler.sendPost("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse() +
                             ". Je hebt dalijk: " + nextSubject, "voice");
                 }
-                //VoiceHandler.sendPost("scholica","app");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (Objects.equals(action, "Prep-Sleep"))
-
-        {
+        } else if (Objects.equals(action, "Prep-Sleep")) {
             LcdHandler.disableBacklight();
             sleeping = true;
-            try {
-                VoiceHandler.sendPost("Welterusten. Wil je morgen douchen?;Prep-Sleep", "voice");
-                VoiceHandler.sendPost("", "response");
-            } catch (Exception e) {
-                code = 500;
-                e.printStackTrace();
-            }
-            try {
-                VoiceHandler.sendPost("Welterusten. Wil je morgen douchen?;Prep-Sleep", "voice");
-                VoiceHandler.sendPost("", "response");
-            } catch (Exception e) {
-                code = 500;
-                e.printStackTrace();
+            String weekDay;
+            SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
+            Calendar cal = Calendar.getInstance();
+            weekDay = dayFormat.format(cal.getTime());
+            if (!Objects.equals(weekDay, "Saturday") || !Objects.equals(weekDay, "Sunday")) {
+                try {
+                    VoiceHandler.sendPost("Welterusten. Wil je morgen douchen?;Prep-Sleep", "voice");
+                    VoiceHandler.sendPost("", "response");
+                } catch (Exception e) {
+                    code = 500;
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    VoiceHandler.sendPost("Welterusten.", "voice");
+                } catch (Exception e) {
+                    code = 500;
+                    e.printStackTrace();
+                }
             }
         } else if (Objects.equals(action, "Sleep")) {
             sleeping = true;
             LcdHandler.disableBacklight();
-        } else if (Objects.equals(action, "Enter"))
-
-        {
+        } else if (Objects.equals(action, "Enter")) {
             if (!sleeping) {
                 inside = true;
             }
-        } else if (Objects.equals(action, "Leave"))
-
-        {
+        } else if (Objects.equals(action, "Leave")) {
             if (!sleeping) {
                 inside = false;
             }
