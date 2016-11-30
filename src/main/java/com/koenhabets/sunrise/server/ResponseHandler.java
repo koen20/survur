@@ -1,13 +1,11 @@
 package com.koenhabets.sunrise.server;
 
 import com.koenhabets.sunrise.server.ScholicaApi.calendarScholica;
-import com.koenhabets.sunrise.server.ScholicaApi.requestToken;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Calendar;
 import java.util.Objects;
 
 public class ResponseHandler implements HttpHandler {
@@ -30,7 +28,7 @@ public class ResponseHandler implements HttpHandler {
                     if (calendarScholica.count == 1) {
                         CalendarHandler.setAlarm("08", "05");
                         VoiceHandler.sendPost("Oke je hebt het eerste uur vrij, het alarm gaat om 08:05", "voice");
-                    }else if (calendarScholica.count == 2) {
+                    } else if (calendarScholica.count == 2) {
                         CalendarHandler.setAlarm("09", "10");
                         VoiceHandler.sendPost("Oke je hebt het eerste en tweede uur vrij, het alarm gaat om 08:10", "voice");
                     } else {

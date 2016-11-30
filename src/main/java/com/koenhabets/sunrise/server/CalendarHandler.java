@@ -6,7 +6,6 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Objects;
 
 public class CalendarHandler implements HttpHandler {

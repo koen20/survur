@@ -3,12 +3,16 @@ package com.koenhabets.sunrise.server;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 
 public class WakeOnLanHandler implements HttpHandler {
     public static final int PORT = 9;
     private String response;
+
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String ipStr = "192.168.2.45";
@@ -34,8 +38,7 @@ public class WakeOnLanHandler implements HttpHandler {
             OutputStream os = httpExchange.getResponseBody();
             os.write(response.getBytes());
             os.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Failed to send Wake-on-LAN packet: + e");
             response = "Failed to send Wake-on-LAN packet: + e";
             httpExchange.sendResponseHeaders(500, response.length());
@@ -45,6 +48,7 @@ public class WakeOnLanHandler implements HttpHandler {
             System.exit(1);
         }
     }
+
     private static byte[] getMacBytes(String macStr) throws IllegalArgumentException {
         byte[] bytes = new byte[6];
         String[] hex = macStr.split("(\\:|\\-)");
@@ -55,8 +59,7 @@ public class WakeOnLanHandler implements HttpHandler {
             for (int i = 0; i < 6; i++) {
                 bytes[i] = (byte) Integer.parseInt(hex[i], 16);
             }
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid hex digit in MAC address.");
         }
         return bytes;

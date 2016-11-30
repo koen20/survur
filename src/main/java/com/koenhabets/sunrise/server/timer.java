@@ -8,6 +8,12 @@ public class timer extends TimerTask {
     int d = 0;
     int counter = 500;
 
+    public static void main() {
+        TimerTask timerTask = new timer();
+        Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(timerTask, 0, 30 * 1000);
+    }
+
     @Override
     public void run() {
         counter++;
@@ -29,16 +35,11 @@ public class timer extends TimerTask {
                 LcdHandler.printLcd(hour + ":" + minute, "Buiten:" + outsideTemp);
                 d = 0;
             }
-
         }
         if (counter == 4) {
             LcdHandler.disableBacklight();
         }
-    }
 
-    public static void main() {
-        TimerTask timerTask = new timer();
-        Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(timerTask, 0, 30 * 1000);
+
     }
 }

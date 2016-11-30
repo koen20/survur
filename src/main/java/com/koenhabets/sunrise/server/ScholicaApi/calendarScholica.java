@@ -112,7 +112,7 @@ public class calendarScholica {
             requestToken.requestToken();
             Calendar cal = Calendar.getInstance();
             int day;
-            if(cal.get(Calendar.HOUR_OF_DAY ) >= 16){
+            if (cal.get(Calendar.HOUR_OF_DAY) >= 16) {
                 day = cal.get(Calendar.DAY_OF_MONTH) + 1;
             } else {
                 day = cal.get(Calendar.DAY_OF_MONTH);
@@ -148,7 +148,8 @@ public class calendarScholica {
         calendar.set(Calendar.DAY_OF_MONTH, currentDay);
         return calendar.getTimeInMillis();
     }
-    public static void getTime(){
+
+    public static void getTime() {
         Calendar cale = Calendar.getInstance();
         day = cale.get(Calendar.DAY_OF_MONTH);
     }

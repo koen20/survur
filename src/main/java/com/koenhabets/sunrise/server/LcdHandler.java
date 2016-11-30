@@ -9,6 +9,7 @@ import java.io.OutputStream;
 public class LcdHandler implements HttpHandler {
     int code = 200;
     String response = "Sent";
+
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String parm = httpExchange.getRequestURI().getQuery();
@@ -20,12 +21,14 @@ public class LcdHandler implements HttpHandler {
         os.write(response.getBytes());
         os.close();
     }
-    public static void printLcd(String text, String text2){
+
+    public static void printLcd(String text, String text2) {
         ExecuteShellCommand com = new ExecuteShellCommand();
         //String response = com.executeCommand("python /home/pi/lcd2/text.py \"" + text + "\" " + "\"" + text2 + "\"");
         String response = com.executeCommand("python /home/pi/lcd2/text.py " + text + " " + text2);
     }
-    public static void disableBacklight(){
+
+    public static void disableBacklight() {
         ExecuteShellCommand com = new ExecuteShellCommand();
         String response = com.executeCommand("python /home/pi/lcd2/disablelight.py");
     }

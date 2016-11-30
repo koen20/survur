@@ -14,6 +14,7 @@ public class SunSetHandler implements HttpHandler {
     private final String USER_AGENT = "Mozilla/5.0";
     String sunset;
     String sunrise;
+
     @Override
     public void handle(HttpExchange he) throws IOException {
         String response = null;
@@ -50,6 +51,7 @@ public class SunSetHandler implements HttpHandler {
         os.write(response.getBytes());
         os.close();
     }
+
     private String sendPost() throws Exception {
 
         String url = "http://api.sunrise-sunset.org/json?lat=50.8927646&lng=6.02240852&date=today";
