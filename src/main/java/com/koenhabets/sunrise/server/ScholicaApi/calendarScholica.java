@@ -76,14 +76,14 @@ public class calendarScholica {
         title = vak.getString("title");
         lokaal = vak.getString("subtitle");
         String first = title.substring(0, 1);
-        if (!Objects.equals(first, "1") || !Objects.equals(lokaal, "Vervallen")) {
+        if (!Objects.equals(first, "1") || Objects.equals(lokaal, "Vervallen")) {
             count++;
             uur = "3";
         }
         vak = jsonArray.getJSONObject(1);
         title = vak.getString("title");
         first = title.substring(0, 1);
-        if (!Objects.equals(first, uur) && count != 0 || !Objects.equals(lokaal, "Vervallen")) {
+        if (!Objects.equals(first, uur) && count != 0 || Objects.equals(lokaal, "Vervallen")) {
             count++;
         }
     }

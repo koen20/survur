@@ -30,7 +30,7 @@ public class ResponseHandler implements HttpHandler {
                         VoiceHandler.sendPost("Oke je hebt het eerste uur vrij, het alarm gaat om 08:05", "voice");
                     } else if (calendarScholica.count == 2) {
                         CalendarHandler.setAlarm("09", "10");
-                        VoiceHandler.sendPost("Oke je hebt het eerste en tweede uur vrij, het alarm gaat om 08:10", "voice");
+                        VoiceHandler.sendPost("Oke je hebt het eerste en tweede uur vrij, het alarm gaat om 09:10", "voice");
                     } else {
                         CalendarHandler.setAlarm("07", "20");
                         VoiceHandler.sendPost("Oke, het alarm gaat om 07:20", "voice");
@@ -45,7 +45,7 @@ public class ResponseHandler implements HttpHandler {
                         VoiceHandler.sendPost("Oke je hebt het eerste uur vrij, het alarm gaat om 08:15", "voice");
                     } else if (calendarScholica.count == 2) {
                         CalendarHandler.setAlarm("09", "15");
-                        VoiceHandler.sendPost("Oke je hebt het eerste en tweede uur vrij, het alarm gaat om 08:15", "voice");
+                        VoiceHandler.sendPost("Oke je hebt het eerste en tweede uur vrij, het alarm gaat om 09:15", "voice");
                     } else {
                         CalendarHandler.setAlarm("07", "25");
                         VoiceHandler.sendPost("Oke, het alarm gaat om 07:25", "voice");
