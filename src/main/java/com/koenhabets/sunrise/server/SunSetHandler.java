@@ -1,5 +1,7 @@
 package com.koenhabets.sunrise.server;
 
+import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator;
+import com.luckycatlabs.sunrisesunset.dto.Location;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.json.JSONException;
@@ -8,6 +10,7 @@ import org.json.JSONObject;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
 
 
 public class SunSetHandler implements HttpHandler {
@@ -17,6 +20,11 @@ public class SunSetHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange he) throws IOException {
+        Location location = new Location("50.903819", "6.029882");
+        SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(location, "Nederland/Amsterdam");
+        String officialSunrise = calculator.getOfficialSunriseForDate(Calendar.getInstance());
+        String officialSunset = calculator.getOfficialSunsetForDate(Calendar.getInstance());
+
         String response = null;
         try {
             response = sendPost();
