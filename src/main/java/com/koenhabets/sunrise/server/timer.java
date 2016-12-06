@@ -11,15 +11,21 @@ public class timer extends TimerTask {
     public static void main() {
         TimerTask timerTask = new timer();
         Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(timerTask, 0, 30 * 1000);
+        timer.scheduleAtFixedRate(timerTask, 0, 3 * 1000);
     }
 
     @Override
     public void run() {
         counter++;
+        if (ActionHandler.sleeping && counter >= 499) {
+            counter = 0;
+        } else if (!ActionHandler.sleeping) {
+            counter = 500;
+        }
+
         if (!ActionHandler.inside && counter >= 499) {
             counter = 0;
-        } else if (ActionHandler.inside) {
+        } else if (ActionHandler.inside && !ActionHandler.sleeping) {
             counter = 500;
         }
         if (!ActionHandler.sleeping && ActionHandler.inside) {
@@ -36,10 +42,9 @@ public class timer extends TimerTask {
                 d = 0;
             }
         }
-        if (counter == 4) {
+        System.out.println(counter);
+        if (counter == 2) {
             LcdHandler.disableBacklight();
         }
-
-
     }
 }
