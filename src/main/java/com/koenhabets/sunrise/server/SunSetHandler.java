@@ -13,6 +13,7 @@ public class SunSetHandler implements HttpHandler {
     String sunset;
     String sunrise;
     String response;
+    Location location;
 
     @Override
     public void handle(HttpExchange he) throws IOException {
@@ -38,7 +39,7 @@ public class SunSetHandler implements HttpHandler {
     }
 
     private void updateSunriseSunset() {
-        Location location = new Location("50.903819", "6.029882");
+        location = new Location("50.903819", "6.029882");
         SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(location, "Nederland/Amsterdam");
         sunrise = calculator.getOfficialSunriseForDate(Calendar.getInstance());
         sunset = calculator.getOfficialSunsetForDate(Calendar.getInstance());
