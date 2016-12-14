@@ -11,7 +11,7 @@ public class timer extends TimerTask {
     public static void main() {
         TimerTask timerTask = new timer();
         Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(timerTask, 0, 3 * 1000);
+        timer.scheduleAtFixedRate(timerTask, 0, 10 * 1000);
     }
 
     @Override
@@ -19,10 +19,7 @@ public class timer extends TimerTask {
         counter++;
         if (ActionHandler.sleeping && counter >= 499) {
             counter = 0;
-        } else if (!ActionHandler.sleeping) {
-            counter = 500;
         }
-
         if (!ActionHandler.inside && counter >= 499) {
             counter = 0;
         } else if (ActionHandler.inside && !ActionHandler.sleeping) {
@@ -42,8 +39,7 @@ public class timer extends TimerTask {
                 d = 0;
             }
         }
-        System.out.println(counter);
-        if (counter == 2) {
+        if (counter == 4) {
             LcdHandler.disableBacklight();
         }
     }

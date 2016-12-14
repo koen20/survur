@@ -37,7 +37,7 @@ public class ActionHandler implements HttpHandler {
                 e.printStackTrace();
             }
         } else if (Objects.equals(action, "Prep-Sleep")) {
-            LcdHandler.printLcd("Welterusten", "");
+            LcdHandler.printLcd("Welterusten", ".");
             sleeping = true;
             String weekDay;
             SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
