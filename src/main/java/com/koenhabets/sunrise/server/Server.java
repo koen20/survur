@@ -21,6 +21,7 @@ public class Server {
         server.createContext("/response", new ResponseHandler());
         server.createContext("/lcd", new LcdHandler());
         server.createContext("/info", new InfoHandler());
+        server.createContext("/room", new RoomHandler());
         server.start();
         timer.main();
     }
