@@ -6,15 +6,24 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Calendar;
+import java.util.Objects;
 
 public class TemperatureHandler implements HttpHandler {
-    static String response = "500";
-    static int hour = 25;
-    static int minute = 65;
+    static String temp = "500";
+    String response;
+    private static int hour = 25;
+    private static int minute = 65;
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        response = getTemp();
+        String parm = httpExchange.getRequestURI().getQuery();
+        if(Objects.equals(parm, "graph")){
+            response = "[" + timer.tempData + "," + timer.tempTime + "]";
+        }else{
+            temp = getTemp();
+            response = temp;
+        }
+
 
         httpExchange.sendResponseHeaders(200, response.length());
         OutputStream os = httpExchange.getResponseBody();
@@ -30,15 +39,14 @@ public class TemperatureHandler implements HttpHandler {
         if (hourc != hour || minuted >= 5) {
             getTime();
             ExecuteShellCommand com = new ExecuteShellCommand();
-            response = com.executeCommand("bash /var/www/html/cgi-bin/temp.py");
-        } else {
+            temp = com.executeCommand("bash /var/www/html/cgi-bin/temp.py");
+            temp = temp.replace("\n", "");
         }
 
-
-        return response;
+        return temp;
     }
 
-    public static void getTime() {
+    private static void getTime() {
         Calendar calendar = Calendar.getInstance();
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
