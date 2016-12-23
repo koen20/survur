@@ -18,7 +18,7 @@ public class TemperatureHandler implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
         String parm = httpExchange.getRequestURI().getQuery();
         if(Objects.equals(parm, "graph")){
-            response = "[" + timer.tempData + "," + timer.tempTime + "]";
+            response = "[" + timer.tempData + "," + timer.tempTime + "," + timer.outsideTemp + "]";
         }else{
             temp = getTemp();
             response = temp;

@@ -15,6 +15,7 @@ import java.util.TimerTask;
 public class timer extends TimerTask {
     static String tempTime;
     static String tempData;
+    static String outsideTemp;
     int d = 0;
     int counter = 500;
     int counter2 = 999;
@@ -76,7 +77,7 @@ public class timer extends TimerTask {
                 e.printStackTrace();
             }
             //System.out.println("Stored: " + ja.toString());
-            if (ja.size() > 48) {
+            if (ja.size() > 100) {
                 ja.remove(0);
             }
             ja.add(temp);
@@ -109,7 +110,7 @@ public class timer extends TimerTask {
                 e.printStackTrace();
             }
             //System.out.println("Stored: " + ja.toString());
-            if (ja.size() > 48) {
+            if (ja.size() > 100) {
                 ja.remove(0);
             }
             ja.add(hour + ":" + minute);
@@ -125,6 +126,41 @@ public class timer extends TimerTask {
                 e.printStackTrace();
             }
             tempData = ja.toJSONString();
+
+
+
+            parser = new JSONParser();
+            ja = new JSONArray();
+            try {
+
+                Object obj = parser.parse(new FileReader("tempOutside.json"));
+
+                ja = (JSONArray) obj;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            //System.out.println("Stored: " + ja.toString());
+            if (ja.size() > 100) {
+                ja.remove(0);
+            }
+            ja.add(WeatherHandler.getTemp());
+            //System.out.println("Saving: " + ja.toString());
+            try {
+
+                FileWriter file = new FileWriter("tempOutside.json");
+                file.write(ja.toJSONString());
+                file.flush();
+                file.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            outsideTemp = ja.toJSONString();
+
             counter2 = 0;
         }
     }
