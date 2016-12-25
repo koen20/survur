@@ -43,7 +43,7 @@ public class ActionHandler implements HttpHandler {
             SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
             Calendar cal = Calendar.getInstance();
             weekDay = dayFormat.format(cal.getTime());
-            if (!Objects.equals(weekDay, "Saturday") || !Objects.equals(weekDay, "Sunday")) {
+            if (!Objects.equals(weekDay, "Saturday") & !Objects.equals(weekDay, "Sunday")) {
                 try {
                     VoiceHandler.sendPost("Welterusten. Wil je morgen douchen?;Prep-Sleep", "voice");
                     VoiceHandler.sendPost("", "response");

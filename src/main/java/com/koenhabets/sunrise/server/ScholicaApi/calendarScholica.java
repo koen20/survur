@@ -125,7 +125,7 @@ public class calendarScholica {
             e.printStackTrace();
         }
         JSONObject jsonObject = null;
-        String title = "geen les";
+        String title = "ddgeen les";
         try {
             jsonObject = new JSONObject(schedule);
 
