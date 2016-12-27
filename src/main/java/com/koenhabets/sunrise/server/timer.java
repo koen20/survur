@@ -42,7 +42,7 @@ public class timer extends TimerTask {
             Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minute = calendar.get(Calendar.MINUTE);
-            String temp = TemperatureHandler.getTemp();
+            double temp = TemperatureHandler.getTemp();
             int outsideTemp = WeatherHandler.getTemp();
             if (d == 0) {
                 LcdHandler.printLcd(hour + ":" + minute, "Binnen:" + temp);
@@ -58,7 +58,7 @@ public class timer extends TimerTask {
         }
 
         if (counter2 > 120) {
-            String temp = TemperatureHandler.getTemp();
+            double temp = TemperatureHandler.tempAvarage;
             Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minute = calendar.get(Calendar.MINUTE);
