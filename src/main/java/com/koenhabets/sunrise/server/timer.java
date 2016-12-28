@@ -16,6 +16,7 @@ public class timer extends TimerTask {
     static String tempTime;
     static String tempData;
     static String outsideTemp;
+    static String tempDataPrecise;
     int d = 0;
     int counter = 500;
     int counter2 = 999;
@@ -58,7 +59,6 @@ public class timer extends TimerTask {
         }
 
         if (counter2 > 120) {
-            double temp = TemperatureHandler.tempAvarage;
             Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minute = calendar.get(Calendar.MINUTE);
@@ -80,7 +80,7 @@ public class timer extends TimerTask {
             if (ja.size() > 100) {
                 ja.remove(0);
             }
-            ja.add(temp);
+            ja.add(TemperatureHandler.tempAvarage);
             //System.out.println("Saving: " + ja.toString());
             try {
 
@@ -160,6 +160,41 @@ public class timer extends TimerTask {
                 e.printStackTrace();
             }
             outsideTemp = ja.toJSONString();
+
+
+            parser = new JSONParser();
+            ja = new JSONArray();
+            try {
+
+                Object obj = parser.parse(new FileReader("tempInsidePrecise.json"));
+
+                ja = (JSONArray) obj;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            //System.out.println("Stored: " + ja.toString());
+            if (ja.size() > 100) {
+                ja.remove(0);
+            }
+            ja.add(TemperatureHandler.getTemp());
+            //System.out.println("Saving: " + ja.toString());
+            try {
+
+                FileWriter file = new FileWriter("tempInsidePrecise.json");
+                file.write(ja.toJSONString());
+                file.flush();
+                file.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            tempDataPrecise = ja.toJSONString();
+
+
 
             counter2 = 0;
         }
