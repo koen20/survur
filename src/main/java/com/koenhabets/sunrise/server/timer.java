@@ -17,11 +17,12 @@ public class timer extends TimerTask {
     static String tempData;
     static String outsideTemp;
     static String tempDataPrecise;
-    int d = 0;
-    int counter = 500;
-    int counter2 = 999;
+    private int d = 0;
+    private int counter = 500;
+    private int counter2 = 999;
+    private int tempArrayLength = 160;
 
-    public static void main() {
+    static void main() {
         TimerTask timerTask = new timer();
         Timer timer = new Timer(true);
         timer.scheduleAtFixedRate(timerTask, 0, 10 * 1000);
@@ -29,6 +30,7 @@ public class timer extends TimerTask {
 
     @Override
     public void run() {
+        double temp = TemperatureHandler.getTemp();
         counter++;
         counter2++;
         if (ActionHandler.sleeping && counter >= 499) {
@@ -43,12 +45,11 @@ public class timer extends TimerTask {
             Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minute = calendar.get(Calendar.MINUTE);
-            double temp = TemperatureHandler.getTemp();
-            int outsideTemp = WeatherHandler.getTemp();
             if (d == 0) {
                 LcdHandler.printLcd(hour + ":" + minute, "Binnen:" + temp);
                 d = 1;
             } else {
+                int outsideTemp = WeatherHandler.getTemp();
                 LcdHandler.printLcd(hour + ":" + minute, "Buiten:" + outsideTemp);
                 d = 0;
             }
@@ -62,6 +63,11 @@ public class timer extends TimerTask {
             Calendar calendar = Calendar.getInstance();
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minute = calendar.get(Calendar.MINUTE);
+
+
+
+
+            //TEMP moving avarage//////////////////////
             JSONParser parser = new JSONParser();
             JSONArray ja = new JSONArray();
             try {
@@ -77,7 +83,7 @@ public class timer extends TimerTask {
                 e.printStackTrace();
             }
             //System.out.println("Stored: " + ja.toString());
-            if (ja.size() > 100) {
+            if (ja.size() > tempArrayLength) {
                 ja.remove(0);
             }
             ja.add(TemperatureHandler.tempAvarage);
@@ -94,7 +100,7 @@ public class timer extends TimerTask {
             }
             tempTime = ja.toJSONString();
 
-
+            //TEMP time//////////////////////
             parser = new JSONParser();
             ja = new JSONArray();
             try {
@@ -110,7 +116,7 @@ public class timer extends TimerTask {
                 e.printStackTrace();
             }
             //System.out.println("Stored: " + ja.toString());
-            if (ja.size() > 100) {
+            if (ja.size() > tempArrayLength) {
                 ja.remove(0);
             }
             ja.add(hour + ":" + minute);
@@ -128,7 +134,7 @@ public class timer extends TimerTask {
             tempData = ja.toJSONString();
 
 
-
+            //outside temp//////////////////////
             parser = new JSONParser();
             ja = new JSONArray();
             try {
@@ -144,7 +150,7 @@ public class timer extends TimerTask {
                 e.printStackTrace();
             }
             //System.out.println("Stored: " + ja.toString());
-            if (ja.size() > 100) {
+            if (ja.size() > tempArrayLength) {
                 ja.remove(0);
             }
             ja.add(WeatherHandler.getTemp());
@@ -161,7 +167,7 @@ public class timer extends TimerTask {
             }
             outsideTemp = ja.toJSONString();
 
-
+            //inside temp precise//////////////////////
             parser = new JSONParser();
             ja = new JSONArray();
             try {
@@ -177,7 +183,7 @@ public class timer extends TimerTask {
                 e.printStackTrace();
             }
             //System.out.println("Stored: " + ja.toString());
-            if (ja.size() > 100) {
+            if (ja.size() > tempArrayLength) {
                 ja.remove(0);
             }
             ja.add(TemperatureHandler.getTemp());
