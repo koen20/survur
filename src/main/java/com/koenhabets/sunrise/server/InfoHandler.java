@@ -23,6 +23,9 @@ public class InfoHandler implements HttpHandler {
             jo.put("next-appointment", CalendarHandler.getResponse());
             jo.put("nextSubject", calendarScholica.nextSubject);
             jo.put("vrij", calendarScholica.count);
+            jo.put("light-A", lightsHandler.A);
+            jo.put("light-B", lightsHandler.B);
+            jo.put("light-C", lightsHandler.C);
         } catch (JSONException e) {
             e.printStackTrace();
         }

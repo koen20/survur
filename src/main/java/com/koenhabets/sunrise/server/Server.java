@@ -22,7 +22,10 @@ public class Server {
         server.createContext("/lcd", new LcdHandler());
         server.createContext("/info", new InfoHandler());
         server.createContext("/room", new RoomHandler());
+        server.createContext("/lights", new lightsHandler());
         server.start();
         timer.main();
+
+        lightsHandler.resetLights();
     }
 }
