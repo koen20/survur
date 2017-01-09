@@ -43,6 +43,10 @@ public class lightsHandler implements HttpHandler {
         }
         ExecuteShellCommand com = new ExecuteShellCommand();
         com.executeCommand("./home/pi/433Utils/RPi_utils/codesend " + code);
+        ExecuteShellCommand com2 = new ExecuteShellCommand();
+        com2.executeCommand("./home/pi/433Utils/RPi_utils/codesend " + code);
+        ExecuteShellCommand com3 = new ExecuteShellCommand();
+        com3.executeCommand("./home/pi/433Utils/RPi_utils/codesend " + code);
     }
     static void resetLights(){
         Light("Aoff");

@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.text.ParseException;
 
 public class Server {
 
@@ -25,7 +26,6 @@ public class Server {
         server.createContext("/lights", new lightsHandler());
         server.start();
         timer.main();
-
         lightsHandler.resetLights();
     }
 }

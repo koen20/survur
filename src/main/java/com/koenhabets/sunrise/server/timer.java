@@ -59,14 +59,11 @@ public class timer extends TimerTask {
             LcdHandler.disableBacklight();
         }
 
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
         if (counter2 > 120) {
-            Calendar calendar = Calendar.getInstance();
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int minute = calendar.get(Calendar.MINUTE);
-
-
-
-
             //TEMP moving avarage//////////////////////
             JSONParser parser = new JSONParser();
             JSONArray ja = new JSONArray();
@@ -201,8 +198,13 @@ public class timer extends TimerTask {
             tempDataPrecise = ja.toJSONString();
 
 
-
             counter2 = 0;
+        }
+        if (ResponseHandler.hour == hour && ResponseHandler.minute - 2 == minute){
+            lightsHandler.Light("Aon");
+        }
+        if (ResponseHandler.hour == hour && ResponseHandler.minute + 5 == minute){
+            lightsHandler.Light("Aoff");
         }
     }
 }

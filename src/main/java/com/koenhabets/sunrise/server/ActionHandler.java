@@ -12,16 +12,17 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class ActionHandler implements HttpHandler {
-    String response = "sent";
-    private int code = 200;
     static boolean sleeping = false;
     static boolean inside = true;
+    String response = "sent";
+    private int code = 200;
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String parm = httpExchange.getRequestURI().getQuery();
         String[] parts = parm.split("=");
         String action = parts[1];
+        calendarScholica.update();
         if (Objects.equals(action, "Wake-up")) {
             sleeping = false;
             try {

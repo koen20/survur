@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.util.Objects;
 
 public class ResponseHandler implements HttpHandler {
+    static int hour;
+    static int minute;
     int code = 200;
     String response = "Sent";
 
@@ -26,14 +28,20 @@ public class ResponseHandler implements HttpHandler {
             if (Objects.equals(parts2[0], "ja")) {
                 try {
                     if (calendarScholica.count == 1) {
+                        hour = 8;
+                        minute = 5;
                         CalendarHandler.setAlarm("08", "05");
                         VoiceHandler.sendPost("Oke je hebt het eerste uur vrij, het alarm gaat om 08:05", "voice");
                         LcdHandler.printLcd("Welterusten", "Alarm:08:05");
                     } else if (calendarScholica.count == 2) {
+                        hour = 9;
+                        minute = 10;
                         CalendarHandler.setAlarm("09", "10");
                         VoiceHandler.sendPost("Oke je hebt het eerste en tweede uur vrij, het alarm gaat om 09:10", "voice");
                         LcdHandler.printLcd("Welterusten", "Alarm:09:10");
                     } else {
+                        hour = 7;
+                        minute = 20;
                         CalendarHandler.setAlarm("07", "20");
                         VoiceHandler.sendPost("Oke, het alarm gaat om 07:20", "voice");
                         LcdHandler.printLcd("Welterusten", "Alarm:07:20");
@@ -44,14 +52,20 @@ public class ResponseHandler implements HttpHandler {
             } else {
                 try {
                     if (calendarScholica.count == 1) {
+                        hour = 8;
+                        minute = 15;
                         CalendarHandler.setAlarm("08", "15");
                         VoiceHandler.sendPost("Oke je hebt het eerste uur vrij, het alarm gaat om 08:15", "voice");
                         LcdHandler.printLcd("Welterusten", "Alarm:08:15");
                     } else if (calendarScholica.count == 2) {
+                        hour = 9;
+                        minute = 15;
                         CalendarHandler.setAlarm("09", "15");
                         VoiceHandler.sendPost("Oke je hebt het eerste en tweede uur vrij, het alarm gaat om 09:15", "voice");
                         LcdHandler.printLcd("Welterusten", "Alarm:09:15");
                     } else {
+                        hour = 7;
+                        minute = 25;
                         CalendarHandler.setAlarm("07", "25");
                         VoiceHandler.sendPost("Oke, het alarm gaat om 07:25", "voice");
                         LcdHandler.printLcd("Welterusten", "Alarm:07:25");
