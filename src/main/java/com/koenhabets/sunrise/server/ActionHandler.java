@@ -26,7 +26,7 @@ public class ActionHandler implements HttpHandler {
         if (Objects.equals(action, "Wake-up")) {
             sleeping = false;
             try {
-                int temp = WeatherHandler.getTemp();
+                double temp = WeatherHandler.getTemp();
                 String nextSubject = calendarScholica.nextSubject;
                 if (Objects.equals(nextSubject, "geen les")) {
                     VoiceHandler.sendPost("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse(), "voice");
@@ -70,6 +70,7 @@ public class ActionHandler implements HttpHandler {
         } else if (Objects.equals(action, "Leave")) {
             if (!sleeping) {
                 inside = false;
+                lightsHandler.resetLights();
             }
         }
         httpExchange.sendResponseHeaders(code, response.length());

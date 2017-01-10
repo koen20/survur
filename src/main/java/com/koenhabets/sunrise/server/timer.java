@@ -49,7 +49,7 @@ public class timer extends TimerTask {
                 LcdHandler.printLcd(hour + ":" + minute, "Binnen:" + temp);
                 d = 1;
             } else {
-                int outsideTemp = WeatherHandler.getTemp();
+                double outsideTemp = WeatherHandler.getTemp();
                 LcdHandler.printLcd(hour + ":" + minute, "Buiten:" + outsideTemp);
                 d = 0;
             }
@@ -201,10 +201,10 @@ public class timer extends TimerTask {
             counter2 = 0;
         }
         if (ResponseHandler.hour == hour && ResponseHandler.minute - 2 == minute){
-            lightsHandler.Light("Aon");
+            lightsHandler.Light("Con");
         }
         if (ResponseHandler.hour == hour && ResponseHandler.minute + 5 == minute){
-            lightsHandler.Light("Aoff");
+            lightsHandler.Light("Coff");
         }
     }
 }
