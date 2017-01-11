@@ -31,6 +31,7 @@ public class timer extends TimerTask {
     @Override
     public void run() {
         double temp = TemperatureHandler.getTemp();
+        double tempOutside = WeatherHandler.getTemp();
         counter++;
         counter2++;
         if (ActionHandler.sleeping && counter >= 499) {
@@ -49,8 +50,7 @@ public class timer extends TimerTask {
                 LcdHandler.printLcd(hour + ":" + minute, "Binnen:" + temp);
                 d = 1;
             } else {
-                double outsideTemp = WeatherHandler.getTemp();
-                LcdHandler.printLcd(hour + ":" + minute, "Buiten:" + outsideTemp);
+                LcdHandler.printLcd(hour + ":" + minute, "Buiten:" + tempOutside);
                 d = 0;
             }
         }
@@ -150,7 +150,7 @@ public class timer extends TimerTask {
             if (ja.size() > tempArrayLength) {
                 ja.remove(0);
             }
-            ja.add(WeatherHandler.getTemp());
+            ja.add(WeatherHandler.tempAvarage);
             //System.out.println("Saving: " + ja.toString());
             try {
 

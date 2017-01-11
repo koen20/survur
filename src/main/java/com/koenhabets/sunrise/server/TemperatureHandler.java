@@ -15,7 +15,7 @@ public class TemperatureHandler implements HttpHandler {
     private static int hour = 25;
     private static int minute = 65;
     static double tempAvarage;
-    static double[] tempArray = new double[3];
+    static double[] tempArray = new double[5];
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
@@ -39,7 +39,7 @@ public class TemperatureHandler implements HttpHandler {
         int hourc = calendar.get(Calendar.HOUR_OF_DAY);
         int minutec = calendar.get(Calendar.MINUTE);
         int minuted = minutec - minute;
-        if (hourc != hour || minuted >= 5) {
+        if (hourc != hour || minuted >= 3) {
             getTime();
             String d;
             ExecuteShellCommand com = new ExecuteShellCommand();
@@ -63,11 +63,15 @@ public class TemperatureHandler implements HttpHandler {
             tempArray[0] = getTemp();
             tempArray[1] = getTemp();
             tempArray[2] = getTemp();
+            tempArray[3] = getTemp();
+            tempArray[4] = getTemp();
         }
+        tempArray[4] = tempArray[3];
+        tempArray[3] = tempArray[2];
         tempArray[2] = tempArray[1];
         tempArray[1] = tempArray[0];
         tempArray[0] = getTemp();
-        tempAvarage = (tempArray[0] + tempArray[1] + tempArray[2]) / 3;
+        tempAvarage = (tempArray[0] + tempArray[1] + tempArray[2] + tempArray[3] + tempArray[4]) / 5;
         return tempAvarage;
     }
 }
