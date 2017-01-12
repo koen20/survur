@@ -17,6 +17,7 @@ public class timer extends TimerTask {
     static String tempData;
     static String outsideTemp;
     static String tempDataPrecise;
+    static String tempDataLivingRoom;
     private int d = 0;
     private int counter = 500;
     private int counter2 = 999;
@@ -198,12 +199,54 @@ public class timer extends TimerTask {
             tempDataPrecise = ja.toJSONString();
 
 
+            //living room temp//////////////////////
+            parser = new JSONParser();
+            ja = new JSONArray();
+            try {
+
+                Object obj = parser.parse(new FileReader("livingRoomTemp.json"));
+
+                ja = (JSONArray) obj;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            //System.out.println("Stored: " + ja.toString());
+            if (ja.size() > tempArrayLength) {
+                ja.remove(0);
+            }
+            try {
+                ja.add(TemperatureHandler.getLivingRoomTemp());
+            } catch (IOException e) {
+                e.printStackTrace();
+                ja.add(20);
+            }
+            //System.out.println("Saving: " + ja.toString());
+            try {
+
+                FileWriter file = new FileWriter("livingRoomTemp.json");
+                file.write(ja.toJSONString());
+                file.flush();
+                file.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            tempDataLivingRoom = ja.toJSONString();
+
+
+
+
+
             counter2 = 0;
         }
-        if (ResponseHandler.hour == hour && ResponseHandler.minute - 2 == minute){
+        if (ResponseHandler.hour == hour && ResponseHandler.minute - 2 == minute && ActionHandler.inside){
             lightsHandler.Light("Con");
         }
-        if (ResponseHandler.hour == hour && ResponseHandler.minute + 5 == minute){
+        if (ResponseHandler.hour == hour && ResponseHandler.minute + 5 == minute && ActionHandler.inside){
             lightsHandler.Light("Coff");
         }
     }
