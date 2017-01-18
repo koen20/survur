@@ -17,6 +17,8 @@ public class WakeOnLanHandler implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
         String ipStr = "192.168.2.45";
         String macStr = "90:2B:34:33:58:E7";
+        ExecuteShellCommand com = new ExecuteShellCommand();
+        com.executeCommand("wakeonlan 90:2B:34:33:58:E7");
         try {
             byte[] macBytes = getMacBytes(macStr);
             byte[] bytes = new byte[6 + 16 * macBytes.length];
