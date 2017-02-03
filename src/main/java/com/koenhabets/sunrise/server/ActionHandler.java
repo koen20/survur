@@ -16,6 +16,8 @@ public class ActionHandler implements HttpHandler {
     static boolean inside = true;
     String response = "sent";
     private int code = 200;
+    static int hour;
+    static int minute;
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
@@ -41,15 +43,36 @@ public class ActionHandler implements HttpHandler {
             LcdHandler.printLcd("Welterusten", ".");
             sleeping = true;
             String weekDay;
+            try {
+                calendarScholica.update();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
             Calendar cal = Calendar.getInstance();
             weekDay = dayFormat.format(cal.getTime());
             if (!Objects.equals(weekDay, "Saturday") & !Objects.equals(weekDay, "Sunday") & calendarScholica.count < 500) {
                 try {
-                    VoiceHandler.sendPost("Welterusten. Wil je morgen douchen?;Prep-Sleep", "voice");
-                    VoiceHandler.sendPost("", "response");
+                    if (calendarScholica.count == 1) {
+                        hour = 8;
+                        minute = 5;
+                        CalendarHandler.setAlarm("08", "05");
+                        VoiceHandler.sendPost("Oke je hebt het eerste uur vrij, het alarm gaat om 08:05", "voice");
+                        LcdHandler.printLcd("Welterusten", "Alarm:08:05");
+                    } else if (calendarScholica.count == 2) {
+                        hour = 9;
+                        minute = 10;
+                        CalendarHandler.setAlarm("09", "10");
+                        VoiceHandler.sendPost("Oke je hebt het eerste en tweede uur vrij, het alarm gaat om 09:10", "voice");
+                        LcdHandler.printLcd("Welterusten", "Alarm:09:10");
+                    } else {
+                        hour = 7;
+                        minute = 20;
+                        CalendarHandler.setAlarm("07", "20");
+                        VoiceHandler.sendPost("Oke, het alarm gaat om 07:20", "voice");
+                        LcdHandler.printLcd("Welterusten", "Alarm:07:20");
+                    }
                 } catch (Exception e) {
-                    code = 500;
                     e.printStackTrace();
                 }
             } else {

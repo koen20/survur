@@ -26,6 +26,7 @@ public class InfoHandler implements HttpHandler {
             jo.put("light-A", lightsHandler.A);
             jo.put("light-B", lightsHandler.B);
             jo.put("light-C", lightsHandler.C);
+            jo.put("livingRoomTemp", TemperatureHandler.livingRoomTemp);
         } catch (JSONException e) {
             e.printStackTrace();
         }

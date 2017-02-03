@@ -2,40 +2,21 @@ package com.koenhabets.sunrise.server;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import org.json.simple.JSONArray;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Objects;
 
 public class TemperatureHandler implements HttpHandler {
     static double temp = 500;
-    String response;
-    private static int hour = 25;
-    private static int minute = 65;
     static double tempAvarage;
     static double[] tempArray = new double[5];
     static double livingRoomTemp;
-
-    @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
-        String parm = httpExchange.getRequestURI().getQuery();
-        if(Objects.equals(parm, "graph")){
-            response = "[" + timer.tempData + "," + timer.tempTime + "," + timer.outsideTemp + "," + timer.tempDataPrecise + "," + timer.tempDataLivingRoom + "]";
-        }else{
-            temp = getTemp();
-            response = temp + "";
-        }
-
-
-        httpExchange.sendResponseHeaders(200, response.length());
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
-    }
+    private static int hour = 25;
+    private static int minute = 65;
+    String response;
 
     public static double getTemp() {
         Calendar calendar = Calendar.getInstance();
@@ -60,9 +41,10 @@ public class TemperatureHandler implements HttpHandler {
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
     }
-    public static double avarageTemp(){
 
-        if(tempArray[1] == 0){
+    public static double avarageTemp() {
+
+        if (tempArray[1] == 0) {
             tempArray[0] = getTemp();
             tempArray[1] = getTemp();
             tempArray[2] = getTemp();
@@ -109,5 +91,26 @@ public class TemperatureHandler implements HttpHandler {
         String text = response.toString();
         livingRoomTemp = Double.parseDouble(text);
         return livingRoomTemp;
+    }
+
+    @Override
+    public void handle(HttpExchange httpExchange) throws IOException {
+        String parm = httpExchange.getRequestURI().getQuery();
+        //String[] parts = parm.split("=");
+        if (Objects.equals(parm, "graph")) {
+            response = "[" + timer.tempData + "," + timer.tempTime + "," + timer.outsideTemp + "," + timer.tempDataPrecise + "," + timer.tempDataLivingRoom + "]";
+        //} else if (Objects.equals(parts[0], "temp1")) {
+            //livingRoomTemp = Double.parseDouble(parts[1]);
+            //response = "Sent";
+        } else {
+            temp = getTemp();
+            response = temp + "";
+        }
+
+
+        httpExchange.sendResponseHeaders(200, response.length());
+        OutputStream os = httpExchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
     }
 }

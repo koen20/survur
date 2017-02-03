@@ -243,11 +243,11 @@ public class timer extends TimerTask {
 
             counter2 = 0;
         }
-        if (ResponseHandler.hour == hour && ResponseHandler.minute - 2 == minute && ActionHandler.inside){
-            lightsHandler.Light("Con");
+        if (ActionHandler.hour == hour && ActionHandler.minute - 2 == minute && ActionHandler.inside){
+            lightsHandler.Light("Bon");
         }
-        if (ResponseHandler.hour == hour && ResponseHandler.minute + 5 == minute && ActionHandler.inside){
-            lightsHandler.Light("Coff");
+        if (ActionHandler.hour == hour && ActionHandler.minute + 5 == minute && ActionHandler.inside){
+            lightsHandler.Light("Boff");
         }
     }
 }
