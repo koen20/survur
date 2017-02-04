@@ -1,4 +1,4 @@
-package com.koenhabets.sunrise.server;
+package com.koenhabets.survur.server;
 
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -31,7 +31,7 @@ public class timer extends TimerTask {
 
     @Override
     public void run() {
-        double temp = TemperatureHandler.getTemp();
+        double temp = TemperatureHandler.temp;
         double tempOutside = WeatherHandler.getTemp();
         counter++;
         counter2++;

@@ -1,4 +1,4 @@
-package com.koenhabets.sunrise.server;
+package com.koenhabets.survur.server;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -6,56 +6,51 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Calendar;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class TemperatureHandler implements HttpHandler {
     static double temp = 500;
     static double tempAvarage;
     static double[] tempArray = new double[5];
     static double livingRoomTemp;
-    private static int hour = 25;
-    private static int minute = 65;
+    private final Timer updateTimer = new Timer();
     String response;
 
-    public static double getTemp() {
-        Calendar calendar = Calendar.getInstance();
-        int hourc = calendar.get(Calendar.HOUR_OF_DAY);
-        int minutec = calendar.get(Calendar.MINUTE);
-        int minuted = minutec - minute;
-        if (hourc != hour || minuted >= 3) {
-            getTime();
-            String d;
-            ExecuteShellCommand com = new ExecuteShellCommand();
-            d = com.executeCommand("bash /var/www/html/cgi-bin/temp.py");
-            d = d.replace("\n", "");
-            temp = Double.parseDouble(d);
-            avarageTemp();
-        }
-
-        return temp;
+    public TemperatureHandler() {
+        updateTimer.scheduleAtFixedRate(new UpdateTask(), 0,180 *1000);
     }
 
-    private static void getTime() {
-        Calendar calendar = Calendar.getInstance();
-        hour = calendar.get(Calendar.HOUR_OF_DAY);
-        minute = calendar.get(Calendar.MINUTE);
+    public static double getTemp() {
+        String d;
+        ExecuteShellCommand com = new ExecuteShellCommand();
+        d = com.executeCommand("bash /var/www/html/cgi-bin/temp.py");
+        d = d.replace("\n", "");
+        try {
+            temp = Double.parseDouble(d);
+        } catch (NumberFormatException e) {
+            System.err.println("Error while parsing the temperature: " + e.getMessage());
+            temp = -100;
+        }
+        avarageTemp();
+        return temp;
     }
 
     public static double avarageTemp() {
 
         if (tempArray[1] == 0) {
-            tempArray[0] = getTemp();
-            tempArray[1] = getTemp();
-            tempArray[2] = getTemp();
-            tempArray[3] = getTemp();
-            tempArray[4] = getTemp();
+            tempArray[0] = temp;
+            tempArray[1] = temp;
+            tempArray[2] = temp;
+            tempArray[3] = temp;
+            tempArray[4] = temp;
         }
         tempArray[4] = tempArray[3];
         tempArray[3] = tempArray[2];
         tempArray[2] = tempArray[1];
         tempArray[1] = tempArray[0];
-        tempArray[0] = getTemp();
+        tempArray[0] = temp;
         tempAvarage = (tempArray[0] + tempArray[1] + tempArray[2] + tempArray[3] + tempArray[4]) / 5;
         return tempAvarage;
     }
@@ -99,7 +94,7 @@ public class TemperatureHandler implements HttpHandler {
         //String[] parts = parm.split("=");
         if (Objects.equals(parm, "graph")) {
             response = "[" + timer.tempData + "," + timer.tempTime + "," + timer.outsideTemp + "," + timer.tempDataPrecise + "," + timer.tempDataLivingRoom + "]";
-        //} else if (Objects.equals(parts[0], "temp1")) {
+            //} else if (Objects.equals(parts[0], "temp1")) {
             //livingRoomTemp = Double.parseDouble(parts[1]);
             //response = "Sent";
         } else {
@@ -112,5 +107,13 @@ public class TemperatureHandler implements HttpHandler {
         OutputStream os = httpExchange.getResponseBody();
         os.write(response.getBytes());
         os.close();
+    }
+
+    private class UpdateTask extends TimerTask {
+
+        @Override
+        public void run() {
+            getTemp();
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.koenhabets.sunrise.server;
+package com.koenhabets.survur.server;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

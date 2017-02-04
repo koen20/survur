@@ -1,4 +1,4 @@
-package com.koenhabets.sunrise.server;
+package com.koenhabets.survur.server;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;

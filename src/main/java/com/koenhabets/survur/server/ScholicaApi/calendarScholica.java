@@ -1,4 +1,4 @@
-package com.koenhabets.sunrise.server.ScholicaApi;
+package com.koenhabets.survur.server.ScholicaApi;
 
 
 import org.json.JSONArray;

@@ -1,11 +1,11 @@
-group 'com.koenhabets.sunrise'
+group 'com.koenhabets.survur'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.koenhabets.sunrise.server.Server'
+        attributes 'Main-Class': 'com.koenhabets.survur.server.Server'
     }
 }
 
@@ -16,7 +16,7 @@ task fatJar(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'Gradle Jar File Example',
                 'Implementation-Version': version,
-                'Main-Class': 'com.koenhabets.sunrise.server.Server'
+                'Main-Class': 'com.koenhabets.survur.server.Server'
     }
     baseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }

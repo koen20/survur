@@ -1,6 +1,6 @@
-package com.koenhabets.sunrise.server.ScholicaApi;
+package com.koenhabets.survur.server.ScholicaApi;
 
-import com.koenhabets.sunrise.server.KeyHolder;
+import com.koenhabets.survur.server.KeyHolder;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;

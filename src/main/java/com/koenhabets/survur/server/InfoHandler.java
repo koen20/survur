@@ -1,6 +1,6 @@
-package com.koenhabets.sunrise.server;
+package com.koenhabets.survur.server;
 
-import com.koenhabets.sunrise.server.ScholicaApi.calendarScholica;
+import com.koenhabets.survur.server.ScholicaApi.calendarScholica;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.json.JSONException;

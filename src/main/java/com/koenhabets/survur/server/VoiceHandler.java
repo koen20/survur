@@ -1,4 +1,4 @@
-package com.koenhabets.sunrise.server;
+package com.koenhabets.survur.server;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -6,31 +6,31 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Objects;
+import java.net.URLEncoder;
 
-public class CalendarHandler implements HttpHandler {
-    static String response = "";
+public class VoiceHandler implements HttpHandler {
+    private int code = 200;
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String parm = httpExchange.getRequestURI().getQuery();
         String[] parts = parm.split("=");
-        if (Objects.equals(parts[0], "calendar")) {
-            response = parts[1];
+        try {
+            sendPost(parts[1], "voice");
+        } catch (Exception e) {
+            code = 500;
+            e.printStackTrace();
         }
-
-        httpExchange.sendResponseHeaders(200, response.length());
+        String response = "sent";
+        httpExchange.sendResponseHeaders(code, response.length());
         OutputStream os = httpExchange.getResponseBody();
         os.write(response.getBytes());
         os.close();
     }
 
-    static String getResponse() {
-        return response;
-    }
-
-    public static String setAlarm(String hour, String minute) throws Exception {
-        String url = "https://autoremotejoaomgcd.appspot.com/sendmessage?key=" + KeyHolder.getArKey2() + "&message=" + "alarm" + ";" + hour + ";" + minute;
+    public static String sendPost(String parm, String action) throws Exception {
+        parm = URLEncoder.encode(parm, "UTF-8");
+        String url = "https://autoremotejoaomgcd.appspot.com/sendmessage?key=" + KeyHolder.getARKey() + "&message=" + action + ";" + parm;
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
