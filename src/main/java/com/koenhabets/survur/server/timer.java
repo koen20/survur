@@ -32,7 +32,7 @@ public class timer extends TimerTask {
     @Override
     public void run() {
         double temp = TemperatureHandler.temp;
-        double tempOutside = WeatherHandler.getTemp();
+        double tempOutside = TemperatureHandler.tempOutside;
         counter++;
         counter2++;
         if (ActionHandler.sleeping && counter >= 499) {
@@ -151,7 +151,7 @@ public class timer extends TimerTask {
             if (ja.size() > tempArrayLength) {
                 ja.remove(0);
             }
-            ja.add(WeatherHandler.tempAvarage);
+            ja.add(TemperatureHandler.tempOutside);
             //System.out.println("Saving: " + ja.toString());
             try {
 
@@ -164,39 +164,6 @@ public class timer extends TimerTask {
                 e.printStackTrace();
             }
             outsideTemp = ja.toJSONString();
-
-            //inside temp precise//////////////////////
-            parser = new JSONParser();
-            ja = new JSONArray();
-            try {
-
-                Object obj = parser.parse(new FileReader("tempInsidePrecise.json"));
-
-                ja = (JSONArray) obj;
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            //System.out.println("Stored: " + ja.toString());
-            if (ja.size() > tempArrayLength) {
-                ja.remove(0);
-            }
-            ja.add(TemperatureHandler.getTemp());
-            //System.out.println("Saving: " + ja.toString());
-            try {
-
-                FileWriter file = new FileWriter("tempInsidePrecise.json");
-                file.write(ja.toJSONString());
-                file.flush();
-                file.close();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            tempDataPrecise = ja.toJSONString();
 
 
             //living room temp//////////////////////

@@ -16,8 +16,8 @@ public class InfoHandler implements HttpHandler {
         JSONObject jo = new JSONObject();
         calendarScholica.update();
         try {
-            jo.put("inside-temp", TemperatureHandler.getTemp());
-            jo.put("outside-temp", WeatherHandler.getTemp());
+            jo.put("inside-temp", TemperatureHandler.temp);
+            jo.put("outside-temp", TemperatureHandler.tempOutside);
             jo.put("sleeping", ActionHandler.sleeping);
             jo.put("inside", ActionHandler.inside);
             jo.put("next-appointment", CalendarHandler.getResponse());

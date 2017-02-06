@@ -14,12 +14,14 @@ public class TemperatureHandler implements HttpHandler {
     static double temp = 500;
     static double tempAvarage;
     static double[] tempArray = new double[5];
+    static double[] tempArrayOutside = new double[5];
     static double livingRoomTemp;
+    static double tempOutside;
     private final Timer updateTimer = new Timer();
     String response;
 
     public TemperatureHandler() {
-        updateTimer.scheduleAtFixedRate(new UpdateTask(), 0,180 *1000);
+        updateTimer.scheduleAtFixedRate(new UpdateTask(), 0, 180 * 1000);
     }
 
     public static double getTemp() {
@@ -31,9 +33,8 @@ public class TemperatureHandler implements HttpHandler {
             temp = Double.parseDouble(d);
         } catch (NumberFormatException e) {
             System.err.println("Error while parsing the temperature: " + e.getMessage());
-            temp = -100;
+            temp = 20;
         }
-        avarageTemp();
         return temp;
     }
 
@@ -91,12 +92,14 @@ public class TemperatureHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String parm = httpExchange.getRequestURI().getQuery();
-        //String[] parts = parm.split("=");
+        String[] parts = parm.split("=");
         if (Objects.equals(parm, "graph")) {
             response = "[" + timer.tempData + "," + timer.tempTime + "," + timer.outsideTemp + "," + timer.tempDataPrecise + "," + timer.tempDataLivingRoom + "]";
             //} else if (Objects.equals(parts[0], "temp1")) {
             //livingRoomTemp = Double.parseDouble(parts[1]);
             //response = "Sent";
+        } else if (Objects.equals(parm, "tempOutside")) {
+            response = tempOutside + "";
         } else {
             temp = getTemp();
             response = temp + "";
@@ -109,11 +112,37 @@ public class TemperatureHandler implements HttpHandler {
         os.close();
     }
 
+    public static double getTempOutside() {
+        String d;
+        ExecuteShellCommand com = new ExecuteShellCommand();
+        d = com.executeCommand("bash /home/pi/tempOutside");
+        d = d.replace("\n", "");
+        tempOutside = Double.parseDouble(d);
+        return tempOutside;
+    }
+
+    public static double avarageTempOutside() {
+        if (tempArrayOutside[1] == 0) {
+            tempArrayOutside[0] = tempOutside;
+            tempArrayOutside[1] = tempOutside;
+            tempArrayOutside[2] = tempOutside;
+        }
+        tempArrayOutside[2] = tempArrayOutside[1];
+        tempArrayOutside[1] = tempArrayOutside[0];
+        tempArrayOutside[0] = tempOutside;
+        tempAvarage = (tempArrayOutside[0] + tempArrayOutside[1] + tempArrayOutside[2]) / 3;
+        return tempAvarage;
+    }
+
+
     private class UpdateTask extends TimerTask {
 
         @Override
         public void run() {
             getTemp();
+            getTempOutside();
+            avarageTemp();
+            avarageTempOutside();
         }
     }
 }

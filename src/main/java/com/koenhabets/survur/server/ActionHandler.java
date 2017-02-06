@@ -28,7 +28,7 @@ public class ActionHandler implements HttpHandler {
         if (Objects.equals(action, "Wake-up")) {
             sleeping = false;
             try {
-                double temp = WeatherHandler.getTemp();
+                double temp = TemperatureHandler.tempOutside;
                 String nextSubject = calendarScholica.nextSubject;
                 if (Objects.equals(nextSubject, "geen les")) {
                     VoiceHandler.sendPost("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse(), "voice");
@@ -51,25 +51,26 @@ public class ActionHandler implements HttpHandler {
             SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
             Calendar cal = Calendar.getInstance();
             weekDay = dayFormat.format(cal.getTime());
+            System.out.println(calendarScholica.count);
             if (!Objects.equals(weekDay, "Saturday") & !Objects.equals(weekDay, "Sunday") & calendarScholica.count < 500) {
                 try {
                     if (calendarScholica.count == 1) {
                         hour = 8;
                         minute = 5;
                         CalendarHandler.setAlarm("08", "05");
-                        VoiceHandler.sendPost("Oke je hebt het eerste uur vrij, het alarm gaat om 08:05", "voice");
+                        VoiceHandler.sendPost("Je hebt het eerste uur vrij, het alarm gaat om 08:05", "voice");
                         LcdHandler.printLcd("Welterusten", "Alarm:08:05");
                     } else if (calendarScholica.count == 2) {
                         hour = 9;
                         minute = 10;
                         CalendarHandler.setAlarm("09", "10");
-                        VoiceHandler.sendPost("Oke je hebt het eerste en tweede uur vrij, het alarm gaat om 09:10", "voice");
+                        VoiceHandler.sendPost("Je hebt het eerste en tweede uur vrij, het alarm gaat om 09:10", "voice");
                         LcdHandler.printLcd("Welterusten", "Alarm:09:10");
                     } else {
                         hour = 7;
                         minute = 20;
                         CalendarHandler.setAlarm("07", "20");
-                        VoiceHandler.sendPost("Oke, het alarm gaat om 07:20", "voice");
+                        VoiceHandler.sendPost("Het alarm gaat om 07:20", "voice");
                         LcdHandler.printLcd("Welterusten", "Alarm:07:20");
                     }
                 } catch (Exception e) {
