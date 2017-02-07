@@ -2,29 +2,42 @@ package com.koenhabets.survur.server;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class TemperatureHandler implements HttpHandler {
     static double temp = 500;
-    static double tempAvarage;
-    static double[] tempArray = new double[5];
-    static double[] tempArrayOutside = new double[5];
+    static double tempAvarageInside;
+    static double tempAvarageOutside;
+    private static double[] tempArray = new double[5];
+    private static double[] tempArrayOutside = new double[5];
     static double livingRoomTemp;
     static double tempOutside;
-    private final Timer updateTimer = new Timer();
     String response;
 
+    private String tempTime;
+    private String tempData;
+    private String outsideTemp;
+    private String tempDataLivingRoom;
+    private int tempArrayLength = 160;
+
     public TemperatureHandler() {
+        Timer updateTimerGraph = new Timer();
+        Timer updateTimer = new Timer();
         updateTimer.scheduleAtFixedRate(new UpdateTask(), 0, 180 * 1000);
+        updateTimerGraph.scheduleAtFixedRate(new UpdateTaskGraph(), 0, 20 * 60 * 1000);
     }
 
-    public static double getTemp() {
+    private double getTemp() {
         String d;
         ExecuteShellCommand com = new ExecuteShellCommand();
         d = com.executeCommand("bash /var/www/html/cgi-bin/temp.py");
@@ -38,7 +51,7 @@ public class TemperatureHandler implements HttpHandler {
         return temp;
     }
 
-    public static double avarageTemp() {
+    private double avarageTemp() {
 
         if (tempArray[1] == 0) {
             tempArray[0] = temp;
@@ -52,11 +65,11 @@ public class TemperatureHandler implements HttpHandler {
         tempArray[2] = tempArray[1];
         tempArray[1] = tempArray[0];
         tempArray[0] = temp;
-        tempAvarage = (tempArray[0] + tempArray[1] + tempArray[2] + tempArray[3] + tempArray[4]) / 5;
-        return tempAvarage;
+        tempAvarageInside = (tempArray[0] + tempArray[1] + tempArray[2] + tempArray[3] + tempArray[4]) / 5;
+        return tempAvarageInside;
     }
 
-    public static double getLivingRoomTemp() throws IOException {
+    private double getLivingRoomTemp() throws IOException {
         String url = "http://192.168.2.47";
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -92,12 +105,8 @@ public class TemperatureHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String parm = httpExchange.getRequestURI().getQuery();
-        String[] parts = parm.split("=");
         if (Objects.equals(parm, "graph")) {
-            response = "[" + timer.tempData + "," + timer.tempTime + "," + timer.outsideTemp + "," + timer.tempDataPrecise + "," + timer.tempDataLivingRoom + "]";
-            //} else if (Objects.equals(parts[0], "temp1")) {
-            //livingRoomTemp = Double.parseDouble(parts[1]);
-            //response = "Sent";
+            response = "[" + tempData + "," + tempTime + "," + outsideTemp + "," + tempDataLivingRoom + "]";
         } else if (Objects.equals(parm, "tempOutside")) {
             response = tempOutside + "";
         } else {
@@ -112,7 +121,7 @@ public class TemperatureHandler implements HttpHandler {
         os.close();
     }
 
-    public static double getTempOutside() {
+    private double getTempOutside() {
         String d;
         ExecuteShellCommand com = new ExecuteShellCommand();
         d = com.executeCommand("bash /home/pi/tempOutside");
@@ -121,7 +130,7 @@ public class TemperatureHandler implements HttpHandler {
         return tempOutside;
     }
 
-    public static double avarageTempOutside() {
+    private double avarageTempOutside() {
         if (tempArrayOutside[1] == 0) {
             tempArrayOutside[0] = tempOutside;
             tempArrayOutside[1] = tempOutside;
@@ -130,8 +139,8 @@ public class TemperatureHandler implements HttpHandler {
         tempArrayOutside[2] = tempArrayOutside[1];
         tempArrayOutside[1] = tempArrayOutside[0];
         tempArrayOutside[0] = tempOutside;
-        tempAvarage = (tempArrayOutside[0] + tempArrayOutside[1] + tempArrayOutside[2]) / 3;
-        return tempAvarage;
+        tempAvarageOutside = (tempArrayOutside[0] + tempArrayOutside[1] + tempArrayOutside[2]) / 3;
+        return tempAvarageOutside;
     }
 
 
@@ -143,6 +152,156 @@ public class TemperatureHandler implements HttpHandler {
             getTempOutside();
             avarageTemp();
             avarageTempOutside();
+        }
+    }
+
+    private class UpdateTaskGraph extends TimerTask {
+
+        @Override
+        public void run() {
+            try {
+                getLivingRoomTemp();
+            } catch (IOException e) {
+                livingRoomTemp = 20;
+            }
+
+            Calendar cal = Calendar.getInstance();
+            int hour = cal.get(Calendar.HOUR);
+            int minute = cal.get(Calendar.MINUTE);
+
+            //TEMP moving avarage//////////////////////
+            JSONParser parser = new JSONParser();
+            JSONArray ja = new JSONArray();
+            try {
+
+                Object obj = parser.parse(new FileReader("temp.json"));
+
+                ja = (JSONArray) obj;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            //System.out.println("Stored: " + ja.toString());
+            if (ja.size() > tempArrayLength) {
+                ja.remove(0);
+            }
+            ja.add(tempAvarageInside);
+            //System.out.println("Saving: " + ja.toString());
+            try {
+
+                FileWriter file = new FileWriter("temp.json");
+                file.write(ja.toJSONString());
+                file.flush();
+                file.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            tempTime = ja.toJSONString();
+
+            //TEMP time//////////////////////
+            parser = new JSONParser();
+            ja = new JSONArray();
+            try {
+
+                Object obj = parser.parse(new FileReader("time.json"));
+
+                ja = (JSONArray) obj;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            //System.out.println("Stored: " + ja.toString());
+            if (ja.size() > tempArrayLength) {
+                ja.remove(0);
+            }
+            ja.add(hour + ":" + minute);
+            //System.out.println("Saving: " + ja.toString());
+            try {
+
+                FileWriter file = new FileWriter("time.json");
+                file.write(ja.toJSONString());
+                file.flush();
+                file.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            tempData = ja.toJSONString();
+
+
+            //outside temp//////////////////////
+            parser = new JSONParser();
+            ja = new JSONArray();
+            try {
+
+                Object obj = parser.parse(new FileReader("tempOutside.json"));
+
+                ja = (JSONArray) obj;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            //System.out.println("Stored: " + ja.toString());
+            if (ja.size() > tempArrayLength) {
+                ja.remove(0);
+            }
+            ja.add(tempAvarageOutside);
+            //System.out.println("Saving: " + ja.toString());
+            try {
+
+                FileWriter file = new FileWriter("tempOutside.json");
+                file.write(ja.toJSONString());
+                file.flush();
+                file.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            outsideTemp = ja.toJSONString();
+
+
+            //living room temp//////////////////////
+            parser = new JSONParser();
+            ja = new JSONArray();
+            try {
+
+                Object obj = parser.parse(new FileReader("livingRoomTemp.json"));
+
+                ja = (JSONArray) obj;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            //System.out.println("Stored: " + ja.toString());
+            if (ja.size() > tempArrayLength) {
+                ja.remove(0);
+            }
+            ja.add(livingRoomTemp);
+            //System.out.println("Saving: " + ja.toString());
+            try {
+
+                FileWriter file = new FileWriter("livingRoomTemp.json");
+                file.write(ja.toJSONString());
+                file.flush();
+                file.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            tempDataLivingRoom = ja.toJSONString();
         }
     }
 }
