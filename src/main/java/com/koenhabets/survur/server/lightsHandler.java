@@ -8,16 +8,15 @@ import java.io.OutputStream;
 import java.util.Objects;
 
 public class lightsHandler implements HttpHandler {
+    static boolean A = false;
+    static boolean B = false;
+    static boolean C = false;
     private static int AOn = 13976916;
     private static int AOff = 13976913;
     private static int BOn = 13979988;
     private static int BOff = 13979985;
     private static int COn = 13980756;
     private static int COff = 13980753;
-
-    static boolean A = false;
-    static boolean B = false;
-    static boolean C = false;
     String response;
 
     static void Light(String light) {
@@ -48,7 +47,8 @@ public class lightsHandler implements HttpHandler {
         ExecuteShellCommand com3 = new ExecuteShellCommand();
         com3.executeCommand("./home/pi/433Utils/RPi_utils/codesend " + code);
     }
-    static void resetLights(){
+
+    static void resetLights() {
         Light("Aoff");
         Light("Boff");
         Light("Coff");

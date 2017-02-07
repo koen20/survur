@@ -3,9 +3,6 @@ package com.koenhabets.survur.server;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by koenh on 2/4/2017.
- */
 public class Log {
 
     private static boolean enableLog = false;

@@ -12,7 +12,7 @@ public class Server {
         int port = 9999;
         System.out.println("Starting server on port: " + port);
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-        server.createContext("/sunset-survur", new SunSetHandler());
+        server.createContext("/sunset-sunrise", new SunSetHandler());
         server.createContext("/wol", new WakeOnLanHandler());
         server.createContext("/temp", new TemperatureHandler());
         server.createContext("/voice", new VoiceHandler());

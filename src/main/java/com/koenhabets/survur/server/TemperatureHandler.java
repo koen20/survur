@@ -18,10 +18,10 @@ public class TemperatureHandler implements HttpHandler {
     static double temp = 500;
     static double tempAvarageInside;
     static double tempAvarageOutside;
-    private static double[] tempArray = new double[5];
-    private static double[] tempArrayOutside = new double[5];
     static double livingRoomTemp;
     static double tempOutside;
+    private static double[] tempArray = new double[5];
+    private static double[] tempArrayOutside = new double[5];
     String response;
 
     private String tempTime;
@@ -166,7 +166,7 @@ public class TemperatureHandler implements HttpHandler {
             }
 
             Calendar cal = Calendar.getInstance();
-            int hour = cal.get(Calendar.HOUR);
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
             int minute = cal.get(Calendar.MINUTE);
 
             //TEMP moving avarage//////////////////////
