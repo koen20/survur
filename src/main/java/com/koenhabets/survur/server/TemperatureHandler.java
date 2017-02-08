@@ -7,8 +7,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.Timer;
@@ -20,12 +18,13 @@ public class TemperatureHandler implements HttpHandler {
     static double tempAvarageOutside;
     static double livingRoomTemp;
     static double tempOutside;
+    static String vdd;
     private static double[] tempArray = new double[5];
     private static double[] tempArrayOutside = new double[5];
     String response;
-
     private String tempTime;
     private String tempData;
+    private String vddData;
     private String outsideTemp;
     private String tempDataLivingRoom;
     private int tempArrayLength = 160;
@@ -69,46 +68,20 @@ public class TemperatureHandler implements HttpHandler {
         return tempAvarageInside;
     }
 
-    private double getLivingRoomTemp() throws IOException {
-        String url = "http://192.168.2.47";
-        URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-        //add reuqest header
-        con.setRequestMethod("POST");
-        //con.setRequestProperty("User-Agent", USER_AGENT);
-        //con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-
-        String urlParameters = "";
-
-        // Send post request
-        con.setDoOutput(true);
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(urlParameters);
-        wr.flush();
-        wr.close();
-
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-        String text = response.toString();
-        livingRoomTemp = Double.parseDouble(text);
-        return livingRoomTemp;
-    }
-
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        String parm = httpExchange.getRequestURI().getQuery();
-        if (Objects.equals(parm, "graph")) {
-            response = "[" + tempData + "," + tempTime + "," + outsideTemp + "," + tempDataLivingRoom + "]";
-        } else if (Objects.equals(parm, "tempOutside")) {
+        String parmt = httpExchange.getRequestURI().getQuery();
+        String[] parm = parmt.split("=");
+        if (Objects.equals(parm[0], "graph")) {
+            response = "[" + tempData + "," + tempTime + "," + outsideTemp + "," + tempDataLivingRoom + "," + vddData + "]";
+        } else if (Objects.equals(parm[0], "tempOutside")) {
             response = tempOutside + "";
+        } else if (Objects.equals(parm[0], "sent")) {
+            Log.d(parm[1]);
+            String[] split = parm[1].split(";");
+            livingRoomTemp = Double.parseDouble(split[0]);
+            vdd = split[1];
+            response = "Sent";
         } else {
             temp = getTemp();
             response = temp + "";
@@ -159,11 +132,11 @@ public class TemperatureHandler implements HttpHandler {
 
         @Override
         public void run() {
-            try {
-                getLivingRoomTemp();
-            } catch (IOException e) {
-                livingRoomTemp = 20;
-            }
+            //  try {
+            //              getLivingRoomTemp();
+            //        } catch (IOException e) {
+            //          livingRoomTemp = 20;
+            //    }
 
             Calendar cal = Calendar.getInstance();
             int hour = cal.get(Calendar.HOUR_OF_DAY);
@@ -302,6 +275,40 @@ public class TemperatureHandler implements HttpHandler {
                 e.printStackTrace();
             }
             tempDataLivingRoom = ja.toJSONString();
+
+
+            //vdd//////////////////////
+            parser = new JSONParser();
+            ja = new JSONArray();
+            try {
+
+                Object obj = parser.parse(new FileReader("vdd.json"));
+
+                ja = (JSONArray) obj;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            //System.out.println("Stored: " + ja.toString());
+            if (ja.size() > tempArrayLength) {
+                ja.remove(0);
+            }
+            ja.add(vdd);
+            //System.out.println("Saving: " + ja.toString());
+            try {
+
+                FileWriter file = new FileWriter("vdd.json");
+                file.write(ja.toJSONString());
+                file.flush();
+                file.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            vddData = ja.toJSONString();
         }
     }
 }
