@@ -7,6 +7,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.Timer;
@@ -65,7 +67,16 @@ public class TemperatureHandler implements HttpHandler {
         tempArray[1] = tempArray[0];
         tempArray[0] = temp;
         tempAvarageInside = (tempArray[0] + tempArray[1] + tempArray[2] + tempArray[3] + tempArray[4]) / 5;
+        tempAvarageInside = round(tempAvarageInside, 2);
         return tempAvarageInside;
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
     @Override
@@ -113,6 +124,7 @@ public class TemperatureHandler implements HttpHandler {
         tempArrayOutside[1] = tempArrayOutside[0];
         tempArrayOutside[0] = tempOutside;
         tempAvarageOutside = (tempArrayOutside[0] + tempArrayOutside[1] + tempArrayOutside[2]) / 3;
+        tempAvarageOutside = round(tempAvarageOutside, 2);
         return tempAvarageOutside;
     }
 
@@ -132,12 +144,6 @@ public class TemperatureHandler implements HttpHandler {
 
         @Override
         public void run() {
-            //  try {
-            //              getLivingRoomTemp();
-            //        } catch (IOException e) {
-            //          livingRoomTemp = 20;
-            //    }
-
             Calendar cal = Calendar.getInstance();
             int hour = cal.get(Calendar.HOUR_OF_DAY);
             int minute = cal.get(Calendar.MINUTE);

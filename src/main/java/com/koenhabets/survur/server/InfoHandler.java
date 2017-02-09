@@ -14,7 +14,7 @@ public class InfoHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         JSONObject jo = new JSONObject();
-        calendarScholica.update();
+        int code = 200;
         try {
             jo.put("inside-temp", TemperatureHandler.temp);
             jo.put("outside-temp", TemperatureHandler.tempOutside);
@@ -28,10 +28,11 @@ public class InfoHandler implements HttpHandler {
             jo.put("light-C", lightsHandler.C);
             jo.put("livingRoomTemp", TemperatureHandler.livingRoomTemp);
         } catch (JSONException e) {
+            code = 500;
             e.printStackTrace();
         }
         String response = jo.toString();
-        httpExchange.sendResponseHeaders(200, response.length());
+        httpExchange.sendResponseHeaders(code, response.length());
         OutputStream os = httpExchange.getResponseBody();
         os.write(response.getBytes());
         os.close();

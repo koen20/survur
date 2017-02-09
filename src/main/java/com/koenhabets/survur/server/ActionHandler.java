@@ -24,7 +24,6 @@ public class ActionHandler implements HttpHandler {
         String parm = httpExchange.getRequestURI().getQuery();
         String[] parts = parm.split("=");
         String action = parts[1];
-        calendarScholica.update();
         if (Objects.equals(action, "Wake-up")) {
             sleeping = false;
             try {
@@ -43,11 +42,6 @@ public class ActionHandler implements HttpHandler {
             LcdHandler.printLcd("Welterusten", ".");
             sleeping = true;
             String weekDay;
-            try {
-                calendarScholica.update();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
             Calendar cal = Calendar.getInstance();
             weekDay = dayFormat.format(cal.getTime());

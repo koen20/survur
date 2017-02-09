@@ -12,12 +12,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class calendarScholica {
     static String schedule;
     public static int count;
     public static String nextSubject;
     static int day;
+
+    public static void main(){
+        Timer updateTimer = new Timer();
+        updateTimer.scheduleAtFixedRate(new update(), 0, 30 * 60 * 1000);
+    }
 
     public static String getCalendar(int day) throws Exception {
         String url = "https://api.scholica.com/2.0/communities/1/calendar/schedule";
@@ -93,22 +100,25 @@ public class calendarScholica {
 
     }
 
-    public static void update() {
-        Calendar calendarc = Calendar.getInstance();
-        int dayc = calendarc.get(Calendar.DAY_OF_MONTH);
-        if (dayc != day) {
-            try {
-                requestToken.requestToken();
-            } catch (Exception e) {
-                e.printStackTrace();
+    public static class update extends TimerTask {
+        @Override
+        public void run() {
+            Calendar calendarc = Calendar.getInstance();
+            int dayc = calendarc.get(Calendar.DAY_OF_MONTH);
+            if (dayc != day) {
+                try {
+                    requestToken.requestToken();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                nextSubject = getSubject();
+                try {
+                    checkSchedule();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                getTime();
             }
-            nextSubject = getSubject();
-            try {
-                checkSchedule();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            getTime();
         }
     }
 
