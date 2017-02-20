@@ -20,6 +20,7 @@ public class InfoHandler implements HttpHandler {
             jo.put("outside-temp", TemperatureHandler.tempOutside);
             jo.put("sleeping", ActionHandler.sleeping);
             jo.put("inside", ActionHandler.inside);
+            jo.put("insideRoom", RoomHandler.insideRoom);
             jo.put("next-appointment", CalendarHandler.getResponse());
             jo.put("nextSubject", calendarScholica.nextSubject);
             jo.put("vrij", calendarScholica.count);
