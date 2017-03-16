@@ -41,7 +41,7 @@ public class TemperatureHandler implements HttpHandler {
     private double getTemp() {
         String d;
         ExecuteShellCommand com = new ExecuteShellCommand();
-        d = com.executeCommand("bash /var/www/html/cgi-bin/temp.py");
+        d = com.executeCommand("bash /home/pi/scripts/temp.py");
         d = d.replace("\n", "");
         try {
             temp = Double.parseDouble(d);
@@ -108,7 +108,7 @@ public class TemperatureHandler implements HttpHandler {
     private double getTempOutside() {
         String d;
         ExecuteShellCommand com = new ExecuteShellCommand();
-        d = com.executeCommand("bash /home/pi/tempOutside");
+        d = com.executeCommand("bash /home/pi/scripts/tempOutside");
         d = d.replace("\n", "");
         tempOutside = Double.parseDouble(d);
         return tempOutside;

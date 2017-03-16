@@ -23,12 +23,12 @@ public class LcdHandler implements HttpHandler {
     public static void printLcd(String text, String text2) {
         ExecuteShellCommand com = new ExecuteShellCommand();
         //String response = com.executeCommand("python /home/pi/lcd2/text.py \"" + text + "\" " + "\"" + text2 + "\"");
-        com.executeCommand("python /home/pi/lcd2/text.py " + text + " " + text2);
+        com.executeCommand("python /home/pi/scripts/lcd2/text.py " + text + " " + text2);
     }
 
     public static void disableBacklight() {
         ExecuteShellCommand com = new ExecuteShellCommand();
-        com.executeCommand("python /home/pi/lcd2/disablelight.py");
+        com.executeCommand("python /home/pi/scripts/lcd2/disablelight.py");
     }
 
     @Override

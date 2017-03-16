@@ -41,11 +41,11 @@ public class lightsHandler implements HttpHandler {
             C = false;
         }
         ExecuteShellCommand com = new ExecuteShellCommand();
-        com.executeCommand("./home/pi/433Utils/RPi_utils/codesend " + code);
+        com.executeCommand("./home/pi/scripts/433Utils/RPi_utils/codesend " + code);
         ExecuteShellCommand com2 = new ExecuteShellCommand();
-        com2.executeCommand("./home/pi/433Utils/RPi_utils/codesend " + code);
+        com2.executeCommand("./home/pi/scripts/433Utils/RPi_utils/codesend " + code);
         ExecuteShellCommand com3 = new ExecuteShellCommand();
-        com3.executeCommand("./home/pi/433Utils/RPi_utils/codesend " + code);
+        com3.executeCommand("./home/pi/scripts/433Utils/RPi_utils/codesend " + code);
     }
 
     static void resetLights() {
