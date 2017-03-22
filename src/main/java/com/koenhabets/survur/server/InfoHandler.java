@@ -28,6 +28,7 @@ public class InfoHandler implements HttpHandler {
             jo.put("light-B", lightsHandler.B);
             jo.put("light-C", lightsHandler.C);
             jo.put("livingRoomTemp", TemperatureHandler.livingRoomTemp);
+            jo.put("alarmEnabled", ConfigHandler.alarmEnabled);
         } catch (JSONException e) {
             code = 500;
             e.printStackTrace();
