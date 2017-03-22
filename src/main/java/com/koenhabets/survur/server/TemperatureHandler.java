@@ -15,10 +15,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TemperatureHandler implements HttpHandler {
-    static double temp = 500;
-    static double tempAvarageInside;
-    static double tempAvarageOutside;
-    static double livingRoomTemp;
+    static double temp = 20;
+    static double tempAvarageInside = 20;
+    static double tempAvarageOutside = 12;
+    static double livingRoomTemp = 20;
     static double tempOutside;
     static String vdd;
     private static double[] tempArray = new double[5];
@@ -35,7 +35,7 @@ public class TemperatureHandler implements HttpHandler {
         Timer updateTimerGraph = new Timer();
         Timer updateTimer = new Timer();
         updateTimer.scheduleAtFixedRate(new UpdateTask(), 0, 180 * 1000);
-        updateTimerGraph.scheduleAtFixedRate(new UpdateTaskGraph(), 0, 20 * 60 * 1000);
+        updateTimerGraph.scheduleAtFixedRate(new UpdateTaskGraph(), 1000, 20 * 60 * 1000);
     }
 
     private double getTemp() {
