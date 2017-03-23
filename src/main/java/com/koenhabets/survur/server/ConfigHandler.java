@@ -10,6 +10,7 @@ import java.util.Objects;
 
 public class ConfigHandler implements HttpHandler {
     static boolean alarmEnabled = true;
+    static boolean motionEnabled = true;
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
@@ -21,6 +22,12 @@ public class ConfigHandler implements HttpHandler {
                 alarmEnabled = true;
             } else {
                 alarmEnabled = false;
+            }
+        } else if (Objects.equals(parm[0], "motion")) {
+            if (Objects.equals(parm[1], "true")) {
+                motionEnabled = true;
+            } else {
+                motionEnabled = false;
             }
         }
 

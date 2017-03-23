@@ -31,15 +31,14 @@ public class RoomHandler implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
         String parm = httpExchange.getRequestURI().getQuery();
         try {
-            if (Objects.equals(parm, "enter")) {
-
+            if (Objects.equals(parm, "enter") & ConfigHandler.motionEnabled) {
                 Calendar cal = Calendar.getInstance();
                 int Cday = cal.get(Calendar.DAY_OF_MONTH);
                 int Cminute = cal.get(Calendar.MINUTE);
                 int Chour = cal.get(Calendar.HOUR_OF_DAY);
                 int minuteDif = Cminute - minute;
                 if (minuteDif <= 2 && Chour == hour && Cday == day) {
-                    if(!insideRoom){
+                    if (!insideRoom) {
                         //VoiceHandler.sendPost("Hallo", "voice");
                     }
                     insideRoom = true;
@@ -88,17 +87,19 @@ public class RoomHandler implements HttpHandler {
 
         @Override
         public void run() {
-            Calendar cal = Calendar.getInstance();
-            int Cday = cal.get(Calendar.DAY_OF_MONTH);
-            int Cminute = cal.get(Calendar.MINUTE);
-            int Chour = cal.get(Calendar.HOUR_OF_DAY);
-            int minuteDif = Cminute - minute;
-            int hourDif = Chour - hour;
-            if (insideRoom) {
-                if (Cday == day && minuteDif < 10 && hourDif < 1) {
+            if (ConfigHandler.motionEnabled) {
+                Calendar cal = Calendar.getInstance();
+                int Cday = cal.get(Calendar.DAY_OF_MONTH);
+                int Cminute = cal.get(Calendar.MINUTE);
+                int Chour = cal.get(Calendar.HOUR_OF_DAY);
+                int minuteDif = Cminute - minute;
+                int hourDif = Chour - hour;
+                if (insideRoom) {
+                    if (Cday == day && minuteDif < 10 && hourDif < 1) {
 
-                } else {
-                    insideRoom = false;
+                    } else {
+                        insideRoom = false;
+                    }
                 }
             }
         }
