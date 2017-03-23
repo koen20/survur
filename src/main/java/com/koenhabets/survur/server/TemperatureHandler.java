@@ -94,7 +94,6 @@ public class TemperatureHandler implements HttpHandler {
             vdd = split[1];
             response = "Sent";
         } else {
-            temp = getTemp();
             response = temp + "";
         }
 
