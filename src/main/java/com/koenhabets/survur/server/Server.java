@@ -5,11 +5,13 @@ import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.security.Key;
 
 public class Server {
 
     public static void main(String args[]) throws IOException {
         if (args.length > 0 && args[0].equals("log")) Log.enableLog(true);
+        KeyHolder.init("config.json");
         int port = 9999;
         System.out.println("Starting server on port: " + port);
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);

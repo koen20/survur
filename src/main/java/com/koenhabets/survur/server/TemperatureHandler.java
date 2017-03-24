@@ -104,13 +104,12 @@ public class TemperatureHandler implements HttpHandler {
         os.close();
     }
 
-    private double getTempOutside() {
+    private void getTempOutside() {
         String d;
         ExecuteShellCommand com = new ExecuteShellCommand();
         d = com.executeCommand("bash /home/pi/scripts/tempOutside");
         d = d.replace("\n", "");
         tempOutside = Double.parseDouble(d);
-        return tempOutside;
     }
 
     private double avarageTempOutside() {

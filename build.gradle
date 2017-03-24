@@ -32,4 +32,6 @@ dependencies {
     compile 'org.json:json:20090211'
     compile 'com.luckycatlabs:SunriseSunsetCalculator:1.2'
     compile 'com.googlecode.json-simple:json-simple:1.1.1'
+    compile 'com.google.guava:guava:21.0'
+    compile 'com.google.code.gson:gson:2.8.0'
 }

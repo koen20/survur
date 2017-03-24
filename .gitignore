@@ -133,9 +133,9 @@ gradle-app.setting
 
 .idea/
 
-KeyHolder.java
 livingRoomTemp.json
 temp.json
 tempOutside.json
 time.json
 vdd.json
+config.json
