@@ -46,7 +46,7 @@ public class ActionHandler implements HttpHandler {
             Calendar cal = Calendar.getInstance();
             weekDay = dayFormat.format(cal.getTime());
             System.out.println(calendarScholica.count);
-            if (!Objects.equals(weekDay, "Friday") & !Objects.equals(weekDay, "Saturday") & calendarScholica.count < 500 & ConfigHandler.alarmEnabled) {
+            if (!Objects.equals(weekDay, "Friday") && !Objects.equals(weekDay, "Saturday") && calendarScholica.count < 500 && ConfigHandler.alarmEnabled) {
                 try {
                     if (calendarScholica.count == 1) {
                         hour = 8;

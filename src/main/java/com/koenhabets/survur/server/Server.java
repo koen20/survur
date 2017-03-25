@@ -27,6 +27,7 @@ public class Server {
         server.createContext("/room", new RoomHandler());
         server.createContext("/lights", new lightsHandler());
         server.createContext("/config", new ConfigHandler());
+        server.createContext("/fish", new FishHandler());
         server.start();
         timer.main();
         calendarScholica.main();

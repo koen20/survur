@@ -30,6 +30,7 @@ public class InfoHandler implements HttpHandler {
             jo.put("livingRoomTemp", TemperatureHandler.livingRoomTemp);
             jo.put("alarmEnabled", ConfigHandler.alarmEnabled);
             jo.put("motionEnabled", ConfigHandler.motionEnabled);
+            jo.put("fishFood", FishHandler.food);
         } catch (JSONException e) {
             code = 500;
             e.printStackTrace();
