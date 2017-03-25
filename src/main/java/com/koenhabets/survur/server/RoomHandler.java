@@ -2,6 +2,8 @@ package com.koenhabets.survur.server;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import spark.Request;
+import spark.Response;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,7 +12,7 @@ import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class RoomHandler implements HttpHandler {
+public class RoomHandler {
     static boolean insideRoom = false;
     String response = ":)";
     private int minute = 100;
@@ -27,9 +29,8 @@ public class RoomHandler implements HttpHandler {
         updateTimerRoom.scheduleAtFixedRate(new UpdateInside(), 0, 60 * 1000);
     }
 
-    @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
-        String parm = httpExchange.getRequestURI().getQuery();
+    public String action(Request request, Response response){
+        String parm = request.queryParams("action");
         try {
             if (Objects.equals(parm, "enter") & ConfigHandler.motionEnabled) {
                 Calendar cal = Calendar.getInstance();
@@ -51,11 +52,7 @@ public class RoomHandler implements HttpHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        httpExchange.sendResponseHeaders(200, response.length());
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
+        return "";
     }
 
     private class CheckWifi extends TimerTask {

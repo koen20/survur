@@ -2,30 +2,23 @@ package com.koenhabets.survur.server;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import spark.Request;
+import spark.Response;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Objects;
 
-public class CalendarHandler implements HttpHandler {
+public class CalendarHandler {
     static String response = "";
 
-    @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
-        String parm = httpExchange.getRequestURI().getQuery();
-        String[] parts = parm.split("=");
-        if (Objects.equals(parts[0], "calendar")) {
-            response = parts[1];
-        }
-
-        httpExchange.sendResponseHeaders(200, response.length());
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
+    public String setCalendar(Request request, Response res){
+        response = request.queryParams("appointment");
+        return response;
     }
 
-    static String getResponse() {
+    public static String getResponse() {
         return response;
     }
 

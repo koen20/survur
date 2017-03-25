@@ -1,12 +1,15 @@
 package com.koenhabets.survur.server;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import spark.Request;
+import spark.Response;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
@@ -14,7 +17,7 @@ import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class TemperatureHandler implements HttpHandler {
+public class TemperatureHandler {
     static double temp = 20;
     static double tempAvarageInside = 20;
     static double tempAvarageOutside = 12;
@@ -36,6 +39,14 @@ public class TemperatureHandler implements HttpHandler {
         Timer updateTimer = new Timer();
         updateTimer.scheduleAtFixedRate(new UpdateTask(), 0, 180 * 1000);
         updateTimerGraph.scheduleAtFixedRate(new UpdateTaskGraph(), 1000, 20 * 60 * 1000);
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
     private double getTemp() {
@@ -71,37 +82,23 @@ public class TemperatureHandler implements HttpHandler {
         return tempAvarageInside;
     }
 
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
-    }
-
-    @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
-        String parmt = httpExchange.getRequestURI().getQuery();
-        String[] parm = parmt.split("=");
-        if (Objects.equals(parm[0], "graph")) {
+    public String getTemperature(Request request, Response res) {
+        response = "";
+        String location = request.queryParams("location");
+        if (Objects.equals(location, "graph")) {
             response = "[" + tempData + "," + tempTime + "," + outsideTemp + "," + tempDataLivingRoom + "," + vddData + "]";
-        } else if (Objects.equals(parm[0], "tempOutside")) {
+        } else if (Objects.equals(location, "outside")) {
             response = tempOutside + "";
-        } else if (Objects.equals(parm[0], "sent")) {
-            Log.d(parm[1]);
-            String[] split = parm[1].split(";");
-            livingRoomTemp = Double.parseDouble(split[0]);
-            vdd = split[1];
-            response = "Sent";
-        } else {
+        } else if (Objects.equals(location, "inside")) {
             response = temp + "";
         }
+        return response;
+    }
 
-
-        httpExchange.sendResponseHeaders(200, response.length());
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
+    public String setTemperature(Request request, Response res) {
+        vdd = request.queryParams("vdd");
+        livingRoomTemp = Double.parseDouble(request.queryParams("temperature"));
+        return "Sent";
     }
 
     private void getTempOutside() {

@@ -1,40 +1,31 @@
 package com.koenhabets.survur.server;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import spark.Request;
+import spark.Response;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Objects;
 
 
-public class ConfigHandler implements HttpHandler {
+public class ConfigHandler {
     static boolean alarmEnabled = true;
     static boolean motionEnabled = true;
 
-    @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
-        String parmt = httpExchange.getRequestURI().getQuery();
-        String[] parm = parmt.split("=");
-
-        if (Objects.equals(parm[0], "alarm")) {
-            if (Objects.equals(parm[1], "true")) {
+    public String setConfig(Request request, Response response) {
+        String parm = request.queryParams("config");
+        String parm2 = request.queryParams("status");
+        if (Objects.equals(parm, "alarm")) {
+            if (Objects.equals(parm2, "true")) {
                 alarmEnabled = true;
             } else {
                 alarmEnabled = false;
             }
-        } else if (Objects.equals(parm[0], "motion")) {
-            if (Objects.equals(parm[1], "true")) {
+        } else if (Objects.equals(parm, "motion")) {
+            if (Objects.equals(parm2, "true")) {
                 motionEnabled = true;
             } else {
                 motionEnabled = false;
             }
         }
-
-        String response = ":)";
-        httpExchange.sendResponseHeaders(200, response.length());
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
+        return "";
     }
 }

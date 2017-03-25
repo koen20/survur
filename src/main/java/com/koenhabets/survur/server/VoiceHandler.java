@@ -8,25 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class VoiceHandler implements HttpHandler {
-    private int code = 200;
-
-    @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
-        String parm = httpExchange.getRequestURI().getQuery();
-        String[] parts = parm.split("=");
-        try {
-            sendPost(parts[1], "voice");
-        } catch (Exception e) {
-            code = 500;
-            e.printStackTrace();
-        }
-        String response = "sent";
-        httpExchange.sendResponseHeaders(code, response.length());
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
-    }
+public class VoiceHandler {
 
     public static String sendPost(String parm, String action) throws Exception {
         parm = URLEncoder.encode(parm, "UTF-8");

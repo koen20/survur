@@ -1,17 +1,10 @@
 package com.koenhabets.survur.server;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class LcdHandler implements HttpHandler {
-    String response = "Sent";
-    private int code = 200;
+public class LcdHandler {
     private int d = 0;
     private int counter = 500;
 
@@ -28,18 +21,6 @@ public class LcdHandler implements HttpHandler {
     public static void disableBacklight() {
         ExecuteShellCommand com = new ExecuteShellCommand();
         com.executeCommand("python /home/pi/scripts/lcd2/disablelight.py");
-    }
-
-    @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
-        String parm = httpExchange.getRequestURI().getQuery();
-        String[] parts = parm.split(";");
-        printLcd(parts[0], parts[1]);
-
-        httpExchange.sendResponseHeaders(code, response.length());
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
     }
 
     private class UpdateTask extends TimerTask {

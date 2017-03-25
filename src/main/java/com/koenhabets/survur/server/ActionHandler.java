@@ -1,29 +1,23 @@
 package com.koenhabets.survur.server;
 
 import com.koenhabets.survur.server.ScholicaApi.calendarScholica;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import spark.Request;
+import spark.Response;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
-public class ActionHandler implements HttpHandler {
+public class ActionHandler {
     static boolean sleeping = false;
     static boolean inside = true;
-    String response = "sent";
-    private int code = 200;
     static int hour;
     static int minute;
+    private int code = 200;
 
-    @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
-        String parm = httpExchange.getRequestURI().getQuery();
-        String[] parts = parm.split("=");
-        String action = parts[1];
+    public String action(Request request, Response response) {
+        String action = request.queryParams("action");
         if (Objects.equals(action, "Wake-up")) {
             sleeping = false;
             try {
@@ -91,9 +85,6 @@ public class ActionHandler implements HttpHandler {
                 LightsHandler.resetLights();
             }
         }
-        httpExchange.sendResponseHeaders(code, response.length());
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
+        return "";
     }
 }
