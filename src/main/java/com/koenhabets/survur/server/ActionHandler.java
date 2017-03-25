@@ -88,7 +88,7 @@ public class ActionHandler implements HttpHandler {
         } else if (Objects.equals(action, "Leave")) {
             if (!sleeping) {
                 inside = false;
-                lightsHandler.resetLights();
+                LightsHandler.resetLights();
             }
         }
         httpExchange.sendResponseHeaders(code, response.length());

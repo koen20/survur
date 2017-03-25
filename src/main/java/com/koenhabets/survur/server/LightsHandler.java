@@ -1,13 +1,11 @@
 package com.koenhabets.survur.server;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import spark.Request;
+import spark.Response;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Objects;
 
-public class lightsHandler implements HttpHandler {
+public class LightsHandler {
     static boolean A = false;
     static boolean B = false;
     static boolean C = false;
@@ -54,15 +52,9 @@ public class lightsHandler implements HttpHandler {
         Light("Coff");
     }
 
-    @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
-        String parm = httpExchange.getRequestURI().getQuery();
+    public String setLight(Request request, Response response) {
+        String parm = request.queryParams("light");
         Light(parm);
-
-        response = "Sent";
-        httpExchange.sendResponseHeaders(200, response.length());
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
+        return ":)";
     }
 }

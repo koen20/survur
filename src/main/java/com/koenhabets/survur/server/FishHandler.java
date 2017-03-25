@@ -2,20 +2,18 @@ package com.koenhabets.survur.server;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import spark.Request;
+import spark.Response;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class FishHandler implements HttpHandler {
+public class FishHandler {
     static int food = 150;
-    private String response;
 
     public FishHandler() throws IOException {
         Timer updateTimer = new Timer();
@@ -23,28 +21,19 @@ public class FishHandler implements HttpHandler {
         readFood();
     }
 
-    @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
-        String parm = httpExchange.getRequestURI().getQuery();
-
-        if (Objects.equals(parm, "feed")) {
-            Calendar cal = Calendar.getInstance();
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            if (food < 150 && hour < 20 && hour > 6) {
-                try {
-                    feedFish();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                food = food + 80;
+    public String fishFeed(Request request, Response response) throws IOException {
+        Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        if (food < 150 && hour < 20 && hour > 6) {
+            try {
+                feedFish();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            food = food + 80;
         }
-        response = food + "";
-        httpExchange.sendResponseHeaders(200, response.length());
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
         saveFood();
+        return food + "";
     }
 
     private void saveFood() throws IOException {

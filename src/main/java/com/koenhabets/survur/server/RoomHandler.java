@@ -70,7 +70,7 @@ public class RoomHandler implements HttpHandler {
                 countOut++;
                 if (countOut == 2 && !ActionHandler.sleeping) {
                     ActionHandler.inside = false;
-                    lightsHandler.resetLights();
+                    LightsHandler.resetLights();
                 }
             } else {
                 countOut = 0;

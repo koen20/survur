@@ -4,6 +4,8 @@ import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator;
 import com.luckycatlabs.sunrisesunset.dto.Location;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import spark.Request;
+import spark.Response;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,21 +20,7 @@ public class SunSetHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange he) throws IOException {
 
-        String response = "";
-        int result = 0;
 
-        try {
-            response = parseSunriseSunset();
-            result = 200;
-        } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            e.printStackTrace();
-            result = 500;
-        } finally {
-            he.sendResponseHeaders(result, response.length());
-            OutputStream os = he.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        }
     }
 
     private String parseSunriseSunset() throws NumberFormatException, IndexOutOfBoundsException {
@@ -56,5 +44,17 @@ public class SunSetHandler implements HttpHandler {
         result += ";" + sunrise1 + "." + sunrise2;
 
         return result;
+    }
+
+    public String getSunsetSunrise(Request request, Response response){
+        String responsed = "";
+        int result = 0;
+
+        try {
+            responsed = parseSunriseSunset();
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+        return responsed;
     }
 }
