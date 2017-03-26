@@ -81,7 +81,7 @@ public class FishHandler {
 
         @Override
         public void run() {
-            food = food - 5;
+            food = food - 4;
             try {
                 saveFood();
             } catch (IOException e) {

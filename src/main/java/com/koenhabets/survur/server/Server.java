@@ -42,9 +42,6 @@ public class Server {
         post("/room", room::action);
         post("/calendar", calendar::setCalendar);
 
-        /*
-        server.createContext("/response", new ResponseHandler());
-        */
         timer.main();
         calendarScholica.main();
 
