@@ -1,5 +1,6 @@
 package com.koenhabets.survur.server;
 
+import com.koenhabets.survur.server.ScholicaApi.calendarScholica;
 import spark.Request;
 import spark.Response;
 
@@ -39,8 +40,16 @@ public class RoomHandler {
                 if (minuteDif <= 2 && Chour == hour && Cday == day) {
                     if (!insideRoom && !ActionHandler.sleeping && ActionHandler.inside) {
                         //VoiceHandler.sendPost("Hallo", "voice");
-                        LightsHandler.Light("Aon");
-                        LightsHandler.Light("Bon");
+                        if (Chour > SunSetHandler.sunriseHour) {
+                            LightsHandler.Light("Aon");
+                            LightsHandler.Light("Bon");
+                        }
+                        if (calendarScholica.count < 2 && ConfigHandler.alarmEnabled && !ActionHandler.sleeping) {
+                            if (Chour == 21 && Cminute > 25 || Chour == 22) {
+                                VoiceHandler.sendPost("Ga je nu slapen?", "voice");
+                                VoiceHandler.sendPost("", "enterLate");
+                            }
+                        }
                     }
                     insideRoom = true;
 
@@ -86,7 +95,7 @@ public class RoomHandler {
                 int Cminute = cal.get(Calendar.MINUTE);
                 int minuteDif = Cminute - minute;
                 if (insideRoom) {
-                    if (Cday == day && minuteDif < 7 && minuteDif > -56) {
+                    if (Cday == day && minuteDif < 5 && minuteDif > -56) {
 
                     } else {
                         insideRoom = false;

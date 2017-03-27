@@ -26,6 +26,7 @@ public class Server {
         ActionHandler action = new ActionHandler();
         RoomHandler room = new RoomHandler();
         CalendarHandler calendar = new CalendarHandler();
+        ResponseHandler response = new ResponseHandler();
         new LcdHandler();
 
         get("/info", info::getInfo);
@@ -41,6 +42,7 @@ public class Server {
         get("/action", action::action);
         post("/room", room::action);
         post("/calendar", calendar::setCalendar);
+        post("/response", response::response);
 
         timer.main();
         calendarScholica.main();

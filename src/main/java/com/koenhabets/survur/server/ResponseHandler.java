@@ -1,30 +1,20 @@
 package com.koenhabets.survur.server;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import spark.Request;
+import spark.Response;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Objects;
 
-public class ResponseHandler implements HttpHandler {
-    int code = 200;
-    String response = "Sent";
+public class ResponseHandler {
 
-    @Override
-    public void handle(HttpExchange httpExchange) throws IOException {
-        String parm = httpExchange.getRequestURI().getQuery();
-        String[] parts = parm.split("=");
-        String[] parts2 = parts[1].split(";");
-
-        if (Objects.equals(parts2[1], "Prep-Sleep")) {
-            if (Objects.equals(parts2[0], "ja")) {
+    public String response(Request request, Response res) {
+        String action = request.queryParams("action");
+        String response = request.queryParams("response");
+        if (Objects.equals(action, "enterLate")) {
+            if (Objects.equals(response, "ja")) {
+                ActionHandler.prepSleep();
             }
         }
-
-        httpExchange.sendResponseHeaders(code, response.length());
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
+        return "";
     }
 }
