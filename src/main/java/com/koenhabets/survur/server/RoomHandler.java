@@ -1,12 +1,8 @@
 package com.koenhabets.survur.server;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import spark.Request;
 import spark.Response;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.Timer;
@@ -14,6 +10,7 @@ import java.util.TimerTask;
 
 public class RoomHandler {
     static boolean insideRoom = false;
+    static String lastMovement;
     String response = ":)";
     private int minute = 100;
     private int day = 65;
@@ -29,7 +26,7 @@ public class RoomHandler {
         updateTimerRoom.scheduleAtFixedRate(new UpdateInside(), 0, 60 * 1000);
     }
 
-    public String action(Request request, Response response){
+    public String action(Request request, Response response) {
         String parm = request.queryParams("action");
         try {
             if (Objects.equals(parm, "enter") & ConfigHandler.motionEnabled) {
@@ -37,10 +34,13 @@ public class RoomHandler {
                 int Cday = cal.get(Calendar.DAY_OF_MONTH);
                 int Cminute = cal.get(Calendar.MINUTE);
                 int Chour = cal.get(Calendar.HOUR_OF_DAY);
+                lastMovement = Chour + ":" + Cminute + " day:" + Cday;
                 int minuteDif = Cminute - minute;
                 if (minuteDif <= 2 && Chour == hour && Cday == day) {
-                    if (!insideRoom) {
+                    if (!insideRoom && !ActionHandler.sleeping && ActionHandler.inside) {
                         //VoiceHandler.sendPost("Hallo", "voice");
+                        LightsHandler.Light("Aon");
+                        LightsHandler.Light("Bon");
                     }
                     insideRoom = true;
 
@@ -56,8 +56,6 @@ public class RoomHandler {
     }
 
     private class CheckWifi extends TimerTask {
-
-
         @Override
         public void run() {
             ExecuteShellCommand com = new ExecuteShellCommand();
@@ -80,22 +78,20 @@ public class RoomHandler {
     }
 
     private class UpdateInside extends TimerTask {
-
-
         @Override
         public void run() {
             if (ConfigHandler.motionEnabled) {
                 Calendar cal = Calendar.getInstance();
                 int Cday = cal.get(Calendar.DAY_OF_MONTH);
                 int Cminute = cal.get(Calendar.MINUTE);
-                int Chour = cal.get(Calendar.HOUR_OF_DAY);
                 int minuteDif = Cminute - minute;
-                int hourDif = Chour - hour;
                 if (insideRoom) {
-                    if (Cday == day && minuteDif < 10 && hourDif < 1) {
+                    if (Cday == day && minuteDif < 7 && minuteDif > -56) {
 
                     } else {
                         insideRoom = false;
+                        LightsHandler.Light("Aoff");
+                        LightsHandler.Light("Boff");
                     }
                 }
             }

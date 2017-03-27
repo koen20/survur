@@ -26,6 +26,7 @@ public class InfoHandler {
             jo.put("alarmEnabled", ConfigHandler.alarmEnabled);
             jo.put("motionEnabled", ConfigHandler.motionEnabled);
             jo.put("fishFood", FishHandler.food);
+            jo.put("lastMovement", RoomHandler.lastMovement);
         } catch (JSONException e) {
             e.printStackTrace();
         }
