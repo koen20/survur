@@ -4,10 +4,10 @@ import com.koenhabets.survur.server.ScholicaApi.calendarScholica;
 import spark.Request;
 import spark.Response;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 public class ActionHandler {
     static boolean sleeping = false;
@@ -77,6 +77,16 @@ public class ActionHandler {
                     VoiceHandler.sendPost("Het alarm gaat om 07:20", "voice");
                     LcdHandler.printLcd("Welterusten", "Alarm:07:20");
                 }
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                int month = cal.get(Calendar.MONTH);
+                int year = cal.get(Calendar.YEAR);
+                minute = minute - 2;
+                String dateStringOn = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":00";
+                minute = minute + 7;
+                String dateStringOff = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":00";
+                System.out.println();
+                setOff(dateStringOff);
+                setOn(dateStringOn);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -86,6 +96,56 @@ public class ActionHandler {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int month = cal.get(Calendar.MONTH);
+        int year = cal.get(Calendar.YEAR);
+        int hourC = cal.get(Calendar.HOUR);
+        int minuteC = cal.get(Calendar.MINUTE) + 2;
+        String dateString = year + "-" + month + "-" + day + " " + hourC + ":" + minuteC + ":00";
+        try {
+            setOff(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void setOff(String dateString) throws ParseException {
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = dateFormatter .parse(dateString);
+
+        //Now create the time and schedule it
+        Timer timer = new Timer();
+
+        //Use this if you want to execute it once
+        timer.schedule(new lightsOff(), date);
+    }
+
+    public static void setOn(String dateString) throws ParseException {
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = dateFormatter .parse(dateString);
+
+        //Now create the time and schedule it
+        Timer timer = new Timer();
+
+        //Use this if you want to execute it once
+        timer.schedule(new lightsOn(), date);
+    }
+
+    private static class lightsOff extends TimerTask
+    {
+
+        public void run()
+        {
+            LightsHandler.Light("Boff");
+        }
+    }
+    private static class lightsOn extends TimerTask{
+
+        @Override
+        public void run() {
+            LightsHandler.Light("Bon");
         }
     }
 }

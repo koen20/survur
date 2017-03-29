@@ -95,7 +95,7 @@ public class RoomHandler {
                 int Cminute = cal.get(Calendar.MINUTE);
                 int minuteDif = Cminute - minute;
                 if (insideRoom) {
-                    if (Cday == day && minuteDif < 5 && minuteDif > -56) {
+                    if (Cday == day && minuteDif < 4 && minuteDif > -56) {
 
                     } else {
                         insideRoom = false;
