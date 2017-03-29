@@ -16,9 +16,9 @@ public class FishHandler {
     static int food = 150;
 
     public FishHandler() throws IOException {
+        readFood();
         Timer updateTimer = new Timer();
         updateTimer.scheduleAtFixedRate(new UpdateTask(), 0, 30 * 60 * 1000);
-        readFood();
     }
 
     public String fishFeed(Request request, Response response) throws IOException {
