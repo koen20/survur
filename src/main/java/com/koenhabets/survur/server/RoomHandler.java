@@ -12,7 +12,6 @@ import java.util.TimerTask;
 public class RoomHandler {
     static boolean insideRoom = false;
     static String lastMovement;
-    String response = ":)";
     private int minute = 100;
     private int day = 65;
     private int hour = 100;
@@ -40,11 +39,11 @@ public class RoomHandler {
                 if (minuteDif <= 2 && Chour == hour && Cday == day) {
                     if (!insideRoom && !ActionHandler.sleeping && ActionHandler.inside) {
                         //VoiceHandler.sendPost("Hallo", "voice");
-                        if (Chour > SunSetHandler.sunriseHour) {
+                        if (Chour > SunSetHandler.sunsetHour) {
                             LightsHandler.Light("Aon");
                             LightsHandler.Light("Bon");
                         }
-                        if (calendarScholica.count < 2 && ConfigHandler.alarmEnabled && !ActionHandler.sleeping) {
+                        if (calendarScholica.count < 5 && ConfigHandler.alarmEnabled && !ActionHandler.sleeping) {
                             if (Chour == 21 && Cminute > 25 || Chour == 22) {
                                 VoiceHandler.sendPost("Ga je nu slapen?", "voice");
                                 VoiceHandler.sendPost("", "enterLate");
@@ -95,7 +94,7 @@ public class RoomHandler {
                 int Cminute = cal.get(Calendar.MINUTE);
                 int minuteDif = Cminute - minute;
                 if (insideRoom) {
-                    if (Cday == day && minuteDif < 5 && minuteDif > -56) {
+                    if (Cday == day && minuteDif < 4 && minuteDif > -56) {
 
                     } else {
                         insideRoom = false;

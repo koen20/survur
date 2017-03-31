@@ -33,7 +33,7 @@ public class Server {
         post("/lights", light::setLight);
         post("/wol", wol::wol);
         get("/wol", wol::wol);
-        get("/sunsest-sunrise", sunsetSunrise::getSunsetSunrise);
+        get("/sunset-sunrise", sunsetSunrise::getSunsetSunrise);
         post("/fish", fish::fishFeed);
         post("/config", config::setConfig);
         get("/temp", temp::getTemperature);
