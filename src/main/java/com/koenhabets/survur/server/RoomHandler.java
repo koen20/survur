@@ -37,8 +37,9 @@ public class RoomHandler {
                 int Cminute = cal.get(Calendar.MINUTE);
                 int Chour = cal.get(Calendar.HOUR_OF_DAY);
                 lastMovement = Chour + ":" + Cminute + " day:" + Cday;
-                int minuteDif = Cminute - minute;
-                if (minuteDif <= 2 && Chour == hour && Cday == day) {
+                long Cmiliseconds = cal.getTimeInMillis();
+                long milisecondsDif = Cmiliseconds - miliseconds;
+                if (milisecondsDif < 120000) {
                     if (!insideRoom && !ActionHandler.sleeping && ActionHandler.inside) {
                         //VoiceHandler.sendPost("Hallo", "voice");
                         if (Chour > SunSetHandler.sunriseHour) {
@@ -93,16 +94,10 @@ public class RoomHandler {
         public void run() {
             if (ConfigHandler.motionEnabled) {
                 Calendar cal = Calendar.getInstance();
-                int Cday = cal.get(Calendar.DAY_OF_MONTH);
-                int Cminute = cal.get(Calendar.MINUTE);
-                int minuteDif = Cminute - minute;
                 long Cmiliseconds = cal.getTimeInMillis();
                 long milisecondsDif = Cmiliseconds - miliseconds;
-                System.out.println(milisecondsDif);
                 if (insideRoom) {
-                    if (milisecondsDif < 120000) {
-
-                    } else {
+                    if (milisecondsDif > 120000) {
                         insideRoom = false;
                         LightsHandler.Light("Aoff");
                         LightsHandler.Light("Boff");
