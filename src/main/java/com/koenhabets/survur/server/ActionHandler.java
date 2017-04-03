@@ -48,7 +48,8 @@ public class ActionHandler {
         }
         return "";
     }
-    static void prepSleep(){
+
+    static void prepSleep() {
         LcdHandler.printLcd("Welterusten", ".");
         sleeping = true;
         String weekDay;
@@ -85,8 +86,10 @@ public class ActionHandler {
                 minute = minute + 7;
                 String dateStringOff = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":00";
                 System.out.println();
-                setOff(dateStringOff);
-                setOn(dateStringOn);
+                if (inside) {
+                    setOff(dateStringOff);
+                    setOn(dateStringOn);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -113,7 +116,7 @@ public class ActionHandler {
 
     public static void setOff(String dateString) throws ParseException {
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = dateFormatter .parse(dateString);
+        Date date = dateFormatter.parse(dateString);
 
         //Now create the time and schedule it
         Timer timer = new Timer();
@@ -124,7 +127,7 @@ public class ActionHandler {
 
     public static void setOn(String dateString) throws ParseException {
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = dateFormatter .parse(dateString);
+        Date date = dateFormatter.parse(dateString);
 
         //Now create the time and schedule it
         Timer timer = new Timer();
@@ -133,15 +136,14 @@ public class ActionHandler {
         timer.schedule(new lightsOn(), date);
     }
 
-    private static class lightsOff extends TimerTask
-    {
+    private static class lightsOff extends TimerTask {
 
-        public void run()
-        {
+        public void run() {
             LightsHandler.Light("Boff");
         }
     }
-    private static class lightsOn extends TimerTask{
+
+    private static class lightsOn extends TimerTask {
 
         @Override
         public void run() {
