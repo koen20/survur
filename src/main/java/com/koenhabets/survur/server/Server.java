@@ -40,7 +40,7 @@ public class Server {
         post("/temp", temp::setTemperature);
         post("/action", action::action);
         get("/action", action::action);
-        post("/room", room::action);
+        get("/room", room::action);
         post("/calendar", calendar::setCalendar);
         post("/response", response::response);
 

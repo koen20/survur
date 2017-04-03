@@ -18,13 +18,14 @@ public class RoomHandler {
     private int hour = 100;
     private int countIn = 0;
     private int countOut = 0;
+    private long miliseconds = 0;
 
     public RoomHandler() {
         Timer updateTimer = new Timer();
         updateTimer.scheduleAtFixedRate(new CheckWifi(), 0, 7 * 60 * 1000);
 
         Timer updateTimerRoom = new Timer();
-        updateTimerRoom.scheduleAtFixedRate(new UpdateInside(), 0, 60 * 1000);
+        updateTimerRoom.scheduleAtFixedRate(new UpdateInside(), 0, 10 * 1000);
     }
 
     public String action(Request request, Response response) {
@@ -57,6 +58,7 @@ public class RoomHandler {
                 day = cal.get(Calendar.DAY_OF_MONTH);
                 minute = cal.get(Calendar.MINUTE);
                 hour = cal.get(Calendar.HOUR_OF_DAY);
+                miliseconds = cal.getTimeInMillis();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,8 +96,11 @@ public class RoomHandler {
                 int Cday = cal.get(Calendar.DAY_OF_MONTH);
                 int Cminute = cal.get(Calendar.MINUTE);
                 int minuteDif = Cminute - minute;
+                long Cmiliseconds = cal.getTimeInMillis();
+                long milisecondsDif = Cmiliseconds - miliseconds;
+                System.out.println(milisecondsDif);
                 if (insideRoom) {
-                    if (Cday == day && minuteDif < 4 && minuteDif > -56) {
+                    if (milisecondsDif < 120000) {
 
                     } else {
                         insideRoom = false;
