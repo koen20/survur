@@ -35,7 +35,7 @@ public class RoomHandler {
                 lastMovement = Chour + ":" + Cminute + " day:" + Cday;
                 long Cmiliseconds = cal.getTimeInMillis();
                 long milisecondsDif = Cmiliseconds - miliseconds;
-                if (milisecondsDif < 120000) {
+                if (milisecondsDif < 120 * 1000) {
                     if (!insideRoom && !ActionHandler.sleeping && ActionHandler.inside) {
                         //VoiceHandler.sendPost("Hallo", "voice");
                         if (Chour > SunSetHandler.sunsetHour) {
@@ -44,8 +44,8 @@ public class RoomHandler {
                         }
                         if (calendarScholica.count < 4 && ConfigHandler.alarmEnabled) {
                             if (Chour == 21 && Cminute > 25 || Chour == 22) {
-                                VoiceHandler.sendPost("Ga je nu slapen?", "voice");
-                                VoiceHandler.sendPost("", "enterLate");
+                                VoiceHandler.sendPost("Ga je nu slapen?;enterLate", "voice");
+                                VoiceHandler.sendPost("", "response");
                             }
                         }
                     }
@@ -90,7 +90,7 @@ public class RoomHandler {
                 long Cmiliseconds = cal.getTimeInMillis();
                 long milisecondsDif = Cmiliseconds - miliseconds;
                 if (insideRoom) {
-                    if (milisecondsDif > 120000) {
+                    if (milisecondsDif > 120 * 1000) {
                         insideRoom = false;
                         LightsHandler.Light("Aoff");
                         LightsHandler.Light("Boff");

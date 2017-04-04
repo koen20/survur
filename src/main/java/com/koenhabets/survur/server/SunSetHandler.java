@@ -2,16 +2,15 @@ package com.koenhabets.survur.server;
 
 import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator;
 import com.luckycatlabs.sunrisesunset.dto.Location;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import spark.Request;
 import spark.Response;
 
-import java.io.IOException;
 import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
-public class SunSetHandler implements HttpHandler {
+public class SunSetHandler {
 
     private static final Location LOCATION = new Location("50.903819", "6.029882");
     private static final String TIMEZONE = "Nederland/Amsterdam";
@@ -19,19 +18,19 @@ public class SunSetHandler implements HttpHandler {
     public static int sunsetMinute;
     public static int sunriseHour;
     public static int sunriseMinute;
+    private String result;
 
-    @Override
-    public void handle(HttpExchange he) throws IOException {
-
-
+    public SunSetHandler() {
+        Timer updateTimer = new Timer();
+        updateTimer.scheduleAtFixedRate(new UpdateTask(), 0, 12 * 60 * 60 * 1000);
     }
+
 
     private String parseSunriseSunset() throws NumberFormatException, IndexOutOfBoundsException {
         SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(LOCATION, TIMEZONE);
         String sunriseO = calculator.getOfficialSunriseForDate(Calendar.getInstance());
         String sunsetO = calculator.getOfficialSunsetForDate(Calendar.getInstance());
 
-        String result;
         String[] parts = sunsetO.split(":");
         String part1 = parts[0];
         String part2 = parts[1];
@@ -50,14 +49,13 @@ public class SunSetHandler implements HttpHandler {
     }
 
     public String getSunsetSunrise(Request request, Response response) {
-        String responsed = "";
-        int result = 0;
+        return result;
+    }
 
-        try {
-            responsed = parseSunriseSunset();
-        } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            e.printStackTrace();
+    private class UpdateTask extends TimerTask {
+        @Override
+        public void run() {
+            parseSunriseSunset();
         }
-        return responsed;
     }
 }
