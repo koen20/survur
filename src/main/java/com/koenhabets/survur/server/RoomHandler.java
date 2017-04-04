@@ -13,9 +13,6 @@ public class RoomHandler {
     static boolean insideRoom = false;
     static String lastMovement;
     String response = ":)";
-    private int minute = 100;
-    private int day = 65;
-    private int hour = 100;
     private int countIn = 0;
     private int countOut = 0;
     private long miliseconds = 0;
@@ -42,11 +39,11 @@ public class RoomHandler {
                 if (milisecondsDif < 120000) {
                     if (!insideRoom && !ActionHandler.sleeping && ActionHandler.inside) {
                         //VoiceHandler.sendPost("Hallo", "voice");
-                        if (Chour > SunSetHandler.sunriseHour) {
+                        if (Chour > SunSetHandler.sunsetHour) {
                             LightsHandler.Light("Aon");
                             LightsHandler.Light("Bon");
                         }
-                        if (calendarScholica.count < 2 && ConfigHandler.alarmEnabled && !ActionHandler.sleeping) {
+                        if (calendarScholica.count < 2 && ConfigHandler.alarmEnabled) {
                             if (Chour == 21 && Cminute > 25 || Chour == 22) {
                                 VoiceHandler.sendPost("Ga je nu slapen?", "voice");
                                 VoiceHandler.sendPost("", "enterLate");
@@ -56,9 +53,6 @@ public class RoomHandler {
                     insideRoom = true;
 
                 }
-                day = cal.get(Calendar.DAY_OF_MONTH);
-                minute = cal.get(Calendar.MINUTE);
-                hour = cal.get(Calendar.HOUR_OF_DAY);
                 miliseconds = cal.getTimeInMillis();
             }
         } catch (Exception e) {
@@ -92,7 +86,7 @@ public class RoomHandler {
     private class UpdateInside extends TimerTask {
         @Override
         public void run() {
-            if (ConfigHandler.motionEnabled) {
+            if (ConfigHandler.motionEnabled && !ActionHandler.sleeping) {
                 Calendar cal = Calendar.getInstance();
                 long Cmiliseconds = cal.getTimeInMillis();
                 long milisecondsDif = Cmiliseconds - miliseconds;

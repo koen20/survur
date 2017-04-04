@@ -33,14 +33,14 @@ public class Server {
         post("/lights", light::setLight);
         post("/wol", wol::wol);
         get("/wol", wol::wol);
-        get("/sunsest-sunrise", sunsetSunrise::getSunsetSunrise);
+        get("/sunset-sunrise", sunsetSunrise::getSunsetSunrise);
         post("/fish", fish::fishFeed);
         post("/config", config::setConfig);
         get("/temp", temp::getTemperature);
         post("/temp", temp::setTemperature);
         post("/action", action::action);
         get("/action", action::action);
-        get("/room", room::action);
+        post("/room", room::action);
         post("/calendar", calendar::setCalendar);
         post("/response", response::response);
 

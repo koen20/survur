@@ -78,17 +78,15 @@ public class ActionHandler {
                     VoiceHandler.sendPost("Het alarm gaat om 07:20", "voice");
                     LcdHandler.printLcd("Welterusten", "Alarm:07:20");
                 }
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-                int month = cal.get(Calendar.MONTH);
-                int year = cal.get(Calendar.YEAR);
-                minute = minute - 2;
-                String dateStringOn = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":00";
-                minute = minute + 7;
-                String dateStringOff = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":00";
-                System.out.println();
+                Calendar calOn = Calendar.getInstance();
+                Calendar calOff = Calendar.getInstance();
+                calOn.set(Calendar.HOUR, hour);
+                calOn.set(Calendar.MINUTE, minute - 1);
+                calOff.set(Calendar.HOUR, hour);
+                calOff.set(Calendar.MINUTE, minute - 1);
                 if (inside) {
-                    setOff(dateStringOff);
-                    setOn(dateStringOn);
+                    setOff(calOff.getTime());
+                    setOn(calOn.getTime());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -100,39 +98,22 @@ public class ActionHandler {
                 e.printStackTrace();
             }
         }
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        int month = cal.get(Calendar.MONTH);
-        int year = cal.get(Calendar.YEAR);
-        int hourC = cal.get(Calendar.HOUR);
-        int minuteC = cal.get(Calendar.MINUTE) + 2;
-        String dateString = year + "-" + month + "-" + day + " " + hourC + ":" + minuteC + ":00";
+        cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) + 3);
         try {
-            setOff(dateString);
+            setOff(cal.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
     }
 
-    public static void setOff(String dateString) throws ParseException {
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = dateFormatter.parse(dateString);
-
-        //Now create the time and schedule it
+    public static void setOff(Date date) throws ParseException {
         Timer timer = new Timer();
-
-        //Use this if you want to execute it once
         timer.schedule(new lightsOff(), date);
     }
 
-    public static void setOn(String dateString) throws ParseException {
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = dateFormatter.parse(dateString);
-
-        //Now create the time and schedule it
+    public static void setOn(Date date) throws ParseException {
         Timer timer = new Timer();
-
-        //Use this if you want to execute it once
         timer.schedule(new lightsOn(), date);
     }
 
