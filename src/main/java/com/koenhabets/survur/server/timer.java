@@ -19,10 +19,10 @@ public class timer extends TimerTask {
         int minute = calendar.get(Calendar.MINUTE);
 
         if (ActionHandler.hour == hour && ActionHandler.minute - 2 == minute && ActionHandler.inside){
-            LightsHandler.Light("Bon");
+
         }
         if (ActionHandler.hour == hour && ActionHandler.minute + 5 == minute && ActionHandler.inside){
-            LightsHandler.Light("Boff");
+
         }
     }
 }

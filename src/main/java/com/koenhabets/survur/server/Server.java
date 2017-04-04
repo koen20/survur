@@ -44,7 +44,7 @@ public class Server {
         post("/calendar", calendar::setCalendar);
         post("/response", response::response);
 
-        timer.main();
+        //timer.main();
         calendarScholica.main();
 
         LightsHandler.resetLights();

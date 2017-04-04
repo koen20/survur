@@ -4,10 +4,10 @@ import com.koenhabets.survur.server.ScholicaApi.calendarScholica;
 import spark.Request;
 import spark.Response;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 public class ActionHandler {
     static boolean sleeping = false;
@@ -48,7 +48,8 @@ public class ActionHandler {
         }
         return "";
     }
-    static void prepSleep(){
+
+    static void prepSleep() {
         LcdHandler.printLcd("Welterusten", ".");
         sleeping = true;
         String weekDay;
@@ -77,6 +78,16 @@ public class ActionHandler {
                     VoiceHandler.sendPost("Het alarm gaat om 07:20", "voice");
                     LcdHandler.printLcd("Welterusten", "Alarm:07:20");
                 }
+                Calendar calOn = Calendar.getInstance();
+                Calendar calOff = Calendar.getInstance();
+                calOn.set(Calendar.HOUR, hour);
+                calOn.set(Calendar.MINUTE, minute - 1);
+                calOff.set(Calendar.HOUR, hour);
+                calOff.set(Calendar.MINUTE, minute - 1);
+                if (inside) {
+                    setOff(calOff.getTime());
+                    setOn(calOn.getTime());
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -86,6 +97,38 @@ public class ActionHandler {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+        cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE) + 3);
+        try {
+            setOff(cal.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void setOff(Date date) throws ParseException {
+        Timer timer = new Timer();
+        timer.schedule(new lightsOff(), date);
+    }
+
+    public static void setOn(Date date) throws ParseException {
+        Timer timer = new Timer();
+        timer.schedule(new lightsOn(), date);
+    }
+
+    private static class lightsOff extends TimerTask {
+
+        public void run() {
+            LightsHandler.Light("Boff");
+        }
+    }
+
+    private static class lightsOn extends TimerTask {
+
+        @Override
+        public void run() {
+            LightsHandler.Light("Bon");
         }
     }
 }

@@ -12,18 +12,17 @@ import java.util.TimerTask;
 public class RoomHandler {
     static boolean insideRoom = false;
     static String lastMovement;
-    private int minute = 100;
-    private int day = 65;
-    private int hour = 100;
+    String response = ":)";
     private int countIn = 0;
     private int countOut = 0;
+    private long miliseconds = 0;
 
     public RoomHandler() {
         Timer updateTimer = new Timer();
         updateTimer.scheduleAtFixedRate(new CheckWifi(), 0, 7 * 60 * 1000);
 
         Timer updateTimerRoom = new Timer();
-        updateTimerRoom.scheduleAtFixedRate(new UpdateInside(), 0, 60 * 1000);
+        updateTimerRoom.scheduleAtFixedRate(new UpdateInside(), 0, 10 * 1000);
     }
 
     public String action(Request request, Response response) {
@@ -35,15 +34,16 @@ public class RoomHandler {
                 int Cminute = cal.get(Calendar.MINUTE);
                 int Chour = cal.get(Calendar.HOUR_OF_DAY);
                 lastMovement = Chour + ":" + Cminute + " day:" + Cday;
-                int minuteDif = Cminute - minute;
-                if (minuteDif <= 2 && Chour == hour && Cday == day) {
+                long Cmiliseconds = cal.getTimeInMillis();
+                long milisecondsDif = Cmiliseconds - miliseconds;
+                if (milisecondsDif < 120000) {
                     if (!insideRoom && !ActionHandler.sleeping && ActionHandler.inside) {
                         //VoiceHandler.sendPost("Hallo", "voice");
                         if (Chour > SunSetHandler.sunsetHour) {
                             LightsHandler.Light("Aon");
                             LightsHandler.Light("Bon");
                         }
-                        if (calendarScholica.count < 5 && ConfigHandler.alarmEnabled && !ActionHandler.sleeping) {
+                        if (calendarScholica.count < 2 && ConfigHandler.alarmEnabled) {
                             if (Chour == 21 && Cminute > 25 || Chour == 22) {
                                 VoiceHandler.sendPost("Ga je nu slapen?", "voice");
                                 VoiceHandler.sendPost("", "enterLate");
@@ -53,9 +53,7 @@ public class RoomHandler {
                     insideRoom = true;
 
                 }
-                day = cal.get(Calendar.DAY_OF_MONTH);
-                minute = cal.get(Calendar.MINUTE);
-                hour = cal.get(Calendar.HOUR_OF_DAY);
+                miliseconds = cal.getTimeInMillis();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,15 +86,12 @@ public class RoomHandler {
     private class UpdateInside extends TimerTask {
         @Override
         public void run() {
-            if (ConfigHandler.motionEnabled) {
+            if (ConfigHandler.motionEnabled && !ActionHandler.sleeping) {
                 Calendar cal = Calendar.getInstance();
-                int Cday = cal.get(Calendar.DAY_OF_MONTH);
-                int Cminute = cal.get(Calendar.MINUTE);
-                int minuteDif = Cminute - minute;
+                long Cmiliseconds = cal.getTimeInMillis();
+                long milisecondsDif = Cmiliseconds - miliseconds;
                 if (insideRoom) {
-                    if (Cday == day && minuteDif < 4 && minuteDif > -56) {
-
-                    } else {
+                    if (milisecondsDif > 120000) {
                         insideRoom = false;
                         LightsHandler.Light("Aoff");
                         LightsHandler.Light("Boff");
