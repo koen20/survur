@@ -12,7 +12,6 @@ import java.util.TimerTask;
 public class RoomHandler {
     static boolean insideRoom = false;
     static String lastMovement;
-    String response = ":)";
     private int countIn = 0;
     private int countOut = 0;
     private long miliseconds = 0;
@@ -43,7 +42,7 @@ public class RoomHandler {
                             LightsHandler.Light("Aon");
                             LightsHandler.Light("Bon");
                         }
-                        if (calendarScholica.count < 2 && ConfigHandler.alarmEnabled) {
+                        if (calendarScholica.count < 4 && ConfigHandler.alarmEnabled) {
                             if (Chour == 21 && Cminute > 25 || Chour == 22) {
                                 VoiceHandler.sendPost("Ga je nu slapen?", "voice");
                                 VoiceHandler.sendPost("", "enterLate");
