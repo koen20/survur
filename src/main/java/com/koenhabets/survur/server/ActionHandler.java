@@ -83,7 +83,7 @@ public class ActionHandler {
                 calOn.set(Calendar.HOUR, hour);
                 calOn.set(Calendar.MINUTE, minute - 1);
                 calOff.set(Calendar.HOUR, hour);
-                calOff.set(Calendar.MINUTE, minute - 1);
+                calOff.set(Calendar.MINUTE, minute + 5);
                 if (inside) {
                     setOff(calOff.getTime());
                     setOn(calOn.getTime());
