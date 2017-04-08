@@ -42,9 +42,9 @@ public class VoiceHandler {
         return response.toString();
     }
 
-    public static String sendFcm(String action, String text) throws Exception {
+    public static String sendFcm(String text, String action) throws Exception {
         text = URLEncoder.encode(text, "UTF-8");
-        String url = "http://192.168.2.44:9997/message?3232927;" + action + "&" + text;
+        String url = "http://192.168.2.24:9997/message?6105860;" + action + "&" + text;
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 

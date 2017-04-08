@@ -43,13 +43,8 @@ public class Server {
         post("/room", room::action);
         post("/calendar", calendar::setCalendar);
         post("/response", response::response);
-        try {
-            //VoiceHandler.sendFcm("voice","test");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        calendarScholica.main();
 
+        calendarScholica.main();
         LightsHandler.resetLights();
     }
 }
