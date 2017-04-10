@@ -20,6 +20,7 @@ public class ActionHandler {
         String weekDay;
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);
         Calendar cal = Calendar.getInstance();
+        int day = cal.get(Calendar.DAY_OF_MONTH);
         weekDay = dayFormat.format(cal.getTime());
         System.out.println(calendarScholica.count);
         if (!Objects.equals(weekDay, "Friday") && !Objects.equals(weekDay, "Saturday") && calendarScholica.count < 500 && ConfigHandler.alarmEnabled) {
@@ -28,28 +29,29 @@ public class ActionHandler {
                     hour = 8;
                     minute = 5;
                     CalendarHandler.setAlarm("08", "05");
-                    VoiceHandler.sendFcm("Je hebt het eerste uur vrij, het alarm gaat om 08:05", "voice");
                     LcdHandler.printLcd("Welterusten", "Alarm:08:05");
                 } else if (calendarScholica.count == 2) {
                     hour = 9;
                     minute = 10;
                     CalendarHandler.setAlarm("09", "10");
-                    VoiceHandler.sendFcm("Je hebt het eerste en tweede uur vrij, het alarm gaat om 09:10", "voice");
                     LcdHandler.printLcd("Welterusten", "Alarm:09:10");
                 } else {
                     hour = 7;
                     minute = 20;
                     CalendarHandler.setAlarm("07", "20");
-                    VoiceHandler.sendFcm("Het alarm gaat om 07:20", "voice");
                     LcdHandler.printLcd("Welterusten", "Alarm:07:20");
                 }
                 Calendar calOn = Calendar.getInstance();
                 Calendar calOff = Calendar.getInstance();
+                calOn.set(Calendar.DAY_OF_MONTH, day + 1);
+                calOff.set(Calendar.DAY_OF_MONTH, day + 1);
                 calOn.set(Calendar.HOUR, hour);
                 calOn.set(Calendar.MINUTE, minute - 1);
                 calOff.set(Calendar.HOUR, hour);
                 calOff.set(Calendar.MINUTE, minute + 5);
                 if (inside) {
+                    VoiceHandler.sendFcm("Het alarm gaat om " + hour + ":" + minute, "voice");
+                    LcdHandler.printLcd("Welterusten", "Alarm:" + hour + ":" + minute);
                     setOff(calOff.getTime());
                     setOn(calOn.getTime());
                 }
