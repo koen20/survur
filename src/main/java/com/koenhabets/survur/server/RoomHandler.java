@@ -92,8 +92,7 @@ public class RoomHandler {
                 if (insideRoom) {
                     if (milisecondsDif > 120 * 1000) {
                         insideRoom = false;
-                        LightsHandler.Light("Aoff");
-                        LightsHandler.Light("Boff");
+                        LightsHandler.resetLights();
                     }
                 }
             }
