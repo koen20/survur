@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
+import static spark.Spark.webSocket;
 
 public class Server {
 
@@ -29,6 +30,7 @@ public class Server {
         ResponseHandler response = new ResponseHandler();
         new LcdHandler();
 
+        webSocket("", WebSocketHandler.class);
         get("/info", info::getInfo);
         post("/lights", light::setLight);
         post("/wol", wol::wol);
