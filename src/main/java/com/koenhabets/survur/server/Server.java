@@ -6,6 +6,7 @@ import spark.Spark;
 import java.io.IOException;
 
 import static spark.Spark.get;
+import static spark.Spark.path;
 import static spark.Spark.post;
 
 public class Server {
@@ -43,6 +44,11 @@ public class Server {
         post("/room", room::action);
         post("/calendar", calendar::setCalendar);
         post("/response", response::response);
+        path("/wol", () -> {
+            post("/wake",       wol::wol);
+            get("/wake",       wol::wol);
+            post("/status",     wol::status);
+        });
 
         calendarScholica.main();
         LightsHandler.resetLights();
