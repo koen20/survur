@@ -9,6 +9,11 @@ import spark.Response;
 public class InfoHandler {
 
     public String getInfo(Request request, Response response){
+        JSONObject jo = getJsonInfo();
+        return jo.toString();
+    }
+
+    static JSONObject getJsonInfo(){
         JSONObject jo = new JSONObject();
         try {
             jo.put("inside-temp", TemperatureHandler.temp);
@@ -30,6 +35,6 @@ public class InfoHandler {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return jo.toString();
+        return jo;
     }
 }

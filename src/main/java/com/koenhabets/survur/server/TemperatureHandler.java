@@ -132,6 +132,11 @@ public class TemperatureHandler {
             getTempOutside();
             avarageTemp();
             avarageTempOutside();
+            try {
+                WebSocketHandler.updateAll();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

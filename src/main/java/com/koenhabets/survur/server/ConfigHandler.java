@@ -41,6 +41,7 @@ public class ConfigHandler {
             }
             saveConfig();
         }
+        WebSocketHandler.updateAll();
         return "";
     }
 

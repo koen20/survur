@@ -3,6 +3,7 @@ package com.koenhabets.survur.server;
 import spark.Request;
 import spark.Response;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class LightsHandler {
@@ -44,6 +45,11 @@ public class LightsHandler {
         com2.executeCommand("./home/pi/scripts/433Utils/RPi_utils/codesend " + code);
         ExecuteShellCommand com3 = new ExecuteShellCommand();
         com3.executeCommand("./home/pi/scripts/433Utils/RPi_utils/codesend " + code);
+        try {
+            WebSocketHandler.updateAll();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     static void resetLights() {

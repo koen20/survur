@@ -2,6 +2,8 @@ package com.koenhabets.survur.server;
 
 import org.eclipse.jetty.websocket.api.*;
 import org.eclipse.jetty.websocket.api.annotations.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Map;
@@ -12,7 +14,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 @WebSocket
 public class WebSocketHandler {
-    static Map<Session, String> userUsernameMap = new ConcurrentHashMap<>();
+    // Store sessions if you want to, for example, broadcast a message to all users
+    private static final Queue<Session> sessions = new ConcurrentLinkedQueue<>();
 
     @OnWebSocketConnect
     public void connected(Session session) {
@@ -27,6 +30,11 @@ public class WebSocketHandler {
     @OnWebSocketMessage
     public void message(Session session, String message) throws IOException {
         System.out.println("Got: " + message);   // Print message
-        session.getRemote().sendString(message); // and send it back
+
+    }
+    public static void updateAll() throws IOException {
+        for (Session sessiond : sessions) {
+            sessiond.getRemote().sendString(InfoHandler.getJsonInfo().toString());
+        }
     }
 }

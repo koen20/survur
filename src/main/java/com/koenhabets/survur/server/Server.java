@@ -30,14 +30,14 @@ public class Server {
         ResponseHandler response = new ResponseHandler();
         new LcdHandler();
 
-        webSocket("", WebSocketHandler.class);
+        webSocket("/ws", WebSocketHandler.class);
         get("/info", info::getInfo);
         post("/lights", light::setLight);
         post("/wol", wol::wol);
         get("/wol", wol::wol);
         get("/sunset-sunrise", sunsetSunrise::getSunsetSunrise);
         post("/fish", fish::fishFeed);
-        post("/config", config::setConfig);
+        get("/config", config::setConfig);
         get("/temp", temp::getTemperature);
         post("/temp", temp::setTemperature);
         post("/action", action::action);
