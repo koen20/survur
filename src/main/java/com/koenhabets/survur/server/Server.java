@@ -30,6 +30,7 @@ public class Server {
         CalendarHandler calendar = new CalendarHandler();
         ResponseHandler response = new ResponseHandler();
         new LcdHandler();
+        new calendarScholica();
 
         webSocket("/ws", WebSocketHandler.class);
         get("/info", info::getInfo);
@@ -38,7 +39,7 @@ public class Server {
         get("/wol", wol::wol);
         get("/sunset-sunrise", sunsetSunrise::getSunsetSunrise);
         post("/fish", fish::fishFeed);
-        get("/config", config::setConfig);
+        post("/config", config::setConfig);
         get("/temp", temp::getTemperature);
         post("/temp", temp::setTemperature);
         post("/action", action::action);
@@ -52,7 +53,6 @@ public class Server {
             post("/status",     wol::status);
         });
 
-        calendarScholica.main();
         LightsHandler.resetLights();
     }
 }

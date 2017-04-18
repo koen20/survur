@@ -3,7 +3,6 @@ package com.koenhabets.survur.server;
 import spark.Request;
 import spark.Response;
 
-import java.io.IOException;
 import java.util.Objects;
 
 public class LightsHandler {
@@ -39,12 +38,18 @@ public class LightsHandler {
             code = COff;
             C = false;
         }
-        ExecuteShellCommand com = new ExecuteShellCommand();
-        com.executeCommand("./home/pi/scripts/433Utils/RPi_utils/codesend " + code);
-        ExecuteShellCommand com2 = new ExecuteShellCommand();
-        com2.executeCommand("./home/pi/scripts/433Utils/RPi_utils/codesend " + code);
-        ExecuteShellCommand com3 = new ExecuteShellCommand();
-        com3.executeCommand("./home/pi/scripts/433Utils/RPi_utils/codesend " + code);
+        final int thing = code;
+        Thread t = new Thread(() -> {
+            String command = "./home/pi/scripts/433Utils/RPi_utils/codesend " + thing;
+            ExecuteShellCommand com = new ExecuteShellCommand();
+            com.executeCommand(command);
+            ExecuteShellCommand com2 = new ExecuteShellCommand();
+            com2.executeCommand(command);
+            ExecuteShellCommand com3 = new ExecuteShellCommand();
+            com3.executeCommand(command);
+        });
+        t.start();
+
         WebSocketHandler.updateAll();
     }
 
@@ -54,7 +59,7 @@ public class LightsHandler {
         Light("Coff");
     }
 
-    public String setLight(Request request, Response response) {
+    String setLight(Request request, Response response) {
         String parm = request.queryParams("light");
         Light(parm);
         return ":)";

@@ -21,7 +21,7 @@ public class calendarScholica {
     public static String nextSubject;
     static int day;
 
-    public static void main(){
+    public calendarScholica(){
         Timer updateTimer = new Timer();
         updateTimer.scheduleAtFixedRate(new update(), 0, 30 * 60 * 1000);
     }
