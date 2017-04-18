@@ -44,7 +44,8 @@ public class RoomHandler {
                         }
                         if (calendarScholica.count < 4 && ConfigHandler.alarmEnabled) {
                             if (Chour == 21 && Cminute > 25 || Chour == 22) {
-                                VoiceHandler.sendPost("Ga je nu slapen?;enterLate", "voice");
+                                VoiceHandler.sendFcm("Ga je nu slapen?", "voice");
+                                ResponseHandler.lastAction = "enterLate";
                                 VoiceHandler.sendPost("", "response");
                             }
                         }

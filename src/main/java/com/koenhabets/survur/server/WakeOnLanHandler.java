@@ -6,9 +6,19 @@ import spark.Response;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class WakeOnLanHandler {
     public static final int PORT = 9;
+    private long miliseconds = 0;
+    static boolean pcOn = false;
+
+    public WakeOnLanHandler() {
+        Timer updateTimer = new Timer();
+        updateTimer.scheduleAtFixedRate(new updateStatus(), 0, 60 * 1000);
+    }
 
     private static byte[] getMacBytes(String macStr) throws IllegalArgumentException {
         byte[] bytes = new byte[6];
@@ -48,6 +58,25 @@ public class WakeOnLanHandler {
         socket.close();
 
         return "sent";
+    }
+
+    public String status(Request request, Response response) throws Exception {
+        Calendar cal = Calendar.getInstance();
+        miliseconds = cal.getTimeInMillis();
+        pcOn = true;
+        return ":)";
+    }
+
+    private class updateStatus extends TimerTask {
+        @Override
+        public void run() {
+            Calendar cal = Calendar.getInstance();
+            long Cmiliseconds = cal.getTimeInMillis();
+            long milisecondsDif = Cmiliseconds - miliseconds;
+            if (milisecondsDif > 5 * 60 * 1000) {
+                pcOn = false;
+            }
+        }
     }
 
 }
