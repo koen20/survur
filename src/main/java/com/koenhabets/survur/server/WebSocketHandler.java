@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 @WebSocket
 public class WebSocketHandler {
-    // Store sessions if you want to, for example, broadcast a message to all users
     private static final Queue<Session> sessions = new ConcurrentLinkedQueue<>();
 
     @OnWebSocketConnect
@@ -32,9 +31,13 @@ public class WebSocketHandler {
         System.out.println("Got: " + message);   // Print message
 
     }
-    public static void updateAll() throws IOException {
+    public static void updateAll() {
         for (Session sessiond : sessions) {
-            sessiond.getRemote().sendString(InfoHandler.getJsonInfo().toString());
+            try {
+                sessiond.getRemote().sendString(InfoHandler.getJsonInfo().toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

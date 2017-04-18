@@ -33,6 +33,7 @@ public class FishHandler {
             food = food + 80;
         }
         saveFood();
+        WebSocketHandler.updateAll();
         return food + "";
     }
 

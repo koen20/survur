@@ -64,6 +64,7 @@ public class WakeOnLanHandler {
         Calendar cal = Calendar.getInstance();
         miliseconds = cal.getTimeInMillis();
         pcOn = true;
+        WebSocketHandler.updateAll();
         return ":)";
     }
 
@@ -75,6 +76,7 @@ public class WakeOnLanHandler {
             long milisecondsDif = Cmiliseconds - miliseconds;
             if (milisecondsDif > 5 * 60 * 1000) {
                 pcOn = false;
+                WebSocketHandler.updateAll();
             }
         }
     }

@@ -45,11 +45,7 @@ public class LightsHandler {
         com2.executeCommand("./home/pi/scripts/433Utils/RPi_utils/codesend " + code);
         ExecuteShellCommand com3 = new ExecuteShellCommand();
         com3.executeCommand("./home/pi/scripts/433Utils/RPi_utils/codesend " + code);
-        try {
-            WebSocketHandler.updateAll();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        WebSocketHandler.updateAll();
     }
 
     static void resetLights() {
