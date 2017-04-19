@@ -38,17 +38,17 @@ public class LightsHandler {
             code = COff;
             C = false;
         }
-        final int thing = code;
-        Thread t = new Thread(() -> {
-            String command = "./home/pi/scripts/433Utils/RPi_utils/codesend " + thing;
+        //final int thing = code;
+        //Thread t = new Thread(() -> {
+            String command = "./home/pi/scripts/433Utils/RPi_utils/codesend " + code;
             ExecuteShellCommand com = new ExecuteShellCommand();
             com.executeCommand(command);
             ExecuteShellCommand com2 = new ExecuteShellCommand();
             com2.executeCommand(command);
             ExecuteShellCommand com3 = new ExecuteShellCommand();
             com3.executeCommand(command);
-        });
-        t.start();
+        //});
+        //t.start();
 
         WebSocketHandler.updateAll();
     }

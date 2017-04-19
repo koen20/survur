@@ -63,8 +63,10 @@ public class WakeOnLanHandler {
     public String status(Request request, Response response) throws Exception {
         Calendar cal = Calendar.getInstance();
         miliseconds = cal.getTimeInMillis();
+        if (!pcOn) {
+            WebSocketHandler.updateAll();
+        }
         pcOn = true;
-        WebSocketHandler.updateAll();
         return ":)";
     }
 
@@ -75,8 +77,10 @@ public class WakeOnLanHandler {
             long Cmiliseconds = cal.getTimeInMillis();
             long milisecondsDif = Cmiliseconds - miliseconds;
             if (milisecondsDif > 5 * 60 * 1000) {
+                if (pcOn) {
+                    WebSocketHandler.updateAll();
+                }
                 pcOn = false;
-                WebSocketHandler.updateAll();
             }
         }
     }
