@@ -14,12 +14,14 @@ public class KeyHolder {
     private final String arKey2;
     private final String weather;
     private final String scholicaPasswd;
+    private final String sonarrApiKey;
 
-    public KeyHolder(String arKey1, String arKey2, String weather, String scholicaPasswd) {
+    public KeyHolder(String arKey1, String arKey2, String weather, String scholicaPasswd, String sonarrApiKey) {
         this.arKey1 = arKey1;
         this.arKey2 = arKey2;
         this.weather = weather;
         this.scholicaPasswd = scholicaPasswd;
+        this.sonarrApiKey = sonarrApiKey;
     }
 
     public static void init(String path) throws IOException {
@@ -43,5 +45,9 @@ public class KeyHolder {
 
     public static String getScholicaPasswd() {
         return instance.scholicaPasswd;
+    }
+
+    public static String getSonarrApiKey() {
+        return instance.sonarrApiKey;
     }
 }

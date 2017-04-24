@@ -31,6 +31,7 @@ public class Server {
         ResponseHandler response = new ResponseHandler();
         new LcdHandler();
         new calendarScholica();
+        new Sonarr();
 
         webSocket("/ws", WebSocketHandler.class);
         get("/info", info::getInfo);
