@@ -49,6 +49,13 @@ public class RoomHandler {
                                 VoiceHandler.sendPost("", "response");
                             }
                         }
+                        if(calendarScholica.count > 499){
+                            if(Chour >= 22 && Cminute > 15 || Chour < 4){
+                                VoiceHandler.sendFcm("Ga je nu slapen?", "voice");
+                                ResponseHandler.lastAction = "enterLate";
+                                VoiceHandler.sendPost("", "response");
+                            }
+                        }
                     }
                     insideRoom = true;
 
