@@ -92,10 +92,10 @@ public class ActionHandler {
                 double temp = TemperatureHandler.tempOutside;
                 String nextSubject = calendarScholica.nextSubject;
                 if (Objects.equals(nextSubject, "geen les")) {
-                    VoiceHandler.sendFcm("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse(), "voice");
+                    //VoiceHandler.sendFcm("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse(), "voice");
                 } else {
-                    VoiceHandler.sendFcm("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse() +
-                            ". Je hebt dalijk: " + nextSubject, "voice");
+                    //VoiceHandler.sendFcm("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse() +
+                      //      ". Je hebt dalijk: " + nextSubject, "voice");
                 }
             } catch (Exception e) {
                 e.printStackTrace();

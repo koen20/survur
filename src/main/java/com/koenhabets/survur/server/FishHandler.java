@@ -30,10 +30,10 @@ public class FishHandler {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            food = food + 85;
+            food = food + 95;
+            WebSocketHandler.updateAll();
         }
         saveFood();
-        WebSocketHandler.updateAll();
         return food + "";
     }
 
@@ -83,7 +83,8 @@ public class FishHandler {
         @Override
         public void run() {
             if(food > -30) {
-                food = food - 4;
+                food = food - 3;
+                WebSocketHandler.updateAll();
             }
             try {
                 saveFood();

@@ -17,7 +17,7 @@ public class WakeOnLanHandler {
 
     public WakeOnLanHandler() {
         Timer updateTimer = new Timer();
-        updateTimer.scheduleAtFixedRate(new updateStatus(), 0, 60 * 1000);
+        updateTimer.scheduleAtFixedRate(new updateStatus(), 0, 20 * 1000);
     }
 
     private static byte[] getMacBytes(String macStr) throws IllegalArgumentException {
@@ -76,7 +76,7 @@ public class WakeOnLanHandler {
             Calendar cal = Calendar.getInstance();
             long Cmiliseconds = cal.getTimeInMillis();
             long milisecondsDif = Cmiliseconds - miliseconds;
-            if (milisecondsDif > 5 * 60 * 1000) {
+            if (milisecondsDif > 100 * 1000) {
                 if (pcOn) {
                     WebSocketHandler.updateAll();
                 }
