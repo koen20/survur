@@ -28,7 +28,7 @@ public class WebSocketHandler {
 
     @OnWebSocketMessage
     public void message(Session session, String message) throws IOException {
-        System.out.println("Got: " + message);   // Print message
+        session.getRemote().sendString(InfoHandler.getJsonInfo().toString());
 
     }
     public static void updateAll() {
