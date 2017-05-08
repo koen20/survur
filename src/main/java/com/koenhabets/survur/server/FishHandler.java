@@ -9,32 +9,36 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class FishHandler {
     static int food = 150;
+    private long miliseconds;
+    static String lastFed = "-";
 
     public FishHandler() throws IOException {
         readFood();
-        Timer updateTimer = new Timer();
-        updateTimer.scheduleAtFixedRate(new UpdateTask(), 0, 30 * 60 * 1000);
     }
 
     public String fishFeed(Request request, Response response) throws IOException {
         Calendar cal = Calendar.getInstance();
+        long Cmiliseconds = cal.getTimeInMillis();
+        long milisecondsDif = Cmiliseconds - miliseconds;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int month = cal.get(Calendar.MONTH);
         int hour = cal.get(Calendar.HOUR_OF_DAY);
-        if (food < 150 && hour < 20 && hour > 6) {
+        int minute = cal.get(Calendar.MINUTE);
+        if (milisecondsDif > 86400000 && hour < 20 && hour > 6) {
             try {
                 feedFish();
+                miliseconds = cal.getTimeInMillis();
+                lastFed = day + "-" + month + " " + hour + ":" + minute;
+                WebSocketHandler.updateAll();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            food = food + 95;
-            WebSocketHandler.updateAll();
         }
         saveFood();
-        return food + "";
+        return lastFed;
     }
 
     private void saveFood() throws IOException {
@@ -53,14 +57,9 @@ public class FishHandler {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-        //add reuqest header
         con.setRequestMethod("GET");
-        //con.setRequestProperty("User-Agent", USER_AGENT);
-        //con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-
         String urlParameters = "";
 
-        // Send post request
         con.setDoOutput(true);
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
         wr.writeBytes(urlParameters);
@@ -76,21 +75,5 @@ public class FishHandler {
             response.append(inputLine);
         }
         in.close();
-    }
-
-    private class UpdateTask extends TimerTask {
-
-        @Override
-        public void run() {
-            if(food > -30) {
-                food = food - 3;
-                WebSocketHandler.updateAll();
-            }
-            try {
-                saveFood();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

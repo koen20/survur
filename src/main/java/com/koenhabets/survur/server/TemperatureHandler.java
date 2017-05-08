@@ -157,14 +157,13 @@ public class TemperatureHandler {
             }
 
             JSONParser parser = new JSONParser();
-            JSONArray ja;
-            Object objt = null;
+            JSONArray ja = new JSONArray();
             try {
-                objt = parser.parse(result);
+                Object obj = parser.parse(result);
+                ja = (JSONArray) obj;
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            ja = (JSONArray) objt;
             if (ja.size() > tempArrayLength) {
                 ja.remove(0);
             }
