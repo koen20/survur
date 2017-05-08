@@ -43,13 +43,12 @@ public class FishHandler {
 
     private void saveFood() throws IOException {
         File file = new File("food.txt");
-        Files.write(food + "", file, Charsets.UTF_8);
+        Files.write(Long.toString(miliseconds), file, Charsets.UTF_8);
     }
 
     private void readFood() throws IOException {
         File file = new File("food.txt");
-        String result = Files.toString(file, Charsets.UTF_8);
-        food = Integer.parseInt(result);
+        miliseconds = Long.parseLong(Files.toString(file, Charsets.UTF_8));
     }
 
     private void feedFish() throws Exception {
