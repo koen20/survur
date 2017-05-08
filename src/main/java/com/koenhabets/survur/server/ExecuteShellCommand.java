@@ -23,7 +23,7 @@ public class ExecuteShellCommand {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return output.toString();

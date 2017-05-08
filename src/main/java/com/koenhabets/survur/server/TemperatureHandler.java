@@ -1,15 +1,14 @@
 package com.koenhabets.survur.server;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import spark.Request;
 import spark.Response;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
@@ -149,100 +148,93 @@ public class TemperatureHandler {
             int minute = cal.get(Calendar.MINUTE);
 
             //TEMP moving avarage//////////////////////
-            JSONParser parser = new JSONParser();
-            JSONArray ja = new JSONArray();
+            String result = null;
             try {
-
-                Object obj = parser.parse(new FileReader("temp.json"));
-
-                ja = (JSONArray) obj;
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                File file1 = new File("temp.json");
+                result = Files.toString(file1, Charsets.UTF_8);
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+
+            JSONParser parser = new JSONParser();
+            JSONArray ja;
+            Object objt = null;
+            try {
+                objt = parser.parse(result);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            //System.out.println("Stored: " + ja.toString());
+            ja = (JSONArray) objt;
             if (ja.size() > tempArrayLength) {
                 ja.remove(0);
             }
             ja.add(tempAvarageInside);
-            //System.out.println("Saving: " + ja.toString());
+
             try {
-
-                FileWriter file = new FileWriter("temp.json");
-                file.write(ja.toJSONString());
-                file.flush();
-                file.close();
-
+                File fileS = new File("temp.json");
+                Files.write(ja.toJSONString(), fileS, Charsets.UTF_8);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             tempTime = ja.toJSONString();
 
+
             //TEMP time//////////////////////
             parser = new JSONParser();
             ja = new JSONArray();
+            result = null;
             try {
-
-                Object obj = parser.parse(new FileReader("time.json"));
-
-                ja = (JSONArray) obj;
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                File file = new File("time.json");
+                result = Files.toString(file, Charsets.UTF_8);
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            try {
+                Object obj = parser.parse(result);
+                ja = (JSONArray) obj;
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            //System.out.println("Stored: " + ja.toString());
+
             if (ja.size() > tempArrayLength) {
                 ja.remove(0);
             }
             ja.add(hour + ":" + minute);
-            //System.out.println("Saving: " + ja.toString());
+
             try {
-
-                FileWriter file = new FileWriter("time.json");
-                file.write(ja.toJSONString());
-                file.flush();
-                file.close();
-
+                File file = new File("time.json");
+                Files.write(ja.toJSONString(), file, Charsets.UTF_8);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
             tempData = ja.toJSONString();
 
 
             //outside temp//////////////////////
             parser = new JSONParser();
             ja = new JSONArray();
+            result = null;
             try {
-
-                Object obj = parser.parse(new FileReader("tempOutside.json"));
-
-                ja = (JSONArray) obj;
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                File file = new File("tempOutside.json");
+                result = Files.toString(file, Charsets.UTF_8);
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            try {
+                Object obj = parser.parse(result);
+                ja = (JSONArray) obj;
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            //System.out.println("Stored: " + ja.toString());
             if (ja.size() > tempArrayLength) {
                 ja.remove(0);
             }
             ja.add(tempAvarageOutside);
-            //System.out.println("Saving: " + ja.toString());
+
             try {
-
-                FileWriter file = new FileWriter("tempOutside.json");
-                file.write(ja.toJSONString());
-                file.flush();
-                file.close();
-
+                File file = new File("tempOutside.json");
+                Files.write(ja.toJSONString(), file, Charsets.UTF_8);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -252,31 +244,26 @@ public class TemperatureHandler {
             //living room temp//////////////////////
             parser = new JSONParser();
             ja = new JSONArray();
+            result = null;
             try {
-
-                Object obj = parser.parse(new FileReader("livingRoomTemp.json"));
-
-                ja = (JSONArray) obj;
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                File file = new File("livingRoomTemp.json");
+                result = Files.toString(file, Charsets.UTF_8);
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            try {
+                Object obj = parser.parse(result);
+                ja = (JSONArray) obj;
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            //System.out.println("Stored: " + ja.toString());
             if (ja.size() > tempArrayLength) {
                 ja.remove(0);
             }
             ja.add(livingRoomTemp);
-            //System.out.println("Saving: " + ja.toString());
             try {
-
-                FileWriter file = new FileWriter("livingRoomTemp.json");
-                file.write(ja.toJSONString());
-                file.flush();
-                file.close();
-
+                File file = new File("livingRoomTemp.json");
+                Files.write(ja.toJSONString(), file, Charsets.UTF_8);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -286,31 +273,26 @@ public class TemperatureHandler {
             //vdd//////////////////////
             parser = new JSONParser();
             ja = new JSONArray();
+            result = null;
             try {
-
-                Object obj = parser.parse(new FileReader("vdd.json"));
-
-                ja = (JSONArray) obj;
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                File file = new File("vdd.json");
+                result = Files.toString(file, Charsets.UTF_8);
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+            try {
+                Object obj = parser.parse(result);
+                ja = (JSONArray) obj;
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            //System.out.println("Stored: " + ja.toString());
             if (ja.size() > tempArrayLength) {
                 ja.remove(0);
             }
             ja.add(vdd);
-            //System.out.println("Saving: " + ja.toString());
             try {
-
-                FileWriter file = new FileWriter("vdd.json");
-                file.write(ja.toJSONString());
-                file.flush();
-                file.close();
-
+                File file = new File("vdd.json");
+                Files.write(ja.toJSONString(), file, Charsets.UTF_8);
             } catch (IOException e) {
                 e.printStackTrace();
             }
