@@ -14,6 +14,7 @@ import java.util.Objects;
 public class ConfigHandler {
     static boolean alarmEnabled = true;
     static boolean motionEnabled = true;
+    static int feedInterval = 24;
 
     public ConfigHandler() {
         try {
@@ -40,6 +41,11 @@ public class ConfigHandler {
                 motionEnabled = false;
             }
             saveConfig();
+        } else if (Objects.equals(parm, "feedInterval")) {
+            int interval = Integer.parseInt(parm2);
+            if (interval > 0 && interval < 25) {
+                feedInterval = interval;
+            }
         }
         WebSocketHandler.updateAll();
         return "";
@@ -51,12 +57,14 @@ public class ConfigHandler {
         JSONObject jo = new JSONObject(result);
         alarmEnabled = jo.getBoolean("alarm");
         motionEnabled = jo.getBoolean("motion");
+        feedInterval = jo.getInt("feedInterval");
     }
 
     private void saveConfig() throws IOException {
         JSONObject jo = new JSONObject();
         jo.put("alarm", alarmEnabled);
         jo.put("motion", motionEnabled);
+        jo.put("feedInterval", feedInterval);
         File file = new File("config.txt");
         Files.write(jo.toString(), file, Charsets.UTF_8);
     }

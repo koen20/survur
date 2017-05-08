@@ -27,7 +27,7 @@ public class FishHandler {
         int month = cal.get(Calendar.MONTH);
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
-        if (milisecondsDif > 86400000 && hour < 20 && hour > 6) {
+        if (milisecondsDif > 3600000 * ConfigHandler.feedInterval && hour < 20 && hour > 6) {
             try {
                 feedFish();
                 miliseconds = cal.getTimeInMillis();

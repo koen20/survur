@@ -8,12 +8,12 @@ import spark.Response;
 
 public class InfoHandler {
 
-    public String getInfo(Request request, Response response){
+    public String getInfo(Request request, Response response) {
         JSONObject jo = getJsonInfo();
         return jo.toString();
     }
 
-    static JSONObject getJsonInfo(){
+    static JSONObject getJsonInfo() {
         JSONObject jo = new JSONObject();
         try {
             jo.put("inside-temp", TemperatureHandler.temp);
@@ -34,6 +34,7 @@ public class InfoHandler {
             jo.put("fishLastFed", FishHandler.lastFed);
             jo.put("lastMovement", RoomHandler.lastMovement);
             jo.put("pcOn", WakeOnLanHandler.pcOn);
+            jo.put("feedInterval", ConfigHandler.feedInterval);
         } catch (JSONException e) {
             e.printStackTrace();
         }
