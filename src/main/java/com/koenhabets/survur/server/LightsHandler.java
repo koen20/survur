@@ -38,7 +38,6 @@ public class LightsHandler {
             code = COff;
             C = false;
         }
-        Log.d("hoi");
         final int thing = code;
         Thread t = new Thread(() -> {
             String command = "./home/pi/scripts/433Utils/RPi_utils/codesend " + thing;
@@ -52,17 +51,8 @@ public class LightsHandler {
     }
 
     private synchronized static void light(String command){
-        Log.d("hoi");
-        try {
-            Thread.sleep(1000);
-            Log.d("hoi");
-            Thread.sleep(1000);
-            Log.d("hoi");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //ExecuteShellCommand com = new ExecuteShellCommand();
-        //com.executeCommand(command);
+        ExecuteShellCommand com = new ExecuteShellCommand();
+        com.executeCommand(command);
     }
 
     static void resetLights() {

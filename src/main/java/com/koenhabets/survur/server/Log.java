@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Log {
 
-    private static boolean enableLog = true;
+    private static boolean enableLog = false;
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-DD-mm HH:mm:ss - ");
 
     public static void enableLog(boolean enable) {
