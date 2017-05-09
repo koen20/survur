@@ -35,7 +35,7 @@ public class Server {
 
         webSocket("/ws", WebSocketHandler.class);
         get("/info", info::getInfo);
-        post("/lights", light::setLight);
+        get("/lights", light::setLight);
         post("/wol", wol::wol);
         get("/wol", wol::wol);
         get("/sunset-sunrise", sunsetSunrise::getSunsetSunrise);

@@ -38,19 +38,31 @@ public class LightsHandler {
             code = COff;
             C = false;
         }
-        //final int thing = code;
-        //Thread t = new Thread(() -> {
-            String command = "./home/pi/scripts/433Utils/RPi_utils/codesend " + code;
-            ExecuteShellCommand com = new ExecuteShellCommand();
-            com.executeCommand(command);
-            ExecuteShellCommand com2 = new ExecuteShellCommand();
-            com2.executeCommand(command);
-            ExecuteShellCommand com3 = new ExecuteShellCommand();
-            com3.executeCommand(command);
-        //});
-        //t.start();
+        Log.d("hoi");
+        final int thing = code;
+        Thread t = new Thread(() -> {
+            String command = "./home/pi/scripts/433Utils/RPi_utils/codesend " + thing;
+            light(command);
+            light(command);
+            light(command);
+        });
+        t.start();
 
         WebSocketHandler.updateAll();
+    }
+
+    private synchronized static void light(String command){
+        Log.d("hoi");
+        try {
+            Thread.sleep(1000);
+            Log.d("hoi");
+            Thread.sleep(1000);
+            Log.d("hoi");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //ExecuteShellCommand com = new ExecuteShellCommand();
+        //com.executeCommand(command);
     }
 
     static void resetLights() {

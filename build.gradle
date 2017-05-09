@@ -34,6 +34,6 @@ dependencies {
     compile 'com.googlecode.json-simple:json-simple:1.1.1'
     compile 'com.google.guava:guava:21.0'
     compile 'com.google.code.gson:gson:2.8.0'
-    compile "com.sparkjava:spark-core:2.6.0.RC0"
+    compile "com.sparkjava:spark-core:2.5.5"
     //compile 'org.slf4j:slf4j-simple:1.7.25'
 }
