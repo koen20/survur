@@ -12,7 +12,7 @@ import java.util.Objects;
 
 
 public class ConfigHandler {
-    static boolean alarmEnabled = true;
+    public static boolean alarmEnabled = true;
     static boolean motionEnabled = true;
     static int feedInterval = 24;
 
@@ -25,8 +25,11 @@ public class ConfigHandler {
     }
 
     public String setConfig(Request request, Response response) throws IOException {
-        String parm = request.queryParams("config");
-        String parm2 = request.queryParams("status");
+        changeConfig(request.queryParams("config"), request.queryParams("status"));
+        return "";
+    }
+
+    public static void changeConfig(String parm, String parm2){
         if (Objects.equals(parm, "alarm")) {
             if (Objects.equals(parm2, "true")) {
                 alarmEnabled = true;
@@ -48,7 +51,6 @@ public class ConfigHandler {
             }
         }
         WebSocketHandler.updateAll();
-        return "";
     }
 
     private void readSavedConfig() throws IOException {
@@ -60,12 +62,16 @@ public class ConfigHandler {
         feedInterval = jo.getInt("feedInterval");
     }
 
-    private void saveConfig() throws IOException {
+    static void saveConfig() {
         JSONObject jo = new JSONObject();
         jo.put("alarm", alarmEnabled);
         jo.put("motion", motionEnabled);
         jo.put("feedInterval", feedInterval);
         File file = new File("config.txt");
-        Files.write(jo.toString(), file, Charsets.UTF_8);
+        try {
+            Files.write(jo.toString(), file, Charsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
