@@ -105,7 +105,10 @@ public class TemperatureHandler {
         ExecuteShellCommand com = new ExecuteShellCommand();
         d = com.executeCommand("bash /home/pi/scripts/tempOutside");
         d = d.replace("\n", "");
-        tempOutside = Double.parseDouble(d);
+        try {
+            tempOutside = Double.parseDouble(d);
+        } catch (NumberFormatException ignored) {
+        }
     }
 
     private double avarageTempOutside() {

@@ -12,17 +12,15 @@ public class Sonarr {
     private String upcoming;
 
     public Sonarr() {
-        try {
-            getCalendar();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        getCalendar();
     }
 
-    private String getCalendar() throws IOException {
-        URL url = new URL(baseUrl + "?apikey=" + KeyHolder.getSonarrApiKey());
-        upcoming = Resources.toString(url, Charset.defaultCharset());
-
+    private String getCalendar() {
+        try {
+            URL url = new URL(baseUrl + "?apikey=" + KeyHolder.getSonarrApiKey());
+            upcoming = Resources.toString(url, Charset.defaultCharset());
+        } catch (IOException ignored) {
+        }
 
         return upcoming;
     }

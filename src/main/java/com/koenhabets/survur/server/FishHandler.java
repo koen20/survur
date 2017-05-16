@@ -11,7 +11,6 @@ import java.net.URL;
 import java.util.Calendar;
 
 public class FishHandler {
-    static int food = 150;
     private long miliseconds;
     static String lastFed = "-";
 
@@ -43,12 +42,17 @@ public class FishHandler {
 
     private void saveFood() throws IOException {
         File file = new File("food.txt");
-        Files.write(Long.toString(miliseconds), file, Charsets.UTF_8);
+        Files.write(Long.toString(miliseconds) + ";" + lastFed, file, Charsets.UTF_8);
     }
 
     private void readFood() throws IOException {
         File file = new File("food.txt");
-        miliseconds = Long.parseLong(Files.toString(file, Charsets.UTF_8));
+        String parts[] = Files.toString(file, Charsets.UTF_8).split(";");
+        miliseconds = Long.parseLong(parts[0]);
+        try {
+            lastFed = parts[1];
+        } catch (ArrayIndexOutOfBoundsException ignored){
+        }
     }
 
     private void feedFish() throws Exception {

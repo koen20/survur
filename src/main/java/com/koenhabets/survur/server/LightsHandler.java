@@ -62,6 +62,7 @@ public class LightsHandler {
     }
 
     String setLight(Request request, Response response) {
+        Log.d(request.ip());
         String parm = request.queryParams("light");
         Light(parm);
         return ":)";
