@@ -46,7 +46,7 @@ public class RoomHandler {
                             if (Chour == 21 && Cminute > 25 || Chour == 22) {
                                 VoiceHandler.sendFcm("Ga je nu slapen?", "voice");
                                 ResponseHandler.lastAction = "enterLate";
-                                VoiceHandler.sendPost("", "response");
+                                VoiceHandler.sendFcm("", "response");
                             }
                         }
                         if(calendarScholica.count > 499){

@@ -46,10 +46,15 @@ public class FishHandler {
     }
 
     private void readFood() throws IOException {
-        File file = new File("food.txt");
-        String parts[] = Files.toString(file, Charsets.UTF_8).split(";");
-        miliseconds = Long.parseLong(parts[0]);
+        String parts[] = {};
         try {
+            File file = new File("food.txt");
+            parts = Files.toString(file, Charsets.UTF_8).split(";");
+        } catch (FileNotFoundException ignored){
+
+        }
+        try {
+            miliseconds = Long.parseLong(parts[0]);
             lastFed = parts[1];
         } catch (ArrayIndexOutOfBoundsException ignored){
         }
