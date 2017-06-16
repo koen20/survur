@@ -7,6 +7,7 @@ import java.util.TimerTask;
 public class LcdHandler {
     private int d = 0;
     private int counter = 500;
+    static boolean lcdOn = false;
 
     public LcdHandler() {
         Timer updateTimer = new Timer();
@@ -16,11 +17,14 @@ public class LcdHandler {
     public static void printLcd(String text, String text2) {
         ExecuteShellCommand com = new ExecuteShellCommand();
         com.executeCommand("python /home/pi/scripts/lcd2/text.py " + text + " " + text2);
+        lcdOn = true;
     }
 
     public static void disableBacklight() {
-        ExecuteShellCommand com = new ExecuteShellCommand();
-        com.executeCommand("python /home/pi/scripts/lcd2/disablelight.py");
+        if (lcdOn) {
+            ExecuteShellCommand com = new ExecuteShellCommand();
+            com.executeCommand("python /home/pi/scripts/lcd2/disablelight.py");
+        }
     }
 
     private class UpdateTask extends TimerTask {
