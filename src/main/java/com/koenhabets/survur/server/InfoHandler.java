@@ -34,6 +34,7 @@ public class InfoHandler {
             jo.put("lastMovement", RoomHandler.lastMovement);
             jo.put("pcOn", WakeOnLanHandler.pcOn);
             jo.put("feedInterval", ConfigHandler.feedInterval);
+            jo.put("foodDaysLeft", FishHandler.daysLeft);
         } catch (JSONException e) {
             e.printStackTrace();
         }

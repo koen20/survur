@@ -39,7 +39,10 @@ public class Server {
         post("/wol", wol::wol);
         get("/wol", wol::wol);
         get("/sunset-sunrise", sunsetSunrise::getSunsetSunrise);
-        post("/fish", fish::fishFeed);
+        path("/fish", () -> {
+            post("/feed", fish::fishFeed);
+            post("/refill", fish::refillFood);
+        });
         post("/config", config::setConfig);
         get("/temp", temp::getTemperature);
         post("/temp", temp::setTemperature);

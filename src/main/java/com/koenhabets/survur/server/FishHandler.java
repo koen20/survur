@@ -13,6 +13,7 @@ import java.util.Calendar;
 public class FishHandler {
     private long miliseconds;
     static String lastFed = "-";
+    static int daysLeft;
 
     public FishHandler() throws IOException {
         readFood();
@@ -27,22 +28,30 @@ public class FishHandler {
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
         if (milisecondsDif > 3600000 * ConfigHandler.feedInterval && hour < 20 && hour > 6) {
-            try {
-                feedFish();
-                miliseconds = cal.getTimeInMillis();
-                lastFed = day + "-" + month + " " + hour + ":" + minute;
-                WebSocketHandler.updateAll();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (daysLeft > 0) {
+                try {
+                    feedFish(20);
+                    miliseconds = cal.getTimeInMillis();
+                    lastFed = day + "-" + month + " " + hour + ":" + minute;
+                    daysLeft = daysLeft - 1;
+                    WebSocketHandler.updateAll();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         saveFood();
         return lastFed;
     }
 
+    public String refillFood(Request request, Response response) {
+        daysLeft = 4;
+        return ":)";
+    }
+
     private void saveFood() throws IOException {
         File file = new File("food.txt");
-        Files.write(Long.toString(miliseconds) + ";" + lastFed, file, Charsets.UTF_8);
+        Files.write(Long.toString(miliseconds) + ";" + lastFed + ";" + daysLeft, file, Charsets.UTF_8);
     }
 
     private void readFood() throws IOException {
@@ -50,18 +59,19 @@ public class FishHandler {
         try {
             File file = new File("food.txt");
             parts = Files.toString(file, Charsets.UTF_8).split(";");
-        } catch (FileNotFoundException ignored){
+        } catch (FileNotFoundException ignored) {
 
         }
         try {
             miliseconds = Long.parseLong(parts[0]);
             lastFed = parts[1];
-        } catch (ArrayIndexOutOfBoundsException ignored){
+            daysLeft = Integer.parseInt(parts[2]);
+        } catch (ArrayIndexOutOfBoundsException ignored) {
         }
     }
 
-    private void feedFish() throws Exception {
-        String url = "http://192.168.2.47";
+    private void feedFish(int position) throws Exception {
+        String url = "http://192.168.2.47?position=" + position;
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
