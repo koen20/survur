@@ -30,13 +30,13 @@ public class FishHandler {
         if (milisecondsDif > 3600000 * ConfigHandler.feedInterval && hour < 20 && hour > 6) {
             if (daysLeft > 0) {
                 try {
-                    if(day == 4){
+                    if(daysLeft == 4){
                         feedFish(110);
-                    } else if (day == 3){
+                    } else if (daysLeft == 3){
                         feedFish(85);
-                    } else if (day == 2){
+                    } else if (daysLeft == 2){
                         feedFish(20);
-                    } else if (day == 1) {
+                    } else if (daysLeft == 1) {
                         feedFish(0);
                     }
 
@@ -44,6 +44,12 @@ public class FishHandler {
                     lastFed = day + "-" + month + " " + hour + ":" + minute;
                     daysLeft = daysLeft - 1;
                     WebSocketHandler.updateAll();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    feedFish(110);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
