@@ -30,7 +30,16 @@ public class FishHandler {
         if (milisecondsDif > 3600000 * ConfigHandler.feedInterval && hour < 20 && hour > 6) {
             if (daysLeft > 0) {
                 try {
-                    feedFish(20);
+                    if(day == 4){
+                        feedFish(110);
+                    } else if (day == 3){
+                        feedFish(85);
+                    } else if (day == 2){
+                        feedFish(20);
+                    } else if (day == 1) {
+                        feedFish(0);
+                    }
+
                     miliseconds = cal.getTimeInMillis();
                     lastFed = day + "-" + month + " " + hour + ":" + minute;
                     daysLeft = daysLeft - 1;
