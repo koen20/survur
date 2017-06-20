@@ -66,14 +66,14 @@ public class FishHandler {
 
     private void saveFood() throws IOException {
         File file = new File("food.txt");
-        Files.write(Long.toString(miliseconds) + ";" + lastFed + ";" + daysLeft, file, Charsets.UTF_8);
+        Files.asCharSink(file, Charsets.UTF_8).write(Long.toString(miliseconds) + ";" + lastFed + ";" + daysLeft);
     }
 
     private void readFood() throws IOException {
         String parts[] = {};
         try {
             File file = new File("food.txt");
-            parts = Files.toString(file, Charsets.UTF_8).split(";");
+            parts = Files.asCharSource(file, Charsets.UTF_8).read().split(";");
         } catch (FileNotFoundException ignored) {
 
         }

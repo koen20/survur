@@ -1,14 +1,11 @@
 package com.koenhabets.survur.server;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import spark.Request;
 import spark.Response;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Objects;
 
 public class CalendarHandler {
     static String response = "";

@@ -22,7 +22,6 @@ public class ActionHandler {
         Calendar cal = Calendar.getInstance();
         int day = cal.get(Calendar.DAY_OF_MONTH);
         weekDay = dayFormat.format(cal.getTime());
-        System.out.println(calendarScholica.count);
         if (!Objects.equals(weekDay, "Friday") && !Objects.equals(weekDay, "Saturday") && calendarScholica.count < 500 && ConfigHandler.alarmEnabled) {
             try {
                 if (calendarScholica.count == 1) {
@@ -91,12 +90,6 @@ public class ActionHandler {
             try {
                 double temp = TemperatureHandler.tempOutside;
                 String nextSubject = calendarScholica.nextSubject;
-                if (Objects.equals(nextSubject, "geen les")) {
-                    //VoiceHandler.sendFcm("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse(), "voice");
-                } else {
-                    //VoiceHandler.sendFcm("Goedemorgen Koen. Het is " + temp + " graden buiten. Je volgende afspraak is: " + CalendarHandler.getResponse() +
-                      //      ". Je hebt dalijk: " + nextSubject, "voice");
-                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -55,7 +55,7 @@ public class ConfigHandler {
 
     private void readSavedConfig() throws IOException {
         File file = new File("config.txt");
-        String result = Files.toString(file, Charsets.UTF_8);
+        String result = Files.asCharSource(file, Charsets.UTF_8).read();
         JSONObject jo = new JSONObject(result);
         alarmEnabled = jo.getBoolean("alarm");
         motionEnabled = jo.getBoolean("motion");
@@ -69,7 +69,7 @@ public class ConfigHandler {
         jo.put("feedInterval", feedInterval);
         File file = new File("config.txt");
         try {
-            Files.write(jo.toString(), file, Charsets.UTF_8);
+            Files.asCharSink(file, Charsets.UTF_8).write(jo.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

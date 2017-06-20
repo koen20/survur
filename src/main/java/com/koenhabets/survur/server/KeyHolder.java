@@ -25,7 +25,7 @@ public class KeyHolder {
     }
 
     public static void init(String path) throws IOException {
-        String json = Files.toString(new File(path), Charset.defaultCharset());
+        String json = Files.asCharSource(new File(path), Charset.defaultCharset()).read();
         instance = new Gson().fromJson(json, KeyHolder.class);
     }
 

@@ -98,7 +98,7 @@ public class RoomHandler {
                 long Cmiliseconds = cal.getTimeInMillis();
                 long milisecondsDif = Cmiliseconds - miliseconds;
                 if (insideRoom) {
-                    if (milisecondsDif > 120 * 1000) {
+                    if (milisecondsDif > 30 * 1000) {
                         insideRoom = false;
                         LightsHandler.resetLights();
                     }

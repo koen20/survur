@@ -154,7 +154,7 @@ public class TemperatureHandler {
             String result = null;
             try {
                 File file1 = new File("temp.json");
-                result = Files.toString(file1, Charsets.UTF_8);
+                result = Files.asCharSource(file1, Charsets.UTF_8).read();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -174,7 +174,7 @@ public class TemperatureHandler {
 
             try {
                 File fileS = new File("temp.json");
-                Files.write(ja.toJSONString(), fileS, Charsets.UTF_8);
+                Files.asCharSink(fileS, Charsets.UTF_8).write(ja.toJSONString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -187,7 +187,7 @@ public class TemperatureHandler {
             result = null;
             try {
                 File file = new File("time.json");
-                result = Files.toString(file, Charsets.UTF_8);
+                result = Files.asCharSource(file, Charsets.UTF_8).read();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -205,7 +205,7 @@ public class TemperatureHandler {
 
             try {
                 File file = new File("time.json");
-                Files.write(ja.toJSONString(), file, Charsets.UTF_8);
+                Files.asCharSink(file, Charsets.UTF_8).write(ja.toJSONString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -219,7 +219,7 @@ public class TemperatureHandler {
             result = null;
             try {
                 File file = new File("tempOutside.json");
-                result = Files.toString(file, Charsets.UTF_8);
+                result = Files.asCharSource(file, Charsets.UTF_8).read();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -236,7 +236,7 @@ public class TemperatureHandler {
 
             try {
                 File file = new File("tempOutside.json");
-                Files.write(ja.toJSONString(), file, Charsets.UTF_8);
+                Files.asCharSink(file, Charsets.UTF_8).write(ja.toJSONString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -249,7 +249,7 @@ public class TemperatureHandler {
             result = null;
             try {
                 File file = new File("livingRoomTemp.json");
-                result = Files.toString(file, Charsets.UTF_8);
+                result = Files.asCharSource(file, Charsets.UTF_8).read();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -265,7 +265,7 @@ public class TemperatureHandler {
             ja.add(livingRoomTemp);
             try {
                 File file = new File("livingRoomTemp.json");
-                Files.write(ja.toJSONString(), file, Charsets.UTF_8);
+                Files.asCharSink(file, Charsets.UTF_8).write(ja.toJSONString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -278,7 +278,7 @@ public class TemperatureHandler {
             result = null;
             try {
                 File file = new File("vdd.json");
-                result = Files.toString(file, Charsets.UTF_8);
+                result = Files.asCharSource(file, Charsets.UTF_8).read();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -294,7 +294,7 @@ public class TemperatureHandler {
             ja.add(vdd);
             try {
                 File file = new File("vdd.json");
-                Files.write(ja.toJSONString(), file, Charsets.UTF_8);
+                Files.asCharSink(file, Charsets.UTF_8).write(ja.toJSONString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
