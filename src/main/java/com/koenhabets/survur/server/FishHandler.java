@@ -61,6 +61,7 @@ public class FishHandler {
 
     public String refillFood(Request request, Response response) {
         daysLeft = 4;
+        WebSocketHandler.updateAll();
         return ":)";
     }
 
