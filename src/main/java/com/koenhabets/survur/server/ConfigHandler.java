@@ -15,6 +15,7 @@ public class ConfigHandler {
     public static boolean alarmEnabled = true;
     static boolean motionEnabled = true;
     static int feedInterval = 24;
+    static String directory = "/var/survur/";
 
     public ConfigHandler() {
         try {
@@ -54,7 +55,7 @@ public class ConfigHandler {
     }
 
     private void readSavedConfig() throws IOException {
-        File file = new File("config.txt");
+        File file = new File(directory + "config.txt");
         String result = Files.asCharSource(file, Charsets.UTF_8).read();
         JSONObject jo = new JSONObject(result);
         alarmEnabled = jo.getBoolean("alarm");
@@ -67,7 +68,7 @@ public class ConfigHandler {
         jo.put("alarm", alarmEnabled);
         jo.put("motion", motionEnabled);
         jo.put("feedInterval", feedInterval);
-        File file = new File("config.txt");
+        File file = new File(directory + "config.txt");
         try {
             Files.asCharSink(file, Charsets.UTF_8).write(jo.toString());
         } catch (IOException e) {
