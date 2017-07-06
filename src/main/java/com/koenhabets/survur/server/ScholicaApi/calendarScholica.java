@@ -36,7 +36,7 @@ public class calendarScholica {
         //con.setRequestProperty("User-Agent", USER_AGENT);
         //con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-        String urlParameters = "token=" + requestToken.requestToken + "&time=" + getStartOfDayInMillis(day) / 1000;
+        String urlParameters = "token=" + requestToken.requestToken + "&time=" + getStartOfDayInMillis(22) / 1000;
 
         // Send post request
         con.setDoOutput(true);

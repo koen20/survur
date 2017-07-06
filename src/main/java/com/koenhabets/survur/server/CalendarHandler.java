@@ -20,7 +20,7 @@ public class CalendarHandler {
     }
 
     public static String setAlarm(String hour, String minute) throws Exception {
-        String url = "http://192.168.2.24:9997/message?7720473;" + "alarm" + "&" + hour + ";" + minute;
+        String url = "http://192.168.2.24:9997/message?7720473;" + "alarm" + "&" + hour + "-" + minute;
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 

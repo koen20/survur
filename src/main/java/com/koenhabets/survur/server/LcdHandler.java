@@ -16,14 +16,14 @@ public class LcdHandler {
 
     public static void printLcd(String text, String text2) {
         ExecuteShellCommand com = new ExecuteShellCommand();
-        com.executeCommand("python /home/pi/scripts/lcd2/text.py " + text + " " + text2);
+        com.executeCommand("python /home/pi/scripts/text.py " + text + " " + text2);
         lcdOn = true;
     }
 
     public static void disableBacklight() {
         if (lcdOn) {
             ExecuteShellCommand com = new ExecuteShellCommand();
-            com.executeCommand("python /home/pi/scripts/lcd2/disablelight.py");
+            com.executeCommand("python /home/pi/scripts/disablelight.py");
         }
     }
 
@@ -46,10 +46,10 @@ public class LcdHandler {
                 int hour = calendar.get(Calendar.HOUR_OF_DAY);
                 int minute = calendar.get(Calendar.MINUTE);
                 if (d == 0) {
-                    printLcd(hour + ":" + minute, "Binnen:" + temp);
+                    printLcd(hour + ":" + minute, "In:" + TemperatureHandler.round(temp, 2));
                     d = 1;
                 } else {
-                    printLcd(hour + ":" + minute, "Buiten:" + tempOutside);
+                    printLcd(hour + ":" + minute, "Out:" + TemperatureHandler.round(tempOutside, 2));
                     d = 0;
                 }
             }
