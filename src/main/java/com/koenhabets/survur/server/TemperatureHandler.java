@@ -153,7 +153,7 @@ public class TemperatureHandler {
             //TEMP moving avarage//////////////////////
             String result = null;
             try {
-                File file1 = new File("temp.json");
+                File file1 = new File(ConfigHandler.directory + "temp.json");
                 result = Files.asCharSource(file1, Charsets.UTF_8).read();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -173,7 +173,7 @@ public class TemperatureHandler {
             ja.add(tempAvarageInside);
 
             try {
-                File fileS = new File("temp.json");
+                File fileS = new File(ConfigHandler.directory + "temp.json");
                 Files.asCharSink(fileS, Charsets.UTF_8).write(ja.toJSONString());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -186,7 +186,7 @@ public class TemperatureHandler {
             ja = new JSONArray();
             result = null;
             try {
-                File file = new File("time.json");
+                File file = new File(ConfigHandler.directory + "time.json");
                 result = Files.asCharSource(file, Charsets.UTF_8).read();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -204,7 +204,7 @@ public class TemperatureHandler {
             ja.add(hour + ":" + minute);
 
             try {
-                File file = new File("time.json");
+                File file = new File(ConfigHandler.directory + "time.json");
                 Files.asCharSink(file, Charsets.UTF_8).write(ja.toJSONString());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -218,7 +218,7 @@ public class TemperatureHandler {
             ja = new JSONArray();
             result = null;
             try {
-                File file = new File("tempOutside.json");
+                File file = new File(ConfigHandler.directory + "tempOutside.json");
                 result = Files.asCharSource(file, Charsets.UTF_8).read();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -235,7 +235,7 @@ public class TemperatureHandler {
             ja.add(tempAvarageOutside);
 
             try {
-                File file = new File("tempOutside.json");
+                File file = new File(ConfigHandler.directory + "tempOutside.json");
                 Files.asCharSink(file, Charsets.UTF_8).write(ja.toJSONString());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -248,7 +248,7 @@ public class TemperatureHandler {
             ja = new JSONArray();
             result = null;
             try {
-                File file = new File("livingRoomTemp.json");
+                File file = new File(ConfigHandler.directory + "livingRoomTemp.json");
                 result = Files.asCharSource(file, Charsets.UTF_8).read();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -264,7 +264,7 @@ public class TemperatureHandler {
             }
             ja.add(livingRoomTemp);
             try {
-                File file = new File("livingRoomTemp.json");
+                File file = new File(ConfigHandler.directory + "livingRoomTemp.json");
                 Files.asCharSink(file, Charsets.UTF_8).write(ja.toJSONString());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -277,7 +277,7 @@ public class TemperatureHandler {
             ja = new JSONArray();
             result = null;
             try {
-                File file = new File("vdd.json");
+                File file = new File(ConfigHandler.directory + "vdd.json");
                 result = Files.asCharSource(file, Charsets.UTF_8).read();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -293,7 +293,7 @@ public class TemperatureHandler {
             }
             ja.add(vdd);
             try {
-                File file = new File("vdd.json");
+                File file = new File(ConfigHandler.directory + "vdd.json");
                 Files.asCharSink(file, Charsets.UTF_8).write(ja.toJSONString());
             } catch (IOException e) {
                 e.printStackTrace();
