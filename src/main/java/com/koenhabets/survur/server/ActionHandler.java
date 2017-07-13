@@ -49,7 +49,7 @@ public class ActionHandler {
                 calOff.set(Calendar.HOUR, hour);
                 calOff.set(Calendar.MINUTE, minute + 5);
                 if (inside) {
-                    VoiceHandler.sendFcm("Het alarm gaat om " + hour + ":" + minute, "voice");
+                    WebSocket2.voice("Het alarm gaat om " + hour + ":" + minute);
                     LcdHandler.printLcd("Welterusten", "Alarm:" + hour + ":" + minute);
                     setOff(calOff.getTime());
                     setOn(calOn.getTime());

@@ -44,16 +44,16 @@ public class RoomHandler {
                         }
                         if (calendarScholica.count < 4 && ConfigHandler.alarmEnabled) {
                             if (Chour == 21 && Cminute > 25 || Chour == 22) {
-                                VoiceHandler.sendFcm("Ga je nu slapen?", "voice");
+                                WebSocket2.voice("Ga je nu slapen?");
                                 ResponseHandler.lastAction = "enterLate";
-                                VoiceHandler.sendFcm("", "response");
+                                WebSocket2.listen();
                             }
                         }
-                        if(calendarScholica.count > 499){
-                            if(Chour >= 22 && Cminute > 15 || Chour < 4){
-                                VoiceHandler.sendFcm("Ga je nu slapen?", "voice");
+                        if (calendarScholica.count > 499) {
+                            if (Chour >= 22 && Cminute > 15 || Chour < 4) {
+                                WebSocket2.voice("Ga je nu slapen?");
                                 ResponseHandler.lastAction = "enterLate";
-                                VoiceHandler.sendPost("", "response");
+                                WebSocket2.listen();
                             }
                         }
                     }

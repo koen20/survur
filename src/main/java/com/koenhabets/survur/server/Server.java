@@ -34,6 +34,7 @@ public class Server {
         new Sonarr();
 
         webSocket("/ws", WebSocketHandler.class);
+        webSocket("/ws2", WebSocket2.class);
         get("/info", info::getInfo);
         post("/lights", light::setLight);
         post("/wol", wol::wol);
