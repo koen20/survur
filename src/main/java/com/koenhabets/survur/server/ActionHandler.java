@@ -59,7 +59,7 @@ public class ActionHandler {
             }
         } else {
             try {
-                VoiceHandler.sendPost("Welterusten.", "voice");
+                WebSocket2.voice("Welterusten.");
             } catch (Exception e) {
                 e.printStackTrace();
             }
