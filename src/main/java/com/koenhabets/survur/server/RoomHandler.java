@@ -1,6 +1,6 @@
 package com.koenhabets.survur.server;
 
-import com.koenhabets.survur.server.ScholicaApi.calendarScholica;
+import com.koenhabets.survur.server.ZermeloApi.calendarZermelo;
 import spark.Request;
 import spark.Response;
 
@@ -42,14 +42,14 @@ public class RoomHandler {
                             LightsHandler.Light("Aon");
                             LightsHandler.Light("Bon");
                         }
-                        if (calendarScholica.count < 4 && ConfigHandler.alarmEnabled) {
+                        if (calendarZermelo.count < 4 && ConfigHandler.alarmEnabled) {
                             if (Chour == 21 && Cminute > 25 || Chour == 22) {
                                 WebSocket2.voice("Ga je nu slapen?");
                                 ResponseHandler.lastAction = "enterLate";
                                 WebSocket2.listen();
                             }
                         }
-                        if (calendarScholica.count > 499) {
+                        if (calendarZermelo.count > 499) {
                             if (Chour >= 22 && Cminute > 15 || Chour < 4) {
                                 WebSocket2.voice("Ga je nu slapen?");
                                 ResponseHandler.lastAction = "enterLate";

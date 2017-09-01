@@ -1,6 +1,6 @@
 package com.koenhabets.survur.server;
 
-import com.koenhabets.survur.server.ScholicaApi.calendarScholica;
+import com.koenhabets.survur.server.ZermeloApi.calendarZermelo;
 import org.json.JSONException;
 import org.json.JSONObject;
 import spark.Request;
@@ -22,8 +22,8 @@ public class InfoHandler {
             jo.put("inside", ActionHandler.inside);
             jo.put("insideRoom", RoomHandler.insideRoom);
             jo.put("next-appointment", CalendarHandler.getResponse());
-            jo.put("nextSubject", calendarScholica.nextSubject);
-            jo.put("vrij", calendarScholica.count);
+            jo.put("nextSubject", calendarZermelo.nextSubject);
+            jo.put("vrij", calendarZermelo.count);
             jo.put("light-A", LightsHandler.A);
             jo.put("light-B", LightsHandler.B);
             jo.put("light-C", LightsHandler.C);

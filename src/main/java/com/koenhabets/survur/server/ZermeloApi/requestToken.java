@@ -1,4 +1,4 @@
-package com.koenhabets.survur.server.ScholicaApi;
+package com.koenhabets.survur.server.ZermeloApi;
 
 import com.koenhabets.survur.server.KeyHolder;
 import org.json.JSONObject;
@@ -13,7 +13,7 @@ public class requestToken {
     static String requestToken;
 
     public static void requestToken() throws Exception {
-        String url = "https://api.scholica.com/2.0/communities/1/authenticate";
+        String url = "https://bernardinuscollege.zportal.nl/api/v3/oauth/token";
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -22,9 +22,8 @@ public class requestToken {
         //con.setRequestProperty("User-Agent", USER_AGENT);
         //con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-        String urlParameters = "username=407332&password="
-                + KeyHolder.getScholicaPasswd() +
-                "&access_token=470d7d90cae6e34f36bc9110026a4370e8864551b0e7e7b33263163562c362a3d68f1937";
+        String urlParameters = "grant_type=authorization&code="
+                + KeyHolder.getZermeloCode();
 
         // Send post request
         con.setDoOutput(true);
@@ -42,8 +41,8 @@ public class requestToken {
             response.append(inputLine);
         }
         in.close();
-        JSONObject responsetoken = new JSONObject(response.toString());
-        JSONObject jsonMain = responsetoken.getJSONObject("result");
-        requestToken = jsonMain.getString("request_token");
+        //JSONObject responsetoken = new JSONObject(response.toString());
+        //JSONObject jsonMain = responsetoken.getJSONObject("result");
+        requestToken = "";
     }
 }

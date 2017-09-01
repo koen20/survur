@@ -1,6 +1,6 @@
 package com.koenhabets.survur.server;
 
-import com.koenhabets.survur.server.ScholicaApi.calendarScholica;
+import com.koenhabets.survur.server.ZermeloApi.calendarZermelo;
 import spark.Spark;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class Server {
         CalendarHandler calendar = new CalendarHandler();
         ResponseHandler response = new ResponseHandler();
         new LcdHandler();
-        new calendarScholica();
+        new calendarZermelo();
         new Sonarr();
 
         webSocket("/ws", WebSocketHandler.class);

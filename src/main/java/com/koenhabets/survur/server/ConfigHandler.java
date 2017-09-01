@@ -15,7 +15,7 @@ public class ConfigHandler {
     public static boolean alarmEnabled = true;
     static boolean motionEnabled = true;
     static int feedInterval = 24;
-    static String directory = "/var/survur/";
+    static String directory = "";
 
     public ConfigHandler() {
         try {

@@ -1,6 +1,6 @@
 package com.koenhabets.survur.server;
 
-import com.koenhabets.survur.server.ScholicaApi.calendarScholica;
+import com.koenhabets.survur.server.ZermeloApi.calendarZermelo;
 import spark.Request;
 import spark.Response;
 
@@ -22,14 +22,14 @@ public class ActionHandler {
         Calendar cal = Calendar.getInstance();
         int day = cal.get(Calendar.DAY_OF_MONTH);
         weekDay = dayFormat.format(cal.getTime());
-        if (!Objects.equals(weekDay, "Friday") && !Objects.equals(weekDay, "Saturday") && calendarScholica.count < 500 && ConfigHandler.alarmEnabled) {
+        if (!Objects.equals(weekDay, "Friday") && !Objects.equals(weekDay, "Saturday") && calendarZermelo.count < 500 && ConfigHandler.alarmEnabled) {
             try {
-                if (calendarScholica.count == 1) {
+                if (calendarZermelo.count == 1) {
                     hour = 8;
                     minute = 5;
                     CalendarHandler.setAlarm("08", "05");
                     LcdHandler.printLcd("Welterusten", "Alarm:08:05");
-                } else if (calendarScholica.count == 2) {
+                } else if (calendarZermelo.count == 2) {
                     hour = 9;
                     minute = 10;
                     CalendarHandler.setAlarm("09", "10");
@@ -89,7 +89,7 @@ public class ActionHandler {
             sleeping = false;
             try {
                 double temp = TemperatureHandler.tempOutside;
-                String nextSubject = calendarScholica.nextSubject;
+                String nextSubject = calendarZermelo.nextSubject;
             } catch (Exception e) {
                 e.printStackTrace();
             }
