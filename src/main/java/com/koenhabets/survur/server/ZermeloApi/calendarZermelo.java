@@ -1,15 +1,15 @@
 package com.koenhabets.survur.server.ZermeloApi;
 
+import com.koenhabets.survur.server.KeyHolder;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -18,52 +18,42 @@ import java.util.TimeZone;
 public class calendarZermelo {
     public static int count = 500;
     public static String nextSubject;
-    private List<TimeTableItem> timeTableItem = new ArrayList<>();
 
     public calendarZermelo() {
-        parseResponse(getAppointments(getStartTime(1), getEndTime(1)));
-        getFirstHour(timeTableItem);
+        count = getFirstHour(parseResponse(getAppointments(getStartTime(1), getEndTime(1))));
     }
     String getAppointments(long startTime, long endTime){
-        StringBuffer response = new StringBuffer();
+        OkHttpClient client = new OkHttpClient();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://bernardinuscollege.zportal.nl/api/v3/appointments").newBuilder();
+        urlBuilder.addQueryParameter("user", "~me");
+        urlBuilder.addQueryParameter("access_token", KeyHolder.getZermeloCode());
+        urlBuilder.addQueryParameter("start", Long.toString(startTime));
+        urlBuilder.addQueryParameter("end", Long.toString(endTime));
 
+        String url = urlBuilder.build().toString();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        Response response = null;
         try {
-            String url = "https://bernardinuscollege.zportal.nl/api/v3/appointments";
-            URL obj = new URL(url);
-            HttpURLConnection con = null;
-            con = (HttpURLConnection) obj.openConnection();
-
-            //add reuqest header
-            con.setRequestMethod("GET");
-            //con.setRequestProperty("User-Agent", USER_AGENT);
-            //con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-
-            String urlParameters = "user=~me&access_token=" + "" + "&start=" + startTime + "&end=" + endTime;
-            System.out.println(urlParameters);
-
-            // Send post request
-            con.setDoOutput(true);
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes(urlParameters);
-            wr.flush();
-            wr.close();
-
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
-            String inputLine;
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
+            response = client.newCall(request).execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(response.toString());
-        return response.toString();
+
+        String res = null;
+        try {
+            res = response.body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(res);
+        return res;
     }
 
-    private void parseResponse(String response) {
+    private List<TimeTableItem> parseResponse(String response) {
+        List<TimeTableItem> timeTableItem = new ArrayList<>();
         timeTableItem.clear();
         try {
             JSONObject jsonObject = new JSONObject(response);
@@ -94,23 +84,26 @@ public class calendarZermelo {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return timeTableItem;
     }
 
-    private void getFirstHour(List<TimeTableItem> timeTableItems){
+    private int getFirstHour(List<TimeTableItem> timeTableItems){
+        int c = 50;
         try {
             TimeTableItem item = timeTableItems.get(0);
-            if (item.getHour() == 1 && !item.isCancelled()) {
-                count = 0;
-            } else if (item.getHour() == 2 && !item.isCancelled()) {
-                count = 1;
-            } else if (item.getHour() == 3 && !item.isCancelled()) {
-                count = 2;
-            } else if (item.getHour() == 4 && !item.isCancelled()) {
-                count = 3;
+            if (item.isCancelled()){
+                item = timeTableItems.get(1);
             }
+
+            c = item.getHour() - 1;
+            nextSubject = item.getSubject();
+
         } catch (IndexOutOfBoundsException e){
             e.printStackTrace();
         }
+        System.out.println(c);
+
+        return c;
     }
 
     private long getStartTime(int day){
