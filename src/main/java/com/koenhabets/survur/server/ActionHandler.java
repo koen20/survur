@@ -16,6 +16,7 @@ public class ActionHandler {
 
     static void prepSleep() {
         LcdHandler.printLcd("Welterusten", ".");
+        calendarZermelo.updateSchedule();
         sleeping = true;
         String weekDay;
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.US);

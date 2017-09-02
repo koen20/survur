@@ -10,19 +10,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 public class calendarZermelo {
     public static int count = 500;
     public static String nextSubject;
 
     public calendarZermelo() {
-        count = getFirstHour(parseResponse(getAppointments(getStartTime(1), getEndTime(1))));
+        Timer updateTimer = new Timer();
+        updateTimer.scheduleAtFixedRate(new update(), 0, 10800000);//3 hours
     }
-    String getAppointments(long startTime, long endTime){
+
+    private static String getAppointments(long startTime, long endTime) {
         OkHttpClient client = new OkHttpClient();
         HttpUrl.Builder urlBuilder = HttpUrl.parse("https://bernardinuscollege.zportal.nl/api/v3/appointments").newBuilder();
         urlBuilder.addQueryParameter("user", "~me");
@@ -48,11 +47,10 @@ public class calendarZermelo {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(res);
         return res;
     }
 
-    private List<TimeTableItem> parseResponse(String response) {
+    private static List<TimeTableItem> parseResponse(String response) {
         List<TimeTableItem> timeTableItem = new ArrayList<>();
         timeTableItem.clear();
         try {
@@ -87,26 +85,25 @@ public class calendarZermelo {
         return timeTableItem;
     }
 
-    private int getFirstHour(List<TimeTableItem> timeTableItems){
-        int c = 50;
+    private static int getFirstHour(List<TimeTableItem> timeTableItems) {
+        int c = 501;
         try {
             TimeTableItem item = timeTableItems.get(0);
-            if (item.isCancelled()){
+            if (item.isCancelled()) {
                 item = timeTableItems.get(1);
             }
 
             c = item.getHour() - 1;
             nextSubject = item.getSubject();
 
-        } catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
         }
-        System.out.println(c);
 
         return c;
     }
 
-    private long getStartTime(int day){
+    private static long getStartTime(int day) {
         Calendar cald = Calendar.getInstance(TimeZone.getTimeZone("CEST"));
         cald.set(Calendar.DAY_OF_MONTH, day);
         cald.set(Calendar.HOUR_OF_DAY, 1);
@@ -114,10 +111,28 @@ public class calendarZermelo {
         return cald.getTimeInMillis() / 1000;
     }
 
-    private long getEndTime(int day){
+    private static long getEndTime(int day) {
         Calendar cald = Calendar.getInstance(TimeZone.getTimeZone("CEST"));
         cald.set(Calendar.DAY_OF_MONTH, day);
         cald.set(Calendar.HOUR_OF_DAY, 20);
         return cald.getTimeInMillis() / 1000;
+    }
+
+    public static void updateSchedule(){
+        Calendar cal = Calendar.getInstance();
+        int day;
+        if (cal.get(Calendar.HOUR_OF_DAY) >= 16) {
+            day = cal.get(Calendar.DAY_OF_MONTH) + 1;
+        } else {
+            day = cal.get(Calendar.DAY_OF_MONTH);
+        }
+        count = getFirstHour(parseResponse(getAppointments(getStartTime(day), getEndTime(day))));
+    }
+
+    public class update extends TimerTask {
+        @Override
+        public void run() {
+            updateSchedule();
+        }
     }
 }
