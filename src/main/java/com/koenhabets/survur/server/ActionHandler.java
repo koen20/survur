@@ -11,8 +11,8 @@ import java.util.*;
 public class ActionHandler {
     static boolean sleeping = false;
     static boolean inside = true;
-    static int hour;
-    static int minute;
+    private static int hour;
+    private static int minute;
 
     static void prepSleep() {
         LcdHandler.printLcd("Welterusten", ".");
@@ -35,6 +35,11 @@ public class ActionHandler {
                     minute = 10;
                     CalendarHandler.setAlarm("09", "10");
                     LcdHandler.printLcd("Welterusten", "Alarm:09:10");
+                } else if (calendarZermelo.count == 3){
+                    hour = 9;
+                    minute = 40;
+                    CalendarHandler.setAlarm("09", "40");
+                    LcdHandler.printLcd("Welterusten", "Alarm:09:40");
                 } else {
                     hour = 7;
                     minute = 20;
@@ -74,12 +79,12 @@ public class ActionHandler {
 
     }
 
-    public static void setOff(Date date) throws ParseException {
+    private static void setOff(Date date) throws ParseException {
         Timer timer = new Timer();
         timer.schedule(new lightsOff(), date);
     }
 
-    public static void setOn(Date date) throws ParseException {
+    private static void setOn(Date date) throws ParseException {
         Timer timer = new Timer();
         timer.schedule(new lightsOn(), date);
     }

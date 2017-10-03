@@ -1,6 +1,7 @@
 package com.koenhabets.survur.server.ZermeloApi;
 
 import com.koenhabets.survur.server.KeyHolder;
+import com.koenhabets.survur.server.Log;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -92,13 +93,25 @@ public class calendarZermelo {
             if (item.isCancelled()) {
                 item = timeTableItems.get(1);
             }
-
+            if (item.isCancelled()) {
+                item = timeTableItems.get(2);
+            }
+            if (item.isCancelled()) {
+                item = timeTableItems.get(3);
+            }
+            if (item.isCancelled()) {
+                item = timeTableItems.get(4);
+            }
+            if (item.isCancelled()) {
+                item = timeTableItems.get(5);
+            }
             c = item.getHour() - 1;
             nextSubject = item.getSubject();
 
-        } catch (IndexOutOfBoundsException e) {
-            e.printStackTrace();
+        } catch (IndexOutOfBoundsException ignored) {
         }
+
+        Log.d(c + "");
 
         return c;
     }
@@ -107,7 +120,6 @@ public class calendarZermelo {
         Calendar cald = Calendar.getInstance(TimeZone.getTimeZone("CEST"));
         cald.set(Calendar.DAY_OF_MONTH, day);
         cald.set(Calendar.HOUR_OF_DAY, 1);
-        System.out.println("millis" + cald.getTimeInMillis() / 1000 + "month" + cald.get(Calendar.MONTH) + "day" + cald.get(Calendar.DAY_OF_MONTH));
         return cald.getTimeInMillis() / 1000;
     }
 
