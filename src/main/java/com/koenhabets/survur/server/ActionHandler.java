@@ -35,12 +35,12 @@ public class ActionHandler {
                     minute = 10;
                     CalendarHandler.setAlarm("09", "10");
                     LcdHandler.printLcd("Welterusten", "Alarm:09:10");
-                } else if (calendarZermelo.count == 3){
+                } else if (calendarZermelo.count >= 3 && calendarZermelo.count < 7){
                     hour = 9;
                     minute = 40;
                     CalendarHandler.setAlarm("09", "40");
                     LcdHandler.printLcd("Welterusten", "Alarm:09:40");
-                } else {
+                }  else {
                     hour = 7;
                     minute = 20;
                     CalendarHandler.setAlarm("07", "20");
@@ -93,12 +93,6 @@ public class ActionHandler {
         String action = request.queryParams("action");
         if (Objects.equals(action, "Wake-up")) {
             sleeping = false;
-            try {
-                double temp = TemperatureHandler.tempOutside;
-                String nextSubject = calendarZermelo.nextSubject;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         } else if (Objects.equals(action, "Prep-Sleep")) {
             prepSleep();
         } else if (Objects.equals(action, "Sleep")) {

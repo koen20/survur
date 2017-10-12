@@ -52,6 +52,7 @@ public class calendarZermelo {
     }
 
     private static List<TimeTableItem> parseResponse(String response) {
+        Log.d("Calendar zermelo: " + response);
         List<TimeTableItem> timeTableItem = new ArrayList<>();
         timeTableItem.clear();
         try {
@@ -104,6 +105,12 @@ public class calendarZermelo {
             }
             if (item.isCancelled()) {
                 item = timeTableItems.get(5);
+            }
+            if (item.isCancelled()) {
+                item = timeTableItems.get(6);
+            }
+            if (item.isCancelled()) {
+                item = timeTableItems.get(7);
             }
             c = item.getHour() - 1;
             nextSubject = item.getSubject();

@@ -17,8 +17,8 @@ public class RoomHandler {
     private long miliseconds = 0;
 
     public RoomHandler() {
-        Timer updateTimer = new Timer();
-        updateTimer.scheduleAtFixedRate(new CheckWifi(), 0, 7 * 60 * 1000);
+        //Timer updateTimer = new Timer();
+        //updateTimer.scheduleAtFixedRate(new CheckWifi(), 0, 7 * 60 * 1000);
 
         Timer updateTimerRoom = new Timer();
         updateTimerRoom.scheduleAtFixedRate(new UpdateInside(), 0, 10 * 1000);
@@ -37,23 +37,20 @@ public class RoomHandler {
                 long milisecondsDif = Cmiliseconds - miliseconds;
                 if (milisecondsDif < 30 * 1000) {
                     if (!insideRoom && !ActionHandler.sleeping && ActionHandler.inside) {
-                        //VoiceHandler.sendPost("Hallo", "voice");
                         if (Chour > SunSetHandler.sunsetHour) {
                             LightsHandler.Light("Aon");
                             LightsHandler.Light("Bon");
                         }
-                        if (calendarZermelo.count < 4 && ConfigHandler.alarmEnabled) {
-                            if (Chour == 21 && Cminute > 25 || Chour == 22) {
-                                WebSocket2.voice("Ga je nu slapen?");
+                        if (calendarZermelo.count < 5 && ConfigHandler.alarmEnabled) {
+                            if (Chour == 21 && Cminute > 40 || Chour == 22 || Chour == 23) {
+                                WebSocket2.voiceListen("Ga je nu slapen?");
                                 ResponseHandler.lastAction = "enterLate";
-                                WebSocket2.listen();
                             }
                         }
                         if (calendarZermelo.count > 499) {
-                            if (Chour >= 22 && Cminute > 15 || Chour < 4) {
-                                WebSocket2.voice("Ga je nu slapen?");
+                            if (Chour >= 22 && Cminute > 25 || Chour < 4) {
+                                WebSocket2.voiceListen("Ga je nu slapen?");
                                 ResponseHandler.lastAction = "enterLate";
-                                WebSocket2.listen();
                             }
                         }
                     }

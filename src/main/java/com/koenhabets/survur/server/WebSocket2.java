@@ -9,6 +9,7 @@ import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import java.io.IOException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeUnit;
 
 @WebSocket
 public class WebSocket2 {
@@ -40,7 +41,7 @@ public class WebSocket2 {
         }
     }
 
-    public static void listen(){
+    public static void listen() {
         for (Session sessiond : sessions) {
             try {
                 sessiond.getRemote().sendString("listen;");
@@ -50,7 +51,7 @@ public class WebSocket2 {
         }
     }
 
-    public static void voice(String message){
+    public static void voice(String message) {
         for (Session sessiond : sessions) {
             try {
                 sessiond.getRemote().sendString("voice;" + message);
@@ -58,5 +59,18 @@ public class WebSocket2 {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void voiceListen(String messsage) {
+        Thread t = new Thread(() -> {
+            voice(messsage);
+            try {
+                TimeUnit.SECONDS.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            listen();
+        });
+        t.start();
     }
 }
