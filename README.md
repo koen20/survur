@@ -1,5 +1,5 @@
 # survur
-[![Build Status](https://travis-ci.org/koenkoe/survur.svg?branch=master)](https://travis-ci.org/koenkoe/survur)
+[![Build Status](https://travis-ci.org/koen20/survur.svg?branch=master)](https://travis-ci.org/koen20/survur)
 ### Android
 https://github.com/koenkoe/Home
 ### Motion
