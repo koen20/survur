@@ -22,6 +22,7 @@ public class TemperatureHandler {
     static double tempAvarageOutside = 12;
     static double livingRoomTemp = 20;
     static double tempOutside;
+    static double humidity = 50;
     static String vdd;
     private static double[] tempArray = new double[5];
     private static double[] tempArrayOutside = new double[5];
@@ -29,6 +30,7 @@ public class TemperatureHandler {
     private String tempTime;
     private String tempData;
     private String vddData;
+    private String humidityData;
     private String outsideTemp;
     private String tempDataLivingRoom;
     private int tempArrayLength = 160;
@@ -62,6 +64,20 @@ public class TemperatureHandler {
         return temp;
     }
 
+    private double getHumidity(){
+        String d;
+        ExecuteShellCommand com = new ExecuteShellCommand();
+        d = com.executeCommand("python /home/pi/scripts/humidity.py");
+        d = d.replace("\n", "");
+        try {
+            humidity = Double.parseDouble(d);
+        } catch (NumberFormatException e) {
+            System.err.println("Error while parsing the humidity: " + e.getMessage());
+            humidity = 50.0;
+        }
+        return humidity;
+    }
+
     private double avarageTemp() {
 
         if (tempArray[1] == 0) {
@@ -85,7 +101,7 @@ public class TemperatureHandler {
         response = "";
         String location = request.queryParams("location");
         if (Objects.equals(location, "graph")) {
-            response = "[" + tempData + "," + tempTime + "," + outsideTemp + "," + tempDataLivingRoom + "," + vddData + "]";
+            response = "[" + tempData + "," + tempTime + "," + outsideTemp + "," + tempDataLivingRoom + "," + humidityData + "]";
         } else if (Objects.equals(location, "outside")) {
             response = tempOutside + "";
         } else if (Objects.equals(location, "inside")) {
@@ -132,6 +148,7 @@ public class TemperatureHandler {
         public void run() {
             getTemp();
             getTempOutside();
+            getHumidity();
             avarageTemp();
             avarageTempOutside();
             try {
@@ -271,7 +288,7 @@ public class TemperatureHandler {
             }
             tempDataLivingRoom = ja.toJSONString();
 
-
+/*
             //vdd//////////////////////
             parser = new JSONParser();
             ja = new JSONArray();
@@ -298,7 +315,35 @@ public class TemperatureHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            vddData = ja.toJSONString();
+            vddData = ja.toJSONString();*/
+
+            //humidity//////////////////////
+            parser = new JSONParser();
+            ja = new JSONArray();
+            result = null;
+            try {
+                File file = new File(ConfigHandler.directory + "vdd.json");
+                result = Files.asCharSource(file, Charsets.UTF_8).read();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                Object obj = parser.parse(result);
+                ja = (JSONArray) obj;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if (ja.size() > tempArrayLength) {
+                ja.remove(0);
+            }
+            ja.add(humidity);
+            try {
+                File file = new File(ConfigHandler.directory + "vdd.json");
+                Files.asCharSink(file, Charsets.UTF_8).write(ja.toJSONString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            humidityData = ja.toJSONString();
         }
     }
 }

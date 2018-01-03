@@ -29,6 +29,7 @@ public class Server {
         RoomHandler room = new RoomHandler();
         CalendarHandler calendar = new CalendarHandler();
         ResponseHandler response = new ResponseHandler();
+        PowerHandler power = new PowerHandler();
         new LcdHandler();
         new calendarZermelo();
         new Sonarr();
@@ -57,6 +58,7 @@ public class Server {
             get("/wake",       wol::wol);
             post("/status",     wol::status);
         });
+        post("/energy", power::setEnergy);
 
         LightsHandler.resetLights();
     }

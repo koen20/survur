@@ -35,6 +35,14 @@ public class InfoHandler {
             jo.put("pcOn", WakeOnLanHandler.pcOn);
             jo.put("feedInterval", ConfigHandler.feedInterval);
             jo.put("foodDaysLeft", FishHandler.daysLeft);
+            jo.put("humidity", TemperatureHandler.humidity);
+            jo.put("currentEnergyUsage", PowerHandler.currentEnergyUsage);
+            jo.put("currentEnergyProduction", PowerHandler.currentEnergyProduction);
+            jo.put("gasUsage", PowerHandler.gasUsage);
+            jo.put("energyUsage1", PowerHandler.energyUsage1);
+            jo.put("energyUsage2", PowerHandler.energyUsage2);
+            jo.put("energyProduction1", PowerHandler.energyProduction1);
+            jo.put("energyProduction2", PowerHandler.energyProduction2);
         } catch (JSONException e) {
             e.printStackTrace();
         }

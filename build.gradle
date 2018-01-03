@@ -35,6 +35,6 @@ dependencies {
     compile 'com.google.guava:guava:23.0'
     compile 'com.google.code.gson:gson:2.8.2'
     compile "com.sparkjava:spark-core:2.5.5"
-    compile 'com.squareup.okhttp3:okhttp:3.9.0'
+    compile 'com.squareup.okhttp3:okhttp:3.9.1'
     //compile 'org.slf4j:slf4j-simple:1.7.25'
 }

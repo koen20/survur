@@ -29,22 +29,18 @@ public class ActionHandler {
                     hour = 8;
                     minute = 5;
                     CalendarHandler.setAlarm("08", "05");
-                    LcdHandler.printLcd("Welterusten", "Alarm:08:05");
                 } else if (calendarZermelo.count == 2) {
                     hour = 9;
                     minute = 10;
                     CalendarHandler.setAlarm("09", "10");
-                    LcdHandler.printLcd("Welterusten", "Alarm:09:10");
-                } else if (calendarZermelo.count >= 3 && calendarZermelo.count < 7){
+                } else if (calendarZermelo.count >= 3 && calendarZermelo.count < 7) {
                     hour = 9;
                     minute = 40;
                     CalendarHandler.setAlarm("09", "40");
-                    LcdHandler.printLcd("Welterusten", "Alarm:09:40");
-                }  else {
+                } else {
                     hour = 7;
                     minute = 20;
                     CalendarHandler.setAlarm("07", "20");
-                    LcdHandler.printLcd("Welterusten", "Alarm:07:20");
                 }
                 Calendar calOn = Calendar.getInstance();
                 Calendar calOff = Calendar.getInstance();
