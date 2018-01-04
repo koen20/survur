@@ -39,7 +39,7 @@ public class TemperatureHandler {
         Timer updateTimerGraph = new Timer();
         Timer updateTimer = new Timer();
         updateTimer.scheduleAtFixedRate(new UpdateTask(), 0, 180 * 1000);
-        updateTimerGraph.scheduleAtFixedRate(new UpdateTaskGraph(), 1000, 20 * 60 * 1000);
+        updateTimerGraph.scheduleAtFixedRate(new UpdateTaskGraph(), 10000, 20 * 60 * 1000);
     }
 
     public static double round(double value, int places) {

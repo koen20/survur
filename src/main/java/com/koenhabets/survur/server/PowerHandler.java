@@ -22,6 +22,15 @@ public class PowerHandler {
         updateTimer.schedule(new UpdateTask(), millisToNextHour(Calendar.getInstance()), 3600000);
     }
 
+    public String getData(Request request, Response response){
+        long startTime = Long.parseLong(request.queryParams("startTime"));
+        long endTime = Long.parseLong(request.queryParams("endTime"));
+        System.out.println("sdahkflj");
+
+        System.out.println(PowerData.getDataTime(startTime, endTime).toString() + "dada");
+        return PowerData.getDataTime(startTime, endTime).toString();
+    }
+
     public String setEnergy(Request request, Response response) {
         String data = request.queryParams("data");
         parseData(data);

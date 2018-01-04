@@ -59,6 +59,7 @@ public class Server {
             post("/status",     wol::status);
         });
         post("/energy", power::setEnergy);
+        get("/energy", power::getData);
 
         LightsHandler.resetLights();
     }
