@@ -28,9 +28,7 @@ public class PowerData {
 
     public static JSONArray getDataTime(long startTime, long endTime) {
         JSONArray ja = readData();
-        System.out.println("read" + ja.toString());
         JSONArray jsonArray = new JSONArray();
-        System.out.println("created array");
         for (int i = 0; i < ja.length(); i++) {
             JSONObject item = ja.getJSONObject(i);
             long time = item.getLong("time") / 1000;
@@ -38,7 +36,6 @@ public class PowerData {
                 jsonArray.put(item);
             }
         }
-        System.out.println("dada");
         return jsonArray;
     }
 

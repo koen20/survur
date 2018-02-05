@@ -25,9 +25,7 @@ public class PowerHandler {
     public String getData(Request request, Response response){
         long startTime = Long.parseLong(request.queryParams("startTime"));
         long endTime = Long.parseLong(request.queryParams("endTime"));
-        System.out.println("sdahkflj");
 
-        System.out.println(PowerData.getDataTime(startTime, endTime).toString() + "dada");
         return PowerData.getDataTime(startTime, endTime).toString();
     }
 
