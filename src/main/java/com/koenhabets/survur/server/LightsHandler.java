@@ -19,22 +19,22 @@ public class LightsHandler {
 
     static void Light(String light) {
         int code = 0;
-        if (Objects.equals(light, "Aon")) {
+        if (Objects.equals(light, "Aon") || Objects.equals(light, "aon")) {
             code = AOn;
             A = true;
-        } else if (Objects.equals(light, "Aoff")) {
+        } else if (Objects.equals(light, "Aoff" ) || Objects.equals(light, "aoff")) {
             code = AOff;
             A = false;
-        } else if (Objects.equals(light, "Bon")) {
+        } else if (Objects.equals(light, "Bon") || Objects.equals(light, "bon")) {
             code = BOn;
             B = true;
-        } else if (Objects.equals(light, "Boff")) {
+        } else if (Objects.equals(light, "Boff") || Objects.equals(light, "boff")) {
             code = BOff;
             B = false;
-        } else if (Objects.equals(light, "Con")) {
+        } else if (Objects.equals(light, "Con") || Objects.equals(light, "con")) {
             code = COn;
             C = true;
-        } else if (Objects.equals(light, "Coff")) {
+        } else if (Objects.equals(light, "Coff") || Objects.equals(light, "coff")) {
             code = COff;
             C = false;
         }

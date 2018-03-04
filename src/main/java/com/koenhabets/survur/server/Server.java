@@ -30,6 +30,7 @@ public class Server {
         CalendarHandler calendar = new CalendarHandler();
         ResponseHandler response = new ResponseHandler();
         PowerHandler power = new PowerHandler();
+        Assistant assistant = new Assistant();
         new LcdHandler();
         new calendarZermelo();
         new Sonarr();
@@ -60,6 +61,7 @@ public class Server {
         });
         post("/energy", power::setEnergy);
         get("/energy", power::getData);
+        post("/assistant", assistant::action);
 
         LightsHandler.resetLights();
     }
