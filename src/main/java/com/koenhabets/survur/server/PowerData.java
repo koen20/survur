@@ -26,6 +26,27 @@ public class PowerData {
         writeData(jsonArray);
     }
 
+    public static JSONArray getMonthlyTotal(int months){
+        JSONArray ja = readData();
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < ja.length(); i++) {
+            for(int d = 0; d < months; ++d) {
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                cal.set(Calendar.HOUR, 0);
+                cal.set(Calendar.MINUTE,0);
+                cal.set(Calendar.SECOND, 0);
+                JSONObject item = ja.getJSONObject(i);
+                long time = item.getLong("time");
+                if (time > cal.getTimeInMillis() && time < cal.getTimeInMillis() + 120000) {
+                    jsonArray.put(item);
+                }
+            }
+        }
+
+        return jsonArray;
+    }
+
     public static JSONArray getDataTime(long startTime, long endTime) {
         JSONArray ja = readData();
         JSONArray jsonArray = new JSONArray();

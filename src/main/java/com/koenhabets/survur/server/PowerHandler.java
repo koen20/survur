@@ -23,10 +23,18 @@ public class PowerHandler {
     }
 
     public String getData(Request request, Response response){
-        long startTime = Long.parseLong(request.queryParams("startTime"));
-        long endTime = Long.parseLong(request.queryParams("endTime"));
+        String interval = request.queryParams("interval");
+        String res = null;
+        if(interval.equals("hourly")) {
+            long startTime = Long.parseLong(request.queryParams("startTime"));
+            long endTime = Long.parseLong(request.queryParams("endTime"));
+            res = PowerData.getDataTime(startTime, endTime).toString();
+        } else if (interval.equals("monthly")){
+            int months = Integer.parseInt(request.queryParams("months"));
+            res = PowerData.getMonthlyTotal(months).toString();
+        }
 
-        return PowerData.getDataTime(startTime, endTime).toString();
+        return res;
     }
 
     public String setEnergy(Request request, Response response) {
