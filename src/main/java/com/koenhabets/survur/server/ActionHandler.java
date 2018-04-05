@@ -96,11 +96,11 @@ public class ActionHandler {
             LcdHandler.disableBacklight();
         } else if (Objects.equals(action, "Enter")) {
             if (!sleeping) {
-                inside = true;
+                //inside = true;
             }
         } else if (Objects.equals(action, "Leave")) {
             if (!sleeping) {
-                inside = false;
+                //inside = false;
                 LightsHandler.resetLights();
             }
         }

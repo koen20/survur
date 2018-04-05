@@ -75,8 +75,7 @@ public class calendarZermelo {
                             }
                             lastHour = lesson.getInt("startTimeSlot");
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    } catch (JSONException ignored) {
                     }
                 }
             }
@@ -137,7 +136,7 @@ public class calendarZermelo {
         return cald.getTimeInMillis() / 1000;
     }
 
-    public static void updateSchedule(){
+    public static void updateSchedule() {
         Calendar cal = Calendar.getInstance();
         int day;
         if (cal.get(Calendar.HOUR_OF_DAY) >= 16) {

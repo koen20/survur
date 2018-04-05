@@ -16,14 +16,18 @@ public class KeyHolder {
     private final String scholicaPasswd;
     private final String sonarrApiKey;
     private final String zermeloCode;
+    private final String mqttUsername;
+    private final String mqttPassword;
 
-    public KeyHolder(String arKey1, String arKey2, String weather, String scholicaPasswd, String sonarrApiKey, String zermeloCode) {
+    public KeyHolder(String arKey1, String arKey2, String weather, String scholicaPasswd, String sonarrApiKey, String zermeloCode, String mqttUsername, String mqttPassword) {
         this.arKey1 = arKey1;
         this.arKey2 = arKey2;
         this.weather = weather;
         this.scholicaPasswd = scholicaPasswd;
         this.sonarrApiKey = sonarrApiKey;
         this.zermeloCode = zermeloCode;
+        this.mqttUsername = mqttUsername;
+        this.mqttPassword = mqttPassword;
     }
 
     public static void init(String path) throws IOException {
@@ -55,5 +59,13 @@ public class KeyHolder {
 
     public static String getZermeloCode() {
         return instance.zermeloCode;
+    }
+
+    public static String getMqttUsername() {
+        return instance.mqttUsername;
+    }
+
+    public static String getMqttPassword() {
+        return instance.mqttPassword;
     }
 }

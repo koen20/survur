@@ -65,6 +65,21 @@ public class RoomHandler {
         return "";
     }
 
+    public static void enterRoom() {
+        if (!insideRoom) {
+            Calendar calNow = Calendar.getInstance();
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR, SunSetHandler.sunsetHour);
+            cal.set(Calendar.MINUTE, SunSetHandler.sunsetMinute);
+            if (calNow.getTimeInMillis() > cal.getTimeInMillis()) {
+                if (!ActionHandler.sleeping) {
+                    LightsHandler.Light("Bon");
+                }
+            }
+        }
+        insideRoom = true;
+    }
+
     private class CheckWifi extends TimerTask {
         @Override
         public void run() {

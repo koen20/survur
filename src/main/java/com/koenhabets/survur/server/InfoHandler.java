@@ -43,6 +43,7 @@ public class InfoHandler {
             jo.put("energyUsage2", PowerHandler.energyUsage2);
             jo.put("energyProduction1", PowerHandler.energyProduction1);
             jo.put("energyProduction2", PowerHandler.energyProduction2);
+            jo.put("location", Mqtt.location);
         } catch (JSONException e) {
             e.printStackTrace();
         }

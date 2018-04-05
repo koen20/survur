@@ -2,6 +2,7 @@ group 'com.koenhabets.survur'
 version '1.2'
 
 apply plugin: 'java'
+apply plugin: 'application'
 
 jar {
     manifest {
@@ -19,7 +20,9 @@ task fatJar(type: Jar) {
                 'Main-Class': 'com.koenhabets.survur.server.Server'
     }
     baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    from { (configurations.runtime).collect { it.isDirectory() ? it : zipTree(it) } } {
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    }
     with jar
 }
 
@@ -39,3 +42,5 @@ dependencies {
     compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
     //compile 'org.slf4j:slf4j-simple:1.7.25'
 }
+
+mainClassName = "com.koenhabets.survur.server.Server"
