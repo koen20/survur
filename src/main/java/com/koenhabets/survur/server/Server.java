@@ -34,6 +34,7 @@ public class Server {
         new LcdHandler();
         new calendarZermelo();
         new Sonarr();
+        new Mqtt();
 
         webSocket("/ws", WebSocketHandler.class);
         webSocket("/ws2", WebSocket2.class);
@@ -66,3 +67,4 @@ public class Server {
         LightsHandler.resetLights();
     }
 }
+

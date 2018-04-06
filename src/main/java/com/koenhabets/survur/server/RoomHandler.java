@@ -14,7 +14,7 @@ public class RoomHandler {
     static String lastMovement;
     private int countIn = 0;
     private int countOut = 0;
-    private long miliseconds = 0;
+    private static long milisecondsLast = 0;
 
     public RoomHandler() {
         //Timer updateTimer = new Timer();
@@ -26,7 +26,7 @@ public class RoomHandler {
 
     public String action(Request request, Response response) {
         String parm = request.queryParams("action");
-        try {
+        /*try {
             if (Objects.equals(parm, "enter") & ConfigHandler.motionEnabled) {
                 Calendar cal = Calendar.getInstance();
                 int Cday = cal.get(Calendar.DAY_OF_MONTH);
@@ -61,22 +61,23 @@ public class RoomHandler {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
         return "";
     }
 
     public static void enterRoom() {
+        Calendar calNow = Calendar.getInstance();
         if (!insideRoom) {
-            Calendar calNow = Calendar.getInstance();
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR, SunSetHandler.sunsetHour);
+            cal.set(Calendar.HOUR_OF_DAY, SunSetHandler.sunsetHour);
             cal.set(Calendar.MINUTE, SunSetHandler.sunsetMinute);
-            if (calNow.getTimeInMillis() > cal.getTimeInMillis()) {
+            if (calNow.getTimeInMillis() > cal.getTimeInMillis() || calNow.get(Calendar.HOUR_OF_DAY) < 3) {
                 if (!ActionHandler.sleeping) {
                     LightsHandler.Light("Bon");
                 }
             }
         }
+        milisecondsLast = calNow.getTimeInMillis();
         insideRoom = true;
     }
 
@@ -108,7 +109,7 @@ public class RoomHandler {
             if (ConfigHandler.motionEnabled && !ActionHandler.sleeping) {
                 Calendar cal = Calendar.getInstance();
                 long Cmiliseconds = cal.getTimeInMillis();
-                long milisecondsDif = Cmiliseconds - miliseconds;
+                long milisecondsDif = Cmiliseconds - milisecondsLast;
                 if (insideRoom) {
                     if (milisecondsDif > 120 * 1000) {
                         insideRoom = false;
