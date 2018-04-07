@@ -58,7 +58,6 @@ public class Server {
         path("/wol", () -> {
             post("/wake",       wol::wol);
             get("/wake",       wol::wol);
-            post("/status",     wol::status);
         });
         post("/energy", power::setEnergy);
         get("/energy", power::getData);

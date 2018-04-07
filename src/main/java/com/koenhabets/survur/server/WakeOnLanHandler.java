@@ -12,7 +12,7 @@ import java.util.TimerTask;
 
 public class WakeOnLanHandler {
     public static final int PORT = 9;
-    private long miliseconds = 0;
+    private static long miliseconds = 0;
     static boolean pcOn = false;
 
     public WakeOnLanHandler() {
@@ -60,14 +60,13 @@ public class WakeOnLanHandler {
         return "sent";
     }
 
-    public String status(Request request, Response response) throws Exception {
+    public static void pcIsOn(){
         Calendar cal = Calendar.getInstance();
         miliseconds = cal.getTimeInMillis();
         if (!pcOn) {
             WebSocketHandler.updateAll();
         }
         pcOn = true;
-        return ":)";
     }
 
     private class updateStatus extends TimerTask {
@@ -76,7 +75,7 @@ public class WakeOnLanHandler {
             Calendar cal = Calendar.getInstance();
             long Cmiliseconds = cal.getTimeInMillis();
             long milisecondsDif = Cmiliseconds - miliseconds;
-            if (milisecondsDif > 100 * 1000) {
+            if (milisecondsDif > 50 * 1000) {
                 if (pcOn) {
                     WebSocketHandler.updateAll();
                 }

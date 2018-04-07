@@ -8,7 +8,7 @@ import static org.eclipse.paho.client.mqttv3.MqttClient.generateClientId;
 public class Mqtt implements MqttCallbackExtended {
     private MqttClient client;
     static String location;
-    private String[] topics = {"owntracks/koen/lux/event", "home/motion"};
+    private String[] topics = {"owntracks/koen/lux/event", "home/motion", "home/status/pc"};
 
     public Mqtt() {
         try {
@@ -50,6 +50,10 @@ public class Mqtt implements MqttCallbackExtended {
             }
         } else if (topic.equals("home/motion")) {
             RoomHandler.enterRoom();
+        } else if (topic.equals("home/status/pc")){
+            if (message.toString().equals("online")) {
+                WakeOnLanHandler.pcIsOn();
+            }
         }
     }
 
