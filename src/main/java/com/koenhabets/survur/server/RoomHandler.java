@@ -46,7 +46,7 @@ public class RoomHandler {
                                 WebSocket2.voiceListen("Ga je nu slapen?");
                                 ResponseHandler.lastAction = "enterLate";
                             }
-                        }
+                        }q
                         if (calendarZermelo.count > 499) {
                             if (Chour >= 22 && Cminute > 25 || Chour < 4) {
                                 WebSocket2.voiceListen("Ga je nu slapen?");
@@ -73,7 +73,9 @@ public class RoomHandler {
             cal.set(Calendar.MINUTE, SunSetHandler.sunsetMinute);
             if (calNow.getTimeInMillis() > cal.getTimeInMillis() || calNow.get(Calendar.HOUR_OF_DAY) < 3) {
                 if (!ActionHandler.sleeping) {
-                    LightsHandler.Light("Bon");
+                    LightsHandler.setLedStrip(255, 255, 255);
+                } else {
+                    LightsHandler.setLedStrip(204, 102, 0);
                 }
             }
         }

@@ -40,6 +40,7 @@ public class Server {
         webSocket("/ws2", WebSocket2.class);
         get("/info", info::getInfo);
         post("/lights", light::setLight);
+        post("/setledstrip", light::setLed);
         post("/wol", wol::wol);
         get("/wol", wol::wol);
         get("/sunset-sunrise", sunsetSunrise::getSunsetSunrise);

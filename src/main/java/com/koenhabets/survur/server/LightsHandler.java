@@ -17,12 +17,26 @@ public class LightsHandler {
     private static int COff = 13980753;
     String response;
 
+    static void setLedStrip(int red, int green, int blue) {
+        Mqtt.publishMessage("home/led", red + "," + green + "," + blue);
+    }
+
+    String setLed(Request request, Response response) {
+        String parm = request.queryParams("light");
+        String[] split = parm.split(",");
+        int red = Integer.parseInt(split[0]);
+        int green = Integer.parseInt(split[1]);
+        int blue = Integer.parseInt(split[2]);
+        setLedStrip(red, green, blue);
+        return ":)";
+    }
+
     static void Light(String light) {
         int code = 0;
         if (Objects.equals(light, "Aon") || Objects.equals(light, "aon")) {
             code = AOn;
             A = true;
-        } else if (Objects.equals(light, "Aoff" ) || Objects.equals(light, "aoff")) {
+        } else if (Objects.equals(light, "Aoff") || Objects.equals(light, "aoff")) {
             code = AOff;
             A = false;
         } else if (Objects.equals(light, "Bon") || Objects.equals(light, "bon")) {
@@ -50,7 +64,7 @@ public class LightsHandler {
         WebSocketHandler.updateAll();
     }
 
-    private synchronized static void light(String command){
+    private synchronized static void light(String command) {
         ExecuteShellCommand com = new ExecuteShellCommand();
         com.executeCommand(command);
     }
@@ -59,6 +73,7 @@ public class LightsHandler {
         Light("Aoff");
         Light("Boff");
         Light("Coff");
+        setLedStrip(0, 0, 0);
     }
 
     String setLight(Request request, Response response) {

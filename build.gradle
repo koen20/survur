@@ -35,7 +35,7 @@ dependencies {
     compile 'org.json:json:20180130'
     compile 'com.luckycatlabs:SunriseSunsetCalculator:1.2'
     compile 'com.googlecode.json-simple:json-simple:1.1.1'
-    compile 'com.google.guava:guava:24.1-jre'
+    compile 'com.google.guava:guava:25.0-jre'
     compile 'com.google.code.gson:gson:2.8.2'
     compile "com.sparkjava:spark-core:2.5.5"
     compile 'com.squareup.okhttp3:okhttp:3.10.0'

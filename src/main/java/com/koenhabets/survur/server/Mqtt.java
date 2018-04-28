@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import static org.eclipse.paho.client.mqttv3.MqttClient.generateClientId;
 
 public class Mqtt implements MqttCallbackExtended {
-    private MqttClient client;
+    static MqttClient client;
     static String location;
     private String[] topics = {"owntracks/koen/lux/event", "home/motion", "home/status/pc"};
 
@@ -29,6 +29,16 @@ public class Mqtt implements MqttCallbackExtended {
     @Override
     public void connectionLost(Throwable cause) {
 
+    }
+
+    static void publishMessage(String topic, String content){
+        MqttMessage message = new MqttMessage(content.getBytes());
+        message.setQos(0);
+        try {
+            client.publish(topic, message);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
