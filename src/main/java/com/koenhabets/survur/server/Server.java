@@ -64,7 +64,7 @@ public class Server {
         get("/energy", power::getData);
         post("/assistant", assistant::action);
 
-        LightsHandler.resetLights();
+        //LightsHandler.resetLights();
     }
 }
 

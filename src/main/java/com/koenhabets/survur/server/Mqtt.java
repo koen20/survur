@@ -8,7 +8,8 @@ import static org.eclipse.paho.client.mqttv3.MqttClient.generateClientId;
 public class Mqtt implements MqttCallbackExtended {
     static MqttClient client;
     static String location;
-    private String[] topics = {"owntracks/koen/lux/event", "home/motion", "home/status/pc"};
+    //private String[] topics = {"owntracks/koen/lux/event", "home/motion", "home/status/pc", "home/button/sleep"};
+    private String[] topics = {"owntracks/koen/lux/event", "home/#"};
 
     public Mqtt() {
         try {
@@ -31,11 +32,17 @@ public class Mqtt implements MqttCallbackExtended {
 
     }
 
-    static void publishMessage(String topic, String content){
-        MqttMessage message = new MqttMessage(content.getBytes());
-        message.setQos(0);
+    static void publishMessage(String topic, String content) {
         try {
-            client.publish(topic, message);
+            MqttClient client2 = new MqttClient("ssl://mqtt.koenhabets.nl:8752", "survur-publish");
+            MqttConnectOptions connOpts = new MqttConnectOptions();
+            connOpts.setUserName(KeyHolder.getMqttUsername());
+            connOpts.setPassword(KeyHolder.getMqttPassword().toCharArray());
+            client2.connect(connOpts);
+            MqttMessage message = new MqttMessage(content.getBytes());
+            message.setQos(0);
+            client2.publish(topic, message);
+            client2.disconnect();
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -43,7 +50,7 @@ public class Mqtt implements MqttCallbackExtended {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) {
-        Log.d(topic + " " + message.toString());
+        System.out.println(topic + " " + message.toString());
         if (topic.equals("owntracks/koen/lux/event")) {
             JSONObject jsonObject = new JSONObject(message.toString());
             String event = jsonObject.getString("event");
@@ -60,9 +67,21 @@ public class Mqtt implements MqttCallbackExtended {
             }
         } else if (topic.equals("home/motion")) {
             RoomHandler.enterRoom();
-        } else if (topic.equals("home/status/pc")){
+        } else if (topic.equals("home/status/pc")) {
             if (message.toString().equals("online")) {
                 WakeOnLanHandler.pcIsOn();
+            }
+        } else if (topic.equals("home/button/sleep")) {
+            if (message.toString().equals("start")) {
+                System.out.println("start sleeping");
+                ActionHandler.sleeping = true;
+                LightsHandler.resetLights();
+            } else if (message.toString().equals("stop")) {
+                ActionHandler.sleeping = false;
+                System.out.println("stop sleeping");
+                if (ActionHandler.inside) {
+                    LightsHandler.setLedStrip(200, 100, 0);
+                }
             }
         }
     }
@@ -76,7 +95,7 @@ public class Mqtt implements MqttCallbackExtended {
     public void connectComplete(boolean reconnect, java.lang.String serverURI) {
         if (reconnect) {
             try {
-                this.client.subscribe(topics);
+                client.subscribe(topics);
             } catch (MqttException e) {
                 e.printStackTrace();
             }

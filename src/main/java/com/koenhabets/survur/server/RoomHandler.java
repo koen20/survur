@@ -71,7 +71,7 @@ public class RoomHandler {
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.HOUR_OF_DAY, SunSetHandler.sunsetHour);
             cal.set(Calendar.MINUTE, SunSetHandler.sunsetMinute);
-            if (calNow.getTimeInMillis() > cal.getTimeInMillis() || calNow.get(Calendar.HOUR_OF_DAY) < 3) {
+            if (calNow.getTimeInMillis() > cal.getTimeInMillis() || calNow.get(Calendar.HOUR_OF_DAY) < 7) {
                 if (!ActionHandler.sleeping) {
                     LightsHandler.setLedStrip(255, 255, 255);
                 } else {
@@ -108,7 +108,7 @@ public class RoomHandler {
     private class UpdateInside extends TimerTask {
         @Override
         public void run() {
-            if (ConfigHandler.motionEnabled && !ActionHandler.sleeping) {
+            if (ConfigHandler.motionEnabled) {
                 Calendar cal = Calendar.getInstance();
                 long Cmiliseconds = cal.getTimeInMillis();
                 long milisecondsDif = Cmiliseconds - milisecondsLast;
