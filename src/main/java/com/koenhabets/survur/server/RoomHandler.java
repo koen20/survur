@@ -71,7 +71,7 @@ public class RoomHandler {
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.HOUR_OF_DAY, SunSetHandler.sunsetHour);
             cal.set(Calendar.MINUTE, SunSetHandler.sunsetMinute);
-            if (calNow.getTimeInMillis() > cal.getTimeInMillis() || calNow.get(Calendar.HOUR_OF_DAY) < 7) {
+            if (calNow.getTimeInMillis() > cal.getTimeInMillis() || calNow.get(Calendar.HOUR_OF_DAY) < 7 && ConfigHandler.motionEnabled) {
                 if (!ActionHandler.sleeping) {
                     LightsHandler.setLedStrip(255, 255, 255);
                 } else {

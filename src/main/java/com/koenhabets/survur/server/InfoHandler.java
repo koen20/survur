@@ -44,6 +44,11 @@ public class InfoHandler {
             jo.put("energyProduction1", PowerHandler.energyProduction1);
             jo.put("energyProduction2", PowerHandler.energyProduction2);
             jo.put("location", Mqtt.location);
+            jo.put("ledStrip", LightsHandler.ledStrip);
+            jo.put("espLed", LightsHandler.espLed);
+            jo.put("ledRed", LightsHandler.ledRed);
+            jo.put("ledGreen", LightsHandler.ledGreen);
+            jo.put("ledBlue", LightsHandler.ledBlue);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -3,13 +3,14 @@ package com.koenhabets.survur.server;
 import org.eclipse.paho.client.mqttv3.*;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 import static org.eclipse.paho.client.mqttv3.MqttClient.generateClientId;
 
 public class Mqtt implements MqttCallbackExtended {
     static MqttClient client;
     static String location;
-    //private String[] topics = {"owntracks/koen/lux/event", "home/motion", "home/status/pc", "home/button/sleep"};
-    private String[] topics = {"owntracks/koen/lux/event", "home/#"};
+    private String[] topics = {"owntracks/koen/lux/event", "home/motion", "home/status/pc", "home/button/sleep", "home/led/status"};
 
     public Mqtt() {
         try {
@@ -50,7 +51,6 @@ public class Mqtt implements MqttCallbackExtended {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) {
-        System.out.println(topic + " " + message.toString());
         if (topic.equals("owntracks/koen/lux/event")) {
             JSONObject jsonObject = new JSONObject(message.toString());
             String event = jsonObject.getString("event");
@@ -73,16 +73,31 @@ public class Mqtt implements MqttCallbackExtended {
             }
         } else if (topic.equals("home/button/sleep")) {
             if (message.toString().equals("start")) {
-                System.out.println("start sleeping");
                 ActionHandler.sleeping = true;
                 LightsHandler.resetLights();
             } else if (message.toString().equals("stop")) {
                 ActionHandler.sleeping = false;
-                System.out.println("stop sleeping");
                 if (ActionHandler.inside) {
                     LightsHandler.setLedStrip(200, 100, 0);
                 }
             }
+        } else if (topic.equals("home/led/status")) {
+            Calendar cal = Calendar.getInstance();
+            LightsHandler.lastEspStatusUpdate = cal.getTimeInMillis();
+            LightsHandler.espLed = true;
+            String[] split = message.toString().split(",");
+            int red = Integer.parseInt(split[0]);
+            int green = Integer.parseInt(split[1]);
+            int blue = Integer.parseInt(split[2]);
+            LightsHandler.ledRed = red;
+            LightsHandler.ledGreen = green;
+            LightsHandler.ledBlue = blue;
+            if (red == 0 && green == 0 && blue == 0) {
+                LightsHandler.ledStrip = false;
+            } else {
+                LightsHandler.ledStrip = true;
+            }
+
         }
     }
 
