@@ -26,7 +26,7 @@ public class Server {
         ConfigHandler config = new ConfigHandler();
         TemperatureHandler temp = new TemperatureHandler();
         ActionHandler action = new ActionHandler();
-        RoomHandler room = new RoomHandler();
+        new RoomHandler();
         CalendarHandler calendar = new CalendarHandler();
         ResponseHandler response = new ResponseHandler();
         PowerHandler power = new PowerHandler();
@@ -37,7 +37,6 @@ public class Server {
         new Mqtt();
 
         webSocket("/ws", WebSocketHandler.class);
-        webSocket("/ws2", WebSocket2.class);
         get("/info", info::getInfo);
         post("/lights", light::setLight);
         post("/setledstrip", light::setLed);
@@ -53,7 +52,6 @@ public class Server {
         post("/temp", temp::setTemperature);
         post("/action", action::action);
         get("/action", action::action);
-        post("/room", room::action);
         post("/calendar", calendar::setCalendar);
         post("/response", response::response);
         path("/wol", () -> {

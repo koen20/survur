@@ -1,9 +1,5 @@
 package com.koenhabets.survur.server;
 
-import com.koenhabets.survur.server.ZermeloApi.calendarZermelo;
-import spark.Request;
-import spark.Response;
-
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.Timer;
@@ -24,58 +20,17 @@ public class RoomHandler {
         updateTimerRoom.scheduleAtFixedRate(new UpdateInside(), 0, 10 * 1000);
     }
 
-    public String action(Request request, Response response) {
-        String parm = request.queryParams("action");
-        /*try {
-            if (Objects.equals(parm, "enter") & ConfigHandler.motionEnabled) {
-                Calendar cal = Calendar.getInstance();
-                int Cday = cal.get(Calendar.DAY_OF_MONTH);
-                int Cminute = cal.get(Calendar.MINUTE);
-                int Chour = cal.get(Calendar.HOUR_OF_DAY);
-                lastMovement = Chour + ":" + Cminute + " day:" + Cday;
-                long Cmiliseconds = cal.getTimeInMillis();
-                long milisecondsDif = Cmiliseconds - miliseconds;
-                if (milisecondsDif < 30 * 1000) {
-                    if (!insideRoom && !ActionHandler.sleeping && ActionHandler.inside) {
-                        if (Chour > SunSetHandler.sunsetHour) {
-                            LightsHandler.Light("Aon");
-                            LightsHandler.Light("Bon");
-                        }
-                        if (calendarZermelo.count < 5 && ConfigHandler.alarmEnabled) {
-                            if (Chour == 21 && Cminute > 40 || Chour == 22 || Chour == 23) {
-                                WebSocket2.voiceListen("Ga je nu slapen?");
-                                ResponseHandler.lastAction = "enterLate";
-                            }
-                        }q
-                        if (calendarZermelo.count > 499) {
-                            if (Chour >= 22 && Cminute > 25 || Chour < 4) {
-                                WebSocket2.voiceListen("Ga je nu slapen?");
-                                ResponseHandler.lastAction = "enterLate";
-                            }
-                        }
-                    }
-                    insideRoom = true;
-
-                }
-                miliseconds = cal.getTimeInMillis();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-        return "";
-    }
-
     public static void enterRoom() {
         Calendar calNow = Calendar.getInstance();
         if (!insideRoom) {
             Calendar cal = Calendar.getInstance();
             cal.set(Calendar.HOUR_OF_DAY, SunSetHandler.sunsetHour);
             cal.set(Calendar.MINUTE, SunSetHandler.sunsetMinute);
-            if (calNow.getTimeInMillis() > cal.getTimeInMillis() || calNow.get(Calendar.HOUR_OF_DAY) < 7 && ConfigHandler.motionEnabled) {
+            if (calNow.getTimeInMillis() > cal.getTimeInMillis() || calNow.get(Calendar.HOUR_OF_DAY) < 7 && ConfigHandler.motionEnabled && !LightsHandler.ledStrip) {
                 if (!ActionHandler.sleeping) {
                     LightsHandler.setLedStrip(255, 255, 255);
                 } else {
-                    LightsHandler.setLedStrip(204, 102, 0);
+                    LightsHandler.setLedStrip(9, 9, 9);
                 }
             }
         }
