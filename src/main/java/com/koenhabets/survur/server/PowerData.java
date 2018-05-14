@@ -7,34 +7,42 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.sql.*;
 import java.util.Calendar;
 
 public class PowerData {
-    public static void addData(double energyUsage1, double energyUsage2, double energyProduction1, double energyProduction2, double gasUsage) {
-        JSONArray jsonArray = readData();
-        Calendar cal = Calendar.getInstance();
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("energyUsage1", energyUsage1);
-        jsonObject.put("energyUsage2", energyUsage2);
-        jsonObject.put("energyProduction1", energyProduction1);
-        jsonObject.put("energyProduction2", energyProduction2);
-        jsonObject.put("gasUsage", gasUsage);
-        jsonObject.put("time", cal.getTimeInMillis());
-        //add time
-        jsonArray.put(jsonObject);
+    static Connection conn;
 
-        writeData(jsonArray);
+    public PowerData() {
+        try {
+            conn = DriverManager.getConnection("jdbc:mariadb://192.168.2.24:3306/sensors?autoReconnect=true",
+                    KeyHolder.getMysqlUsername(), KeyHolder.getMysqlPassword());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static JSONArray getMonthlyTotal(int months){
+    public static void addData(double energyUsage1, double energyUsage2, double energyProduction1, double energyProduction2, double gasUsage) {
+        Calendar cal = Calendar.getInstance();
+        try {
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate("INSERT sensors values (" + getMysqlDateString(cal.getTimeInMillis()) + ", '" + energyUsage1 + "', '" + energyUsage2 + "'" +
+                    ", '" + energyProduction1 + "', '" + energyProduction2 + "',  '" + gasUsage + "')");
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static JSONArray getMonthlyTotal(int months) {
         JSONArray ja = readData();
         JSONArray jsonArray = new JSONArray();
         for (int i = 0; i < ja.length(); i++) {
-            for(int d = 0; d < months; ++d) {
+            for (int d = 0; d < months; ++d) {
                 Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.DAY_OF_MONTH, 1);
                 cal.set(Calendar.HOUR, 0);
-                cal.set(Calendar.MINUTE,0);
+                cal.set(Calendar.MINUTE, 0);
                 cal.set(Calendar.SECOND, 0);
                 JSONObject item = ja.getJSONObject(i);
                 long time = item.getLong("time");
@@ -48,15 +56,28 @@ public class PowerData {
     }
 
     public static JSONArray getDataTime(long startTime, long endTime) {
-        JSONArray ja = readData();
         JSONArray jsonArray = new JSONArray();
-        for (int i = 0; i < ja.length(); i++) {
-            JSONObject item = ja.getJSONObject(i);
-            long time = item.getLong("time") / 1000;
-            if (time > startTime && time < endTime) {
-                jsonArray.put(item);
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM sensors WHERE date BETWEEN CONVERT(datetime, '" + getMysqlDateString(startTime) +"') AND " +
+                    "CONVERT(datetime, '" + getMysqlDateString(endTime) +"'");
+            while (rs.next()) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("time", rs.getTimestamp(1));
+                jsonObject.put("energyUsage1", rs.getDouble(2));
+                jsonObject.put("energyUsage2", rs.getDouble(3));
+                jsonObject.put("energyProduction1", rs.getDouble(4));
+                jsonObject.put("energyProduction2", rs.getDouble(5));
+                jsonObject.put("gasUsage", rs.getDouble(6));
+                jsonArray.put(jsonObject);
             }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
+
+
         return jsonArray;
     }
 
@@ -80,5 +101,15 @@ public class PowerData {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static String getMysqlDateString(long milliseconds) {
+        java.util.Date dt = new java.util.Date(milliseconds);
+
+        java.text.SimpleDateFormat sdf =
+                new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        String currentTime = sdf.format(dt);
+        return currentTime;
     }
 }

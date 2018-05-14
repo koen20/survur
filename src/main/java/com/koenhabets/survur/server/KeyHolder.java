@@ -18,8 +18,10 @@ public class KeyHolder {
     private final String zermeloCode;
     private final String mqttUsername;
     private final String mqttPassword;
+    private final String mysqlUsername;
+    private final String mysqlPassword;
 
-    public KeyHolder(String arKey1, String arKey2, String weather, String scholicaPasswd, String sonarrApiKey, String zermeloCode, String mqttUsername, String mqttPassword) {
+    public KeyHolder(String arKey1, String arKey2, String weather, String scholicaPasswd, String sonarrApiKey, String zermeloCode, String mqttUsername, String mqttPassword, String mysqlUsername, String mysqlPassword) {
         this.arKey1 = arKey1;
         this.arKey2 = arKey2;
         this.weather = weather;
@@ -28,6 +30,8 @@ public class KeyHolder {
         this.zermeloCode = zermeloCode;
         this.mqttUsername = mqttUsername;
         this.mqttPassword = mqttPassword;
+        this.mysqlUsername = mysqlUsername;
+        this.mysqlPassword = mysqlPassword;
     }
 
     public static void init(String path) throws IOException {
@@ -67,5 +71,13 @@ public class KeyHolder {
 
     public static String getMqttPassword() {
         return instance.mqttPassword;
+    }
+
+    public static String getMysqlPassword() {
+        return instance.mysqlPassword;
+    }
+
+    public static String getMysqlUsername() {
+        return instance.mysqlUsername;
     }
 }
