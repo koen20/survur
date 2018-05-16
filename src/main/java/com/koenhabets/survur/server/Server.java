@@ -35,6 +35,7 @@ public class Server {
         new calendarZermelo();
         new Sonarr();
         new Mqtt();
+        new PowerData();
 
         webSocket("/ws", WebSocketHandler.class);
         get("/info", info::getInfo);
@@ -55,8 +56,8 @@ public class Server {
         post("/calendar", calendar::setCalendar);
         post("/response", response::response);
         path("/wol", () -> {
-            post("/wake",       wol::wol);
-            get("/wake",       wol::wol);
+            post("/wake", wol::wol);
+            get("/wake", wol::wol);
         });
         post("/energy", power::setEnergy);
         get("/energy", power::getData);

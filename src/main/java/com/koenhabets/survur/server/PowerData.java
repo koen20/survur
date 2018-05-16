@@ -26,7 +26,7 @@ public class PowerData {
         Calendar cal = Calendar.getInstance();
         try {
             Statement stmt = conn.createStatement();
-            stmt.executeUpdate("INSERT sensors values (" + getMysqlDateString(cal.getTimeInMillis()) + ", '" + energyUsage1 + "', '" + energyUsage2 + "'" +
+            stmt.executeUpdate("INSERT INTO power VALUES ('" + getMysqlDateString(cal.getTimeInMillis()) + "', '" + energyUsage1 + "', '" + energyUsage2 + "'" +
                     ", '" + energyProduction1 + "', '" + energyProduction2 + "',  '" + gasUsage + "')");
             stmt.close();
         } catch (SQLException e) {
@@ -35,7 +35,7 @@ public class PowerData {
     }
 
     public static JSONArray getMonthlyTotal(int months) {
-        JSONArray ja = readData();
+        /*JSONArray ja = readData();
         JSONArray jsonArray = new JSONArray();
         for (int i = 0; i < ja.length(); i++) {
             for (int d = 0; d < months; ++d) {
@@ -50,17 +50,17 @@ public class PowerData {
                     jsonArray.put(item);
                 }
             }
-        }
+        }*/
 
-        return jsonArray;
+        return new JSONArray();
     }
 
     public static JSONArray getDataTime(long startTime, long endTime) {
         JSONArray jsonArray = new JSONArray();
         try {
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM sensors WHERE date BETWEEN CONVERT(datetime, '" + getMysqlDateString(startTime) +"') AND " +
-                    "CONVERT(datetime, '" + getMysqlDateString(endTime) +"'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM power WHERE date BETWEEN '" + getMysqlDateString(startTime * 1000) + "' AND '"
+                    + getMysqlDateString(endTime * 1000) + "'");
             while (rs.next()) {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("time", rs.getTimestamp(1));
@@ -71,39 +71,16 @@ public class PowerData {
                 jsonObject.put("gasUsage", rs.getDouble(6));
                 jsonArray.put(jsonObject);
             }
-
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
 
-
         return jsonArray;
     }
 
-    private static JSONArray readData() {
-        String result = "[]";
-        try {
-            File file1 = new File(ConfigHandler.directory + "powerData.json");
-            result = Files.asCharSource(file1, Charsets.UTF_8).read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        JSONArray ja = new JSONArray(result);
-
-        return ja;
-    }
-
-    private static void writeData(JSONArray jsonArray) {
-        try {
-            File fileS = new File(ConfigHandler.directory + "powerData.json");
-            Files.asCharSink(fileS, Charsets.UTF_8).write(jsonArray.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static String getMysqlDateString(long milliseconds) {
+    static String getMysqlDateString(long milliseconds) {
         java.util.Date dt = new java.util.Date(milliseconds);
 
         java.text.SimpleDateFormat sdf =
