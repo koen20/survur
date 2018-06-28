@@ -18,8 +18,8 @@ public class InfoHandler {
         try {
             jo.put("inside-temp", TemperatureHandler.temp);
             jo.put("outside-temp", TemperatureHandler.tempOutside);
-            jo.put("sleeping", ActionHandler.sleeping);
-            jo.put("inside", ActionHandler.inside);
+            jo.put("sleeping", SleepHandler.sleeping);
+            jo.put("inside", SleepHandler.inside);
             jo.put("insideRoom", RoomHandler.insideRoom);
             jo.put("next-appointment", CalendarHandler.getResponse());
             jo.put("nextSubject", calendarZermelo.nextSubject);

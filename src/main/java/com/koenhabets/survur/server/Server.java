@@ -25,10 +25,9 @@ public class Server {
         FishHandler fish = new FishHandler();
         ConfigHandler config = new ConfigHandler();
         TemperatureHandler temp = new TemperatureHandler();
-        ActionHandler action = new ActionHandler();
+        SleepHandler action = new SleepHandler();
         new RoomHandler();
         CalendarHandler calendar = new CalendarHandler();
-        ResponseHandler response = new ResponseHandler();
         PowerHandler power = new PowerHandler();
         Assistant assistant = new Assistant();
         new LcdHandler();
@@ -54,7 +53,6 @@ public class Server {
         post("/action", action::action);
         get("/action", action::action);
         post("/calendar", calendar::setCalendar);
-        post("/response", response::response);
         path("/wol", () -> {
             post("/wake", wol::wol);
             get("/wake", wol::wol);

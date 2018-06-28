@@ -59,25 +59,27 @@ public class Mqtt implements MqttCallbackExtended {
             Log.d(event + " " + desc);
             if (desc.equals("Thuis")) {
                 if (event.equals("enter")) {
-                    ActionHandler.inside = true;
+                    SleepHandler.inside = true;
                     Log.d("inside");
                 } else {
-                    ActionHandler.inside = false;
+                    SleepHandler.inside = false;
                 }
             }
         } else if (topic.equals("home/motion")) {
-            RoomHandler.enterRoom();
+            if(ConfigHandler.motionEnabled) {
+                RoomHandler.enterRoom();
+            }
         } else if (topic.equals("home/status/pc")) {
             if (message.toString().equals("online")) {
                 WakeOnLanHandler.pcIsOn();
             }
         } else if (topic.equals("home/button/sleep")) {
             if (message.toString().equals("start")) {
-                ActionHandler.sleeping = true;
+                SleepHandler.sleeping = true;
                 LightsHandler.resetLights();
             } else if (message.toString().equals("stop")) {
-                ActionHandler.sleeping = false;
-                if (ActionHandler.inside) {
+                SleepHandler.sleeping = false;
+                if (SleepHandler.inside) {
                     LightsHandler.setLedStrip(200, 100, 0);
                 }
             }

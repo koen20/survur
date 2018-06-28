@@ -33,15 +33,15 @@ public class LcdHandler {
             double temp = TemperatureHandler.temp;
             double tempOutside = TemperatureHandler.tempOutside;
             counter++;
-            if (ActionHandler.sleeping && counter >= 499) {
+            if (SleepHandler.sleeping && counter >= 499) {
                 counter = 0;
             }
-            if (!ActionHandler.inside && counter >= 499) {
+            if (!SleepHandler.inside && counter >= 499) {
                 counter = 0;
-            } else if (ActionHandler.inside && !ActionHandler.sleeping) {
+            } else if (SleepHandler.inside && !SleepHandler.sleeping) {
                 counter = 500;
             }
-            if (!ActionHandler.sleeping && ActionHandler.inside) {
+            if (!SleepHandler.sleeping && SleepHandler.inside) {
                 Calendar calendar = Calendar.getInstance();
                 int hour = calendar.get(Calendar.HOUR_OF_DAY);
                 int minute = calendar.get(Calendar.MINUTE);
