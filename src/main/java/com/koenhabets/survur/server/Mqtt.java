@@ -65,6 +65,9 @@ public class Mqtt implements MqttCallbackExtended {
                     SleepHandler.inside = false;
                 }
             }
+            if(!event.equals("enter")){
+                location = "onbekend";
+            }
         } else if (topic.equals("home/motion")) {
             if(ConfigHandler.motionEnabled) {
                 RoomHandler.enterRoom();
@@ -75,10 +78,10 @@ public class Mqtt implements MqttCallbackExtended {
             }
         } else if (topic.equals("home/button/sleep")) {
             if (message.toString().equals("start")) {
-                SleepHandler.sleeping = true;
+                SleepHandler.setSleeping(true);
                 LightsHandler.resetLights();
             } else if (message.toString().equals("stop")) {
-                SleepHandler.sleeping = false;
+                SleepHandler.setSleeping(false);
                 if (SleepHandler.inside) {
                     LightsHandler.setLedStrip(200, 100, 0);
                 }

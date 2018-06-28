@@ -136,7 +136,7 @@ public class calendarZermelo {
         return cald.getTimeInMillis() / 1000;
     }
 
-    public static void updateSchedule() {
+    private static void updateSchedule() {
         Calendar cal = Calendar.getInstance();
         int day;
         if (cal.get(Calendar.HOUR_OF_DAY) >= 16) {
