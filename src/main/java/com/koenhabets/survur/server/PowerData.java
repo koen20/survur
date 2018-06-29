@@ -1,12 +1,8 @@
 package com.koenhabets.survur.server;
 
-
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.*;
 import java.sql.*;
 import java.util.Calendar;
 
@@ -71,6 +67,7 @@ public class PowerData {
                 jsonObject.put("gasUsage", rs.getDouble(6));
                 jsonArray.put(jsonObject);
             }
+            rs.close();
             stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();

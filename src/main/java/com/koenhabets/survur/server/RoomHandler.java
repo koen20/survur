@@ -28,7 +28,7 @@ public class RoomHandler {
             cal.set(Calendar.HOUR_OF_DAY, SunSetHandler.sunsetHour);
             cal.set(Calendar.MINUTE, SunSetHandler.sunsetMinute);
             if (calNow.getTimeInMillis() > cal.getTimeInMillis() || calNow.get(Calendar.HOUR_OF_DAY) < 7 ) {
-                if (!SleepHandler.sleeping && sunsetLight) {
+                if (!SleepHandler.sleeping && !sunsetLight) {
                     if (!LightsHandler.ledStrip) {
                         LightsHandler.setLedStrip(255, 255, 255);
                     }

@@ -12,23 +12,25 @@ public class SleepHandler {
 
     public SleepHandler() {
         Timer updateTimerRoom = new Timer();
-        updateTimerRoom.scheduleAtFixedRate(new updateSleeping(), 0, 60 * 1000);
+        updateTimerRoom.scheduleAtFixedRate(new updateSleeping(), 0, 5 * 60 * 1000);
     }
 
     private class updateSleeping extends TimerTask {
         @Override
         public void run() {
             Calendar cal = Calendar.getInstance();
-            if(cal.getTimeInMillis() - sleepingStartTime > 36000000){
-                sleeping = false;
+            if(cal.getTimeInMillis() - sleepingStartTime > 43200000){
+                setSleeping(false);
             }
         }
     }
 
     public static void setSleeping(boolean status){
         if(status){
-            Calendar cal = Calendar.getInstance();
-            sleepingStartTime = cal.getTimeInMillis();
+            if(!sleeping) {
+                Calendar cal = Calendar.getInstance();
+                sleepingStartTime = cal.getTimeInMillis();
+            }
             sleeping = true;
         } else {
             sleeping = false;
