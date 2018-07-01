@@ -31,6 +31,9 @@ public class LightsHandler {
     public LightsHandler() {
         Timer updateTimerRoom = new Timer();
         updateTimerRoom.scheduleAtFixedRate(new update(), 0, 15 * 1000);
+
+        Timer updateLights = new Timer();
+        updateLights.scheduleAtFixedRate(new updateLights(), 0, 60 * 60 * 1000);
     }
 
     static void setLedStrip(int red, int green, int blue) {
@@ -89,6 +92,40 @@ public class LightsHandler {
         WebSocketHandler.updateAll();
     }
 
+    static void Light(String light, boolean status){
+        int code = 0;
+        if(light.equals("A") && status){
+            code = AOn;
+            A = true;
+        } else if(light.equals("A") && !status){
+            code = AOff;
+            A = false;
+        } else if(light.equals("B") && status){
+            code = BOn;
+            B = true;
+        } else if(light.equals("B") && !status){
+            code = BOff;
+            B = false;
+        } else if(light.equals("C") && status){
+            code = COn;
+            C = true;
+        } else if(light.equals("C") && !status){
+            code = COff;
+            C = false;
+        }
+
+        final int thing = code;
+        Thread t = new Thread(() -> {
+            String command = "./home/pi/scripts/433Utils/RPi_utils/codesend " + thing;
+            light(command);
+            light(command);
+            light(command);
+        });
+        t.start();
+
+        WebSocketHandler.updateAll();
+    }
+
     private synchronized static void light(String command) {
         ExecuteShellCommand com = new ExecuteShellCommand();
         com.executeCommand(command);
@@ -120,6 +157,15 @@ public class LightsHandler {
                 ledRed = 0;
                 WebSocketHandler.updateAll();
             }
+        }
+    }
+
+    private class updateLights extends TimerTask {
+        @Override
+        public void run() {
+            Light("A", A);
+            Light("B", B);
+            Light("C", C);
         }
     }
 }
