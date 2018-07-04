@@ -35,6 +35,7 @@ public class Server {
         new Sonarr();
         new Mqtt();
         new PowerData();
+        new Overwatch();
 
         webSocket("/ws", WebSocketHandler.class);
         get("/info", info::getInfo);
