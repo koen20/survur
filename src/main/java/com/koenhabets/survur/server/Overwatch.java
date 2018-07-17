@@ -53,7 +53,10 @@ public class Overwatch {
             JSONObject jsonObject = new JSONObject(response.toString());
             JSONObject overallstats = jsonObject.getJSONObject("eu").getJSONObject("stats").getJSONObject("competitive").getJSONObject("overall_stats");
             comprank = overallstats.getInt("comprank");
-            win_rate = overallstats.getInt("win_rate");
+            try {
+                win_rate = overallstats.getInt("win_rate");
+            } catch (Exception ignored){
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,7 +82,7 @@ public class Overwatch {
         int minutes = calendar.get(Calendar.MINUTE);
         int seconds = calendar.get(Calendar.SECOND);
         int millis = calendar.get(Calendar.MILLISECOND);
-        int hoursToNextDay = 24 - hours;
+        int hoursToNextDay = 23 - hours;
         int minutesToNextHour = 60 - minutes;
         int secondsToNextHour = 60 - seconds;
         int millisToNextHour = 1000 - millis;

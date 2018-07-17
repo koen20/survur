@@ -51,7 +51,7 @@ public class Mqtt implements MqttCallbackExtended {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) {
-        if (topic.equals("owntracks/koen/lux/event")) {
+        if (topic.equals("owntracks/koen/oneplus6/event")) {
             JSONObject jsonObject = new JSONObject(message.toString());
             String event = jsonObject.getString("event");
             String desc = jsonObject.getString("desc");
