@@ -16,8 +16,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Overwatch {
-    static int comprank;
-    static int win_rate;
+
+
     public Overwatch() {
         Timer updateTimer = new Timer();
         updateTimer.scheduleAtFixedRate(new update(), millisToNextDay(Calendar.getInstance()), 86400000);//1 day
@@ -26,14 +26,22 @@ public class Overwatch {
     public class update extends TimerTask {
         @Override
         public void run() {
-            updateStats("koen-21591");
-            insertDb(comprank, win_rate, "koen-21591");
+            OverwatchPlayerItem item = updateStats("koen-21591");
+            insertDb(item);
         }
     }
 
-    private void updateStats(String player){
+    private OverwatchPlayerItem updateStats(String player) {
+        OverwatchPlayerItem item = null;
         try {
-            String url = "https://owapi.net/api/v3/u/" + player + "/stats";
+            int comprank;
+            int win_rate = 0;
+            int compGamesPlayed = 0;
+            int quickTimePlayed = 0;
+            int compTimePlayed = 0;
+            int quickGamesWon = 0;
+            int compGamesWon = 0;
+            String url = "https://owapi.net/api/v3/u/" + player + "/blob";
 
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -51,24 +59,42 @@ public class Overwatch {
             }
             in.close();
             JSONObject jsonObject = new JSONObject(response.toString());
-            JSONObject overallstats = jsonObject.getJSONObject("eu").getJSONObject("stats").getJSONObject("competitive").getJSONObject("overall_stats");
-            comprank = overallstats.getInt("comprank");
+            JSONObject stats = jsonObject.getJSONObject("eu").getJSONObject("stats");
+            JSONObject compOverallstats = stats.getJSONObject("competitive").getJSONObject("overall_stats");
+            JSONObject compGameStats = stats.getJSONObject("competitive").getJSONObject("game_stats");
+            JSONObject quickGameStats = stats.getJSONObject("quickplay").getJSONObject("game_stats");
+            comprank = compOverallstats.getInt("comprank");
             try {
-                win_rate = overallstats.getInt("win_rate");
-            } catch (Exception ignored){
+                win_rate = compOverallstats.getInt("win_rate");
+            } catch (Exception ignored) {
             }
+            try {
+                compGamesPlayed = compGameStats.getInt("games_played");
+                compGamesWon = compGameStats.getInt("games_won");
+                compTimePlayed = compGameStats.getInt("time_played");
+
+                quickGamesWon = quickGameStats.getInt("games_won");
+                quickTimePlayed = quickGameStats.getInt("time_played");
+            } catch (Exception ignored) {
+            }
+            item = new OverwatchPlayerItem(player, comprank, win_rate, compGamesPlayed, quickTimePlayed, compTimePlayed, quickGamesWon, compGamesWon);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return item;
     }
 
-    private void insertDb(int sr, int win_rate, String player){
+    private void insertDb(OverwatchPlayerItem item) {
         try {
             Calendar cal = Calendar.getInstance();
             Connection conn = DriverManager.getConnection("jdbc:mariadb://192.168.2.24:3306/overwatch",
                     KeyHolder.getMysqlUsername(), KeyHolder.getMysqlPassword());
             Statement stmt = conn.createStatement();
-            stmt.executeUpdate("INSERT INTO stats VALUES ('" + PowerData.getMysqlDateString(cal.getTimeInMillis()) +"', '" + sr + "', '" + win_rate + "', '" + player + "')");
+            stmt.executeUpdate("INSERT INTO stats VALUES ('" + PowerData.getMysqlDateString(cal.getTimeInMillis()) + "', '" + item.getCompRank() + "', '" + item.getCompWinrate()
+                    + "', '" + item.getCompGamesPlayed() + "', '" + item.getQuickTimePlayed() + "', '" + item.getCompTimePlayed() +
+                    "', '" + item.getQuickGamesWon() + "', '" + item.getCompGamesWon() + "', '" + item.getPlayer() + "')");
             stmt.close();
             conn.close();
         } catch (SQLException e) {
