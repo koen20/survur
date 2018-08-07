@@ -50,7 +50,6 @@ public class Server {
         });
         post("/config", config::setConfig);
         get("/temp", temp::getTemperature);
-        post("/temp", temp::setTemperature);
         post("/action", action::action);
         get("/action", action::action);
         post("/calendar", calendar::setCalendar);

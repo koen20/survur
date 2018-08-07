@@ -35,7 +35,6 @@ public class InfoHandler {
             jo.put("pcOn", WakeOnLanHandler.pcOn);
             jo.put("feedInterval", ConfigHandler.feedInterval);
             jo.put("foodDaysLeft", FishHandler.daysLeft);
-            jo.put("humidity", TemperatureHandler.humidity);
             jo.put("currentEnergyUsage", PowerHandler.currentEnergyUsage);
             jo.put("currentEnergyProduction", PowerHandler.currentEnergyProduction);
             jo.put("gasUsage", PowerHandler.gasUsage);

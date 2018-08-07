@@ -5,16 +5,35 @@ import org.json.JSONObject;
 
 import java.sql.*;
 import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PowerData {
     static Connection conn;
 
     public PowerData() {
         try {
-            conn = DriverManager.getConnection("jdbc:mariadb://192.168.2.24:3306/sensors?autoReconnect=true",
+            conn = DriverManager.getConnection("jdbc:mariadb://192.168.2.24:3306/sensors",
                     KeyHolder.getMysqlUsername(), KeyHolder.getMysqlPassword());
+            Timer updateTimer = new Timer();
+            updateTimer.scheduleAtFixedRate(new checkMysqlConnection(), 2000, 10000);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private class checkMysqlConnection extends TimerTask {
+        @Override
+        public void run() {
+            try {
+                if (!conn.isValid(2700)) {
+                    conn.close();
+                    conn = DriverManager.getConnection("jdbc:mariadb://192.168.2.24:3306/sensors",
+                            KeyHolder.getMysqlUsername(), KeyHolder.getMysqlPassword());
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
