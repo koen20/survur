@@ -5,11 +5,13 @@ import org.json.JSONObject;
 
 import java.sql.*;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class PowerData {
     static Connection conn;
+    static JSONArray jsonArrayRecent;//360
 
     public PowerData() {
         try {
@@ -17,8 +19,24 @@ public class PowerData {
                     KeyHolder.getMysqlUsername(), KeyHolder.getMysqlPassword());
             Timer updateTimer = new Timer();
             updateTimer.scheduleAtFixedRate(new checkMysqlConnection(), 2000, 10000);
+            Timer timer = new Timer();
+            timer.scheduleAtFixedRate(new updateRecentPower(), 10000, 5000);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private class updateRecentPower extends TimerTask {
+        @Override
+        public void run() {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("date", new Date().getTime());
+            jsonObject.put("energyUsage", PowerHandler.currentEnergyUsage);
+            jsonObject.put("energyProduction", PowerHandler.currentEnergyProduction);
+            jsonArrayRecent.put(jsonObject);
+            if (jsonArrayRecent.length() >= 360){
+                jsonArrayRecent.remove(0);
+            }
         }
     }
 

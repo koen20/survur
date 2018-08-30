@@ -32,6 +32,8 @@ public class PowerHandler {
         } else if (interval.equals("monthly")){
             int months = Integer.parseInt(request.queryParams("months"));
             res = PowerData.getMonthlyTotal(months).toString();
+        } else if (interval.equals("recent")){
+            res = PowerData.jsonArrayRecent.toString();
         }
 
         return res;
