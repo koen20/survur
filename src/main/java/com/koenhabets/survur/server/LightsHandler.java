@@ -8,6 +8,8 @@ import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static java.lang.Math.round;
+
 public class LightsHandler {
     static boolean A = false;
     static boolean B = false;
@@ -49,13 +51,39 @@ public class LightsHandler {
         WebSocketHandler.updateAll();
     }
 
+    static void fadeLedStrip(int red, int green, int blue, int time) {//todo add this directly to the esp
+        final int ledRedStart = ledRed;
+        final int ledGreenStart = ledGreen;
+        final int ledBlueStart = ledBlue;
+
+        Thread t = new Thread(() -> {
+            try {
+                int steps = time / 100;//calculate amount of steps required to make every step 100 milliseconds within time
+                for (int i = 0; i <= steps; i++) {
+                    int r = ledRedStart + round((red - ledRedStart) / steps * i);
+                    int g = ledGreenStart + round((green- ledGreenStart) / steps * i);
+                    int b = ledBlueStart + round((blue - ledBlueStart) / steps * i);
+                    Mqtt.publishMessage("home/led", r + "," + g + "," + b);
+                    Thread.sleep(100);
+                }
+                Mqtt.publishMessage("home/led", red + "," + green + "," + blue);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        t.start();
+        ledRed = red;
+        ledGreen = green;
+        ledBlue = blue;
+    }
+
     String setLed(Request request, Response response) {
         String parm = request.queryParams("color");
         String[] split = parm.split(",");
         int red = Integer.parseInt(split[0]);
         int green = Integer.parseInt(split[1]);
         int blue = Integer.parseInt(split[2]);
-        setLedStrip(red, green, blue);
+        fadeLedStrip(red, green, blue, 500);
         return ":)";
     }
 
@@ -129,6 +157,13 @@ public class LightsHandler {
     private synchronized static void light(String command) {
         ExecuteShellCommand com = new ExecuteShellCommand();
         com.executeCommand(command);
+    }
+
+    static void resetLights(int ledFadeTime) {
+        Light("Aoff");
+        Light("Boff");
+        Light("Coff");
+        fadeLedStrip(0, 0, 0, ledFadeTime);
     }
 
     static void resetLights() {

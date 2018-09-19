@@ -30,13 +30,13 @@ public class RoomHandler {
             if (calNow.getTimeInMillis() > cal.getTimeInMillis() || calNow.get(Calendar.HOUR_OF_DAY) < 7 ) {
                 if (!SleepHandler.sleeping && !sunsetLight) {
                     if (!LightsHandler.ledStrip) {
-                        LightsHandler.setLedStrip(255, 255, 255);
+                        LightsHandler.fadeLedStrip(255, 255, 255, 5000);
                     }
                     LightsHandler.Light("Aon");
                     sunsetLight = true;
                 } else {
                     if (!LightsHandler.ledStrip) {
-                        LightsHandler.setLedStrip(13, 13, 13);
+                        LightsHandler.fadeLedStrip(13, 13, 13, 1000);
                     }
                 }
             }

@@ -10,7 +10,7 @@ public class Assistant {
     public String action(Request req, Response res){
         tada = "Turning on light";
         JSONObject jsonObject = new JSONObject(req.body());
-        JSONObject jsonObjectResult = jsonObject.getJSONObject("result");
+        JSONObject jsonObjectResult = jsonObject.getJSONObject("queryResult");
         if(jsonObjectResult.getString("action").equals("turn_on_light")){
             JSONObject jsonObjectParam = jsonObjectResult.getJSONObject("parameters");
             String light = jsonObjectParam.getString("light");

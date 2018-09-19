@@ -26,62 +26,63 @@ public class Overwatch {
     public class update extends TimerTask {
         @Override
         public void run() {
-            OverwatchPlayerItem item = updateStats("koen-21591");
-            insertDb(item);
+            OverwatchPlayerItem item = null;
+            try {
+                item = updateStats("koen-21591");
+                insertDb(item);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private OverwatchPlayerItem updateStats(String player) {
+    private OverwatchPlayerItem updateStats(String player) throws IOException {
         OverwatchPlayerItem item = null;
-        try {
-            int comprank;
-            int win_rate = 0;
-            int compGamesPlayed = 0;
-            int quickTimePlayed = 0;
-            int compTimePlayed = 0;
-            int quickGamesWon = 0;
-            int compGamesWon = 0;
-            String url = "https://owapi.net/api/v3/u/" + player + "/blob";
+        int comprank;
+        int win_rate = 0;
+        int compGamesPlayed = 0;
+        int quickTimePlayed = 0;
+        int compTimePlayed = 0;
+        int quickGamesWon = 0;
+        int compGamesWon = 0;
+        String url = "https://owapi.net/api/v3/u/" + player + "/blob";
 
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        URL obj = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-            con.setRequestMethod("GET");
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        con.setRequestMethod("GET");
+        con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
 
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-            JSONObject jsonObject = new JSONObject(response.toString());
-            JSONObject stats = jsonObject.getJSONObject("eu").getJSONObject("stats");
-            JSONObject compOverallstats = stats.getJSONObject("competitive").getJSONObject("overall_stats");
-            JSONObject compGameStats = stats.getJSONObject("competitive").getJSONObject("game_stats");
-            JSONObject quickGameStats = stats.getJSONObject("quickplay").getJSONObject("game_stats");
-            comprank = compOverallstats.getInt("comprank");
-            try {
-                win_rate = compOverallstats.getInt("win_rate");
-            } catch (Exception ignored) {
-            }
-            try {
-                compGamesPlayed = compGameStats.getInt("games_played");
-                compGamesWon = compGameStats.getInt("games_won");
-                compTimePlayed = compGameStats.getInt("time_played");
-
-                quickGamesWon = quickGameStats.getInt("games_won");
-                quickTimePlayed = quickGameStats.getInt("time_played");
-            } catch (Exception ignored) {
-            }
-            item = new OverwatchPlayerItem(player, comprank, win_rate, compGamesPlayed, quickTimePlayed, compTimePlayed, quickGamesWon, compGamesWon);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
         }
+        in.close();
+        JSONObject jsonObject = new JSONObject(response.toString());
+        JSONObject stats = jsonObject.getJSONObject("eu").getJSONObject("stats");
+        JSONObject compOverallstats = stats.getJSONObject("competitive").getJSONObject("overall_stats");
+        JSONObject compGameStats = stats.getJSONObject("competitive").getJSONObject("game_stats");
+        JSONObject quickGameStats = stats.getJSONObject("quickplay").getJSONObject("game_stats");
+        comprank = compOverallstats.getInt("comprank");
+        try {
+            win_rate = compOverallstats.getInt("win_rate");
+        } catch (Exception ignored) {
+        }
+        try {
+            compGamesPlayed = compGameStats.getInt("games_played");
+            compGamesWon = compGameStats.getInt("games_won");
+            compTimePlayed = compGameStats.getInt("time_played");
+
+            quickGamesWon = quickGameStats.getInt("games_won");
+            quickTimePlayed = quickGameStats.getInt("time_played");
+        } catch (Exception ignored) {
+        }
+        item = new OverwatchPlayerItem(player, comprank, win_rate, compGamesPlayed, quickTimePlayed, compTimePlayed, quickGamesWon, compGamesWon);
+
 
         return item;
     }

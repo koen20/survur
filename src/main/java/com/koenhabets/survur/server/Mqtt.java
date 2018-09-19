@@ -79,11 +79,11 @@ public class Mqtt implements MqttCallbackExtended {
         } else if (topic.equals("home/button/sleep")) {
             if (message.toString().equals("start")) {
                 SleepHandler.setSleeping(true);
-                LightsHandler.resetLights();
+                LightsHandler.resetLights(60000);
             } else if (message.toString().equals("stop")) {
                 SleepHandler.setSleeping(false);
                 if (SleepHandler.inside) {
-                    LightsHandler.setLedStrip(200, 100, 0);
+                    LightsHandler.fadeLedStrip(200, 100, 0, 5000);
                 }
             }
         } else if (topic.equals("home/led/status")) {

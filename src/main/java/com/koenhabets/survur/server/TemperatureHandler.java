@@ -22,7 +22,7 @@ public class TemperatureHandler {
         Timer updateTimer = new Timer();
         Timer updateTimer2 = new Timer();
         updateTimer.scheduleAtFixedRate(new UpdateTask(), 0, 120 * 1000);
-        updateTimer2.scheduleAtFixedRate(new updateDb(), 12500, 900000);
+        updateTimer2.scheduleAtFixedRate(new updateDb(), 17000, 900000);
 
     }
 
@@ -41,7 +41,7 @@ public class TemperatureHandler {
             double dif = round(temp - tempOutside, 2);
             stmt.executeUpdate("INSERT INTO temperature VALUES ('" + PowerData.getMysqlDateString(cal.getTimeInMillis()) + "', '" + temp + "', '" + tempOutside + "', '" + dif + "')");
             stmt.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
