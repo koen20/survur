@@ -44,6 +44,7 @@ public class Mqtt implements MqttCallbackExtended {
             message.setQos(0);
             client2.publish(topic, message);
             client2.disconnect();
+            client2.close();
         } catch (MqttException e) {
             e.printStackTrace();
         }

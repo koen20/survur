@@ -52,7 +52,8 @@ public class LightsHandler {
     }
 
     static void fadeLedStrip(int red, int green, int blue, int time) {//todo add this directly to the esp
-        final int ledRedStart = ledRed;
+        setLedStrip(red, green, blue);
+        /*final int ledRedStart = ledRed;
         final int ledGreenStart = ledGreen;
         final int ledBlueStart = ledBlue;
 
@@ -74,7 +75,7 @@ public class LightsHandler {
         t.start();
         ledRed = red;
         ledGreen = green;
-        ledBlue = blue;
+        ledBlue = blue;*/
     }
 
     String setLed(Request request, Response response) {
