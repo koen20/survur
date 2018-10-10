@@ -42,7 +42,7 @@ public class LightsHandler {
         ledRed = red;
         ledGreen = green;
         ledBlue = blue;
-        Mqtt.publishMessage("home/led", red + "," + green + "," + blue);
+        Mqtt.publishMessage("home/led", red + "," + green + "," + blue + "&" + 800);
         if (red == 0 && green == 0 && blue == 0) {
             ledStrip = false;
         } else {
@@ -51,31 +51,17 @@ public class LightsHandler {
         WebSocketHandler.updateAll();
     }
 
-    static void fadeLedStrip(int red, int green, int blue, int time) {//todo add this directly to the esp
-        setLedStrip(red, green, blue);
-        /*final int ledRedStart = ledRed;
-        final int ledGreenStart = ledGreen;
-        final int ledBlueStart = ledBlue;
-
-        Thread t = new Thread(() -> {
-            try {
-                int steps = time / 100;//calculate amount of steps required to make every step 100 milliseconds within time
-                for (int i = 0; i <= steps; i++) {
-                    int r = ledRedStart + round((red - ledRedStart) / steps * i);
-                    int g = ledGreenStart + round((green- ledGreenStart) / steps * i);
-                    int b = ledBlueStart + round((blue - ledBlueStart) / steps * i);
-                    Mqtt.publishMessage("home/led", r + "," + g + "," + b);
-                    Thread.sleep(100);
-                }
-                Mqtt.publishMessage("home/led", red + "," + green + "," + blue);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        t.start();
+    static void fadeLedStrip(int red, int green, int blue, int time) {
         ledRed = red;
         ledGreen = green;
-        ledBlue = blue;*/
+        ledBlue = blue;
+        Mqtt.publishMessage("home/led", red + "," + green + "," + blue + "&" + time);
+        if (red == 0 && green == 0 && blue == 0) {
+            ledStrip = false;
+        } else {
+            ledStrip = true;
+        }
+        WebSocketHandler.updateAll();
     }
 
     String setLed(Request request, Response response) {

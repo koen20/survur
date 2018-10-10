@@ -11,7 +11,7 @@ import java.util.TimerTask;
 
 public class PowerData {
     static Connection conn;
-    static JSONArray jsonArrayRecent;//360
+    static JSONArray jsonArrayRecent = new JSONArray();//360
 
     public PowerData() {
         try {

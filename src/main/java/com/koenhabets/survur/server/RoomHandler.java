@@ -36,7 +36,7 @@ public class RoomHandler {
                     sunsetLight = true;
                 } else {
                     if (!LightsHandler.ledStrip) {
-                        LightsHandler.fadeLedStrip(13, 13, 13, 1000);
+                        LightsHandler.fadeLedStrip(13, 13, 13, 700);
                     }
                 }
             }

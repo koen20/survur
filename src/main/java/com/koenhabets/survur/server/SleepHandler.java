@@ -5,6 +5,10 @@ import spark.Response;
 
 import java.util.*;
 
+import static com.koenhabets.survur.server.LightsHandler.Light;
+import static com.koenhabets.survur.server.LightsHandler.fadeLedStrip;
+import static com.koenhabets.survur.server.LightsHandler.setLedStrip;
+
 public class SleepHandler {
     static boolean sleeping = false;
     static boolean inside = true;
@@ -19,17 +23,37 @@ public class SleepHandler {
         @Override
         public void run() {
             Calendar cal = Calendar.getInstance();
-            if(cal.getTimeInMillis() - sleepingStartTime > 43200000){
+            if (cal.getTimeInMillis() - sleepingStartTime > 43200000) {
                 setSleeping(false);
             }
         }
     }
 
-    public static void setSleeping(boolean status){
-        if(status){
-            if(!sleeping) {
+    public static void setSleeping(boolean status) {
+        if (status) {
+            if (!sleeping) {
                 Calendar cal = Calendar.getInstance();
                 sleepingStartTime = cal.getTimeInMillis();
+                Light("Aoff");
+                Light("Boff");
+                Light("Coff");
+                Thread t = new Thread(() -> {
+                    try {
+                        fadeLedStrip(90, 0, 0, 60001);
+                        Thread.sleep(90 * 1000);
+                        setLedStrip(50, 0, 0);
+                        Thread.sleep(50000);
+                        setLedStrip(40, 0, 0);
+                        Thread.sleep(40000);
+                        setLedStrip(30, 0, 0);
+                        Thread.sleep(5000);
+                        setLedStrip(0, 0, 0);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                });
+                t.start();
             }
             sleeping = true;
         } else {
