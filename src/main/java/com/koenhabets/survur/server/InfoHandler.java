@@ -16,7 +16,7 @@ public class InfoHandler {
     static JSONObject getJsonInfo() {
         JSONObject jo = new JSONObject();
         try {
-            jo.put("inside-temp", TemperatureHandler.temp);
+            jo.put("inside-temp", TemperatureHandler.tempInside);
             jo.put("outside-temp", TemperatureHandler.tempOutside);
             jo.put("sleeping", SleepHandler.sleeping);
             jo.put("inside", SleepHandler.inside);
@@ -30,11 +30,9 @@ public class InfoHandler {
             jo.put("livingRoomTemp", TemperatureHandler.livingRoomTemp);
             jo.put("alarmEnabled", ConfigHandler.alarmEnabled);
             jo.put("motionEnabled", ConfigHandler.motionEnabled);
-            jo.put("fishLastFed", FishHandler.lastFed);
             jo.put("lastMovement", RoomHandler.lastMovement);
             jo.put("pcOn", WakeOnLanHandler.pcOn);
             jo.put("feedInterval", ConfigHandler.feedInterval);
-            jo.put("foodDaysLeft", FishHandler.daysLeft);
             jo.put("currentEnergyUsage", PowerHandler.currentEnergyUsage);
             jo.put("currentEnergyProduction", PowerHandler.currentEnergyProduction);
             jo.put("gasUsage", PowerHandler.gasUsage);

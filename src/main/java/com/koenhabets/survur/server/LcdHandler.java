@@ -30,7 +30,7 @@ public class LcdHandler {
     private class UpdateTask extends TimerTask {
         @Override
         public void run() {
-            double temp = TemperatureHandler.temp;
+            double temp = TemperatureHandler.tempInside;
             double tempOutside = TemperatureHandler.tempOutside;
             counter++;
             if (SleepHandler.sleeping && counter >= 499) {

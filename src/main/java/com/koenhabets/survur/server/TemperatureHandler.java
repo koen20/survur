@@ -5,7 +5,6 @@ import spark.Response;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Calendar;
 import java.util.Objects;
@@ -13,7 +12,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TemperatureHandler {
-    static double temp = 20;
+    static double tempInside = 20;
     static double livingRoomTemp = 20;
     static double tempOutside;
     String response;
@@ -23,14 +22,13 @@ public class TemperatureHandler {
         Timer updateTimer2 = new Timer();
         updateTimer.scheduleAtFixedRate(new UpdateTask(), 0, 120 * 1000);
         updateTimer2.scheduleAtFixedRate(new updateDb(), 17000, 900000);
-
     }
 
     private class updateDb extends TimerTask {
 
         @Override
         public void run() {
-            insertTempDb(temp,tempOutside);
+            insertTempDb(tempInside, tempOutside);
         }
     }
 
@@ -38,8 +36,8 @@ public class TemperatureHandler {
         try {
             Calendar cal = Calendar.getInstance();
             Statement stmt = PowerData.conn.createStatement();
-            double dif = round(temp - tempOutside, 2);
-            stmt.executeUpdate("INSERT INTO temperature VALUES ('" + PowerData.getMysqlDateString(cal.getTimeInMillis()) + "', '" + temp + "', '" + tempOutside + "', '" + dif + "')");
+            stmt.executeUpdate("INSERT INTO temperature VALUES (DEFAULT, '" + PowerData.getMysqlDateString(cal.getTimeInMillis()) + "', '" + temp + "', 'inside')");
+            stmt.executeUpdate("INSERT INTO temperature VALUES (DEFAULT, '" + PowerData.getMysqlDateString(cal.getTimeInMillis()) + "', '" + tempOutside + "', 'outside')");
             stmt.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,18 +52,18 @@ public class TemperatureHandler {
         return bd.doubleValue();
     }
 
-    private double getTemp() {
+    private double getTempInside() {
         String d;
         ExecuteShellCommand com = new ExecuteShellCommand();
         d = com.executeCommand("bash /home/pi/scripts/temp.py");
         d = d.replace("\n", "");
         try {
-            temp = round(Double.parseDouble(d), 2);
+            tempInside = round(Double.parseDouble(d), 2);
         } catch (NumberFormatException e) {
             System.err.println("Error while parsing the temperature: " + e.getMessage());
-            temp = 20;
+            tempInside = 20;
         }
-        return temp;
+        return tempInside;
     }
 
     private void getTempOutside() {
@@ -85,7 +83,7 @@ public class TemperatureHandler {
         if (Objects.equals(location, "outside")) {
             response = tempOutside + "";
         } else if (Objects.equals(location, "inside")) {
-            response = temp + "";
+            response = tempInside + "";
         }
         return response;
     }
@@ -95,7 +93,7 @@ public class TemperatureHandler {
 
         @Override
         public void run() {
-            getTemp();
+            getTempInside();
             getTempOutside();
             try {
                 WebSocketHandler.updateAll();

@@ -11,7 +11,7 @@ import java.util.TimerTask;
 
 public class PowerData {
     static Connection conn;
-    static JSONArray jsonArrayRecent = new JSONArray();//360
+    static JSONArray jsonArrayRecent = new JSONArray();//240
 
     public PowerData() {
         try {
@@ -34,7 +34,7 @@ public class PowerData {
             jsonObject.put("energyUsage", PowerHandler.currentEnergyUsage);
             jsonObject.put("energyProduction", PowerHandler.currentEnergyProduction);
             jsonArrayRecent.put(jsonObject);
-            if (jsonArrayRecent.length() >= 360){
+            if (jsonArrayRecent.length() >= 240){
                 jsonArrayRecent.remove(0);
             }
         }
