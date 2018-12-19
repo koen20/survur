@@ -8,7 +8,6 @@ import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static java.lang.Math.round;
 
 public class LightsHandler {
     static boolean A = false;
@@ -21,6 +20,7 @@ public class LightsHandler {
     static int ledGreen = 0;
     static int ledBlue = 0;
     static long lastEspStatusUpdate;
+    static boolean lamp1;
 
     private static int AOn = 13976916;
     private static int AOff = 13976913;
@@ -35,7 +35,7 @@ public class LightsHandler {
         updateTimerRoom.scheduleAtFixedRate(new update(), 0, 15 * 1000);
 
         Timer updateLights = new Timer();
-        updateLights.scheduleAtFixedRate(new updateLights(), 0, 60 * 60 * 1000);
+        updateLights.scheduleAtFixedRate(new updateLights(), 0, 90 * 60 * 1000);
     }
 
     static void setLedStrip(int red, int green, int blue) {
@@ -74,57 +74,30 @@ public class LightsHandler {
         return ":)";
     }
 
-    static void Light(String light) {
-        int code = 0;
-        if (Objects.equals(light, "Aon") || Objects.equals(light, "aon")) {
-            code = AOn;
-            A = true;
-        } else if (Objects.equals(light, "Aoff") || Objects.equals(light, "aoff")) {
-            code = AOff;
-            A = false;
-        } else if (Objects.equals(light, "Bon") || Objects.equals(light, "bon")) {
-            code = BOn;
-            B = true;
-        } else if (Objects.equals(light, "Boff") || Objects.equals(light, "boff")) {
-            code = BOff;
-            B = false;
-        } else if (Objects.equals(light, "Con") || Objects.equals(light, "con")) {
-            code = COn;
-            C = true;
-        } else if (Objects.equals(light, "Coff") || Objects.equals(light, "coff")) {
-            code = COff;
-            C = false;
-        }
-        final int thing = code;
-        Thread t = new Thread(() -> {
-            String command = "./home/pi/scripts/433Utils/RPi_utils/codesend " + thing;
-            light(command);
-            light(command);
-            light(command);
-        });
-        t.start();
-
+    static void setMqttLamp(int lamp, boolean status) {
+        lamp1 = status;
+        Mqtt.publishMessage("home/lamp", status + "");
         WebSocketHandler.updateAll();
     }
 
-    static void Light(String light, boolean status){
+    static void Light(String light, boolean status) {
         int code = 0;
-        if(light.equals("A") && status){
+        if (light.equals("A") && status) {
             code = AOn;
             A = true;
-        } else if(light.equals("A") && !status){
+        } else if (light.equals("A") && !status) {
             code = AOff;
             A = false;
-        } else if(light.equals("B") && status){
+        } else if (light.equals("B") && status) {
             code = BOn;
             B = true;
-        } else if(light.equals("B") && !status){
+        } else if (light.equals("B") && !status) {
             code = BOff;
             B = false;
-        } else if(light.equals("C") && status){
+        } else if (light.equals("C") && status) {
             code = COn;
             C = true;
-        } else if(light.equals("C") && !status){
+        } else if (light.equals("C") && !status) {
             code = COff;
             C = false;
         }
@@ -147,23 +120,55 @@ public class LightsHandler {
     }
 
     static void resetLights(int ledFadeTime) {
-        Light("Aoff");
-        Light("Boff");
-        Light("Coff");
+        //Light("Aoff");
+        Light("B", false);
+        Light("C", false);
+        setMqttLamp(1, false);
         fadeLedStrip(0, 0, 0, ledFadeTime);
     }
 
     static void resetLights() {
-        Light("Aoff");
-        Light("Boff");
-        Light("Coff");
+        //Light("Aoff");
+        Light("B", false);
+        Light("C", false);
+        setMqttLamp(1, false);
         setLedStrip(0, 0, 0);
     }
 
     String setLight(Request request, Response response) {
-        Log.d(request.ip());
         String parm = request.queryParams("light");
-        Light(parm);
+        boolean status = false;
+        String lamp = "";
+        if (Objects.equals(parm, "Aon") || Objects.equals(parm, "aon")) {
+            status = true;
+            lamp = "A";
+        } else if (Objects.equals(parm, "Aoff") || Objects.equals(parm, "aoff")) {
+            status = false;
+            lamp = "A";
+        } else if (Objects.equals(parm, "Bon") || Objects.equals(parm, "bon")) {
+            status = true;
+            lamp = "B";
+        } else if (Objects.equals(parm, "Boff") || Objects.equals(parm, "boff")) {
+            status = false;
+            lamp = "B";
+        } else if (Objects.equals(parm, "Con") || Objects.equals(parm, "con")) {
+            status = true;
+            lamp = "C";
+        } else if (Objects.equals(parm, "Coff") || Objects.equals(parm, "coff")) {
+            status = false;
+            lamp = "C";
+        }
+        if (lamp != "") {
+            Light(lamp, status);
+        } else {
+            try {
+                String split[] = parm.split(";");
+                setMqttLamp(Integer.parseInt(split[0]) , Boolean.parseBoolean(split[1]));
+            } catch (Exception ignored) {
+
+            }
+
+        }
         return ":)";
     }
 
@@ -171,7 +176,7 @@ public class LightsHandler {
         @Override
         public void run() {
             Calendar cal = Calendar.getInstance();
-            if(cal.getTimeInMillis() - lastEspStatusUpdate > 10000){
+            if (cal.getTimeInMillis() - lastEspStatusUpdate > 10000) {
                 espLed = false;
                 ledStrip = false;
                 ledBlue = 0;
@@ -185,7 +190,7 @@ public class LightsHandler {
     private class updateLights extends TimerTask {
         @Override
         public void run() {
-            Light("A", A);
+            //Light("A", A);
             Light("B", B);
             Light("C", C);
         }

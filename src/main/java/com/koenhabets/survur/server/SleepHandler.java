@@ -11,7 +11,6 @@ import static com.koenhabets.survur.server.LightsHandler.setLedStrip;
 
 public class SleepHandler {
     static boolean sleeping = false;
-    static boolean inside = true;
     static long sleepingStartTime = 0;
 
     public SleepHandler() {
@@ -34,9 +33,9 @@ public class SleepHandler {
             if (!sleeping) {
                 Calendar cal = Calendar.getInstance();
                 sleepingStartTime = cal.getTimeInMillis();
-                Light("Aoff");
-                Light("Boff");
-                Light("Coff");
+                //Light("Aoff");
+                Light("B", false);
+                Light("C", false);
                 Thread t = new Thread(() -> {
                     try {
                         fadeLedStrip(90, 0, 0, 60001);

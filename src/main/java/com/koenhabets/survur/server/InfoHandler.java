@@ -19,7 +19,7 @@ public class InfoHandler {
             jo.put("inside-temp", TemperatureHandler.tempInside);
             jo.put("outside-temp", TemperatureHandler.tempOutside);
             jo.put("sleeping", SleepHandler.sleeping);
-            jo.put("inside", SleepHandler.inside);
+            jo.put("inside", RoomHandler.insideHouse);
             jo.put("insideRoom", RoomHandler.insideRoom);
             jo.put("next-appointment", CalendarHandler.getResponse());
             jo.put("nextSubject", calendarZermelo.nextSubject);
@@ -46,6 +46,7 @@ public class InfoHandler {
             jo.put("ledRed", LightsHandler.ledRed);
             jo.put("ledGreen", LightsHandler.ledGreen);
             jo.put("ledBlue", LightsHandler.ledBlue);
+            jo.put("lamp1", LightsHandler.lamp1);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -36,22 +36,16 @@ public class LcdHandler {
             if (SleepHandler.sleeping && counter >= 499) {
                 counter = 0;
             }
-            if (!SleepHandler.inside && counter >= 499) {
+            if (!RoomHandler.insideHouse && counter >= 499) {
                 counter = 0;
-            } else if (SleepHandler.inside && !SleepHandler.sleeping) {
+            } else if (RoomHandler.insideHouse && !SleepHandler.sleeping) {
                 counter = 500;
             }
-            if (!SleepHandler.sleeping && SleepHandler.inside) {
+            if (!SleepHandler.sleeping && RoomHandler.insideHouse) {
                 Calendar calendar = Calendar.getInstance();
                 int hour = calendar.get(Calendar.HOUR_OF_DAY);
                 int minute = calendar.get(Calendar.MINUTE);
-                if (d == 0) {
-                    printLcd(hour + ":" + minute, "In:" + TemperatureHandler.round(temp, 2));
-                    d = 1;
-                } else {
-                    printLcd(hour + ":" + minute, "Out:" + TemperatureHandler.round(tempOutside, 2));
-                    d = 0;
-                }
+                printLcd(hour + ":" + minute, TemperatureHandler.round(temp, 1)+ "/" + TemperatureHandler.round(tempOutside, 1));
             }
 
             if (counter == 6) {

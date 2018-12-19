@@ -34,7 +34,7 @@ public class SunSetHandler {
         String[] parts = sunsetO.split(":");
         String part1 = parts[0];
         String part2 = parts[1];
-        sunsetHour = Integer.parseInt(part1) + 2;
+        sunsetHour = Integer.parseInt(part1) + 1;
         sunsetMinute = Integer.parseInt(part2);
         result = sunsetHour + "." + sunsetMinute;
 

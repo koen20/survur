@@ -1,1 +1,1 @@
-arp-scan -l | grep 5c:51:88:91:28:0e
+sudo arp-scan -l | grep MAC-adres

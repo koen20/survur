@@ -61,10 +61,10 @@ public class Mqtt implements MqttCallbackExtended {
             Log.d(event + " " + desc);
             if (desc.equals("Thuis")) {
                 if (event.equals("enter")) {
-                    SleepHandler.inside = true;
+                    RoomHandler.insideHouse = true;
                     Log.d("inside");
                 } else {
-                    SleepHandler.inside = false;
+                    RoomHandler.insideHouse = false;
                 }
             }
             if(!event.equals("enter")){
@@ -86,7 +86,7 @@ public class Mqtt implements MqttCallbackExtended {
                 }
             } else if (message.toString().equals("stop")) {
                 SleepHandler.setSleeping(false);
-                if (SleepHandler.inside) {
+                if (RoomHandler.insideHouse) {
                     LightsHandler.fadeLedStrip(200, 100, 0, 5000);
                 }
             }

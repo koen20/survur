@@ -7,15 +7,15 @@ import java.util.TimerTask;
 
 public class RoomHandler {
     static boolean insideRoom = false;
+    static boolean insideHouse = true;
     static String lastMovement;
-    private int countIn = 0;
     private int countOut = 0;
     private static long milisecondsLast = 0;
     private static boolean sunsetLight = false;
 
     public RoomHandler() {
-        //Timer updateTimer = new Timer();
-        //updateTimer.scheduleAtFixedRate(new CheckWifi(), 0, 7 * 60 * 1000);
+        Timer updateTimer = new Timer();
+        updateTimer.scheduleAtFixedRate(new CheckWifi(), 0, 15 * 60 * 1000);
 
         Timer updateTimerRoom = new Timer();
         updateTimerRoom.scheduleAtFixedRate(new UpdateInside(), 0, 10 * 1000);
@@ -32,7 +32,7 @@ public class RoomHandler {
                     if (!LightsHandler.ledStrip) {
                         LightsHandler.fadeLedStrip(255, 255, 255, 5000);
                     }
-                    LightsHandler.Light("Aon");
+                    LightsHandler.setMqttLamp(1, true);
                     sunsetLight = true;
                 } else {
                     if (!LightsHandler.ledStrip) {
@@ -53,7 +53,7 @@ public class RoomHandler {
                 long Cmiliseconds = cal.getTimeInMillis();
                 long milisecondsDif = Cmiliseconds - milisecondsLast;
                 if (insideRoom) {
-                    if (milisecondsDif > 120 * 1000) {
+                    if (milisecondsDif > 180 * 1000) {
                         insideRoom = false;
                         sunsetLight = false;
                         LightsHandler.resetLights();
@@ -69,18 +69,14 @@ public class RoomHandler {
             ExecuteShellCommand com = new ExecuteShellCommand();
             String d = com.executeCommand("bash /home/pi/scripts/wifiScan");
             if (Objects.equals(d, "")) {
-                countIn = 0;
                 countOut++;
-                if (countOut == 2 && !SleepHandler.sleeping) {
-                    SleepHandler.inside = false;
+                if (countOut == 6 && !SleepHandler.sleeping && !RoomHandler.insideRoom) {
+                    insideHouse = false;
                     LightsHandler.resetLights();
                 }
             } else {
                 countOut = 0;
-                countIn++;
-                if (countIn == 2) {
-                    SleepHandler.inside = true;
-                }
+                insideHouse = true;
             }
         }
     }

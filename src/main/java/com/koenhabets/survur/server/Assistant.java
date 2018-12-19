@@ -23,7 +23,7 @@ public class Assistant {
             if(light.equals("3")){
                 light = "C";
             }
-            LightsHandler.Light(light + "on");
+            LightsHandler.Light(light, true);
             tada = "Turning on light " + light;
         }
         if(jsonObjectResult.getString("action").equals("turn_off_light")){
@@ -38,16 +38,16 @@ public class Assistant {
             if(light.equals("3")){
                 light = "C";
             }
-            LightsHandler.Light(light + "off");
+            LightsHandler.Light(light, false);
             tada = "Turning off light " + light;
         }
         if(jsonObjectResult.getString("action").equals("turn_on_all_lights")){
-            LightsHandler.Light("Aon");
-            LightsHandler.Light("Bon");
+            LightsHandler.Light("A", true);
+            LightsHandler.Light("B", true);
         }
         if(jsonObjectResult.getString("action").equals("turn_off_all_lights")){
-            LightsHandler.Light("Aoff");
-            LightsHandler.Light("Boff");
+            LightsHandler.Light("A", false);
+            LightsHandler.Light("B", false);
             tada = "Turning off the lights";
         }
 
