@@ -15,7 +15,7 @@ public class ConfigHandler {
     public static boolean alarmEnabled = true;
     static boolean motionEnabled = true;
     static int feedInterval = 24;
-    static String directory = "/media/owncloud/";
+    static String directory = "/home/pi/";
 
     public ConfigHandler() {
         try {

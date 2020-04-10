@@ -11,7 +11,7 @@ public class LcdHandler {
 
     public LcdHandler() {
         Timer updateTimer = new Timer();
-        updateTimer.scheduleAtFixedRate(new UpdateTask(), 0, 10 * 1000);
+        updateTimer.scheduleAtFixedRate(new UpdateTask(), 0, 20 * 1000);
     }
 
     public static void printLcd(String text, String text2) {

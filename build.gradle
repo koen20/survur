@@ -35,12 +35,12 @@ dependencies {
     implementation 'org.json:json:20180813'
     implementation 'com.luckycatlabs:SunriseSunsetCalculator:1.2'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-    implementation 'com.google.guava:guava:27.0-jre'
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.guava:guava:28.2-jre'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation "com.sparkjava:spark-core:2.5.5"
-    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
-    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
-    implementation 'org.mariadb.jdbc:mariadb-java-client:2.3.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.4.0'
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.2'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.4.4'
     //implementation 'org.slf4j:slf4j-simple:1.7.25'
 }
 

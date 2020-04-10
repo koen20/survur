@@ -31,6 +31,8 @@ public class Overwatch {
                 item = updateStats("koen-21591");
                 insertDb(item);
             } catch (Exception e) {
+                Timer updateTimer = new Timer();
+                updateTimer.schedule(new update(), 1800000);//30 minutes
                 e.printStackTrace();
             }
         }
@@ -38,13 +40,18 @@ public class Overwatch {
 
     private OverwatchPlayerItem updateStats(String player) throws IOException {
         OverwatchPlayerItem item = null;
-        int comprank;
-        int win_rate = 0;
+        int comprank = 0;
+        double win_rate = 0;
         int compGamesPlayed = 0;
-        int quickTimePlayed = 0;
-        int compTimePlayed = 0;
+        double quickTimePlayed = 0;
+        double compTimePlayed = 0;
         int quickGamesWon = 0;
         int compGamesWon = 0;
+        int comprankTank = 0;
+        int comprankDps = 0;
+        int comprankSupport = 0;
+        int compGamesTied = 0;
+
         String url = "https://owapi.net/api/v3/u/" + player + "/blob";
 
         URL obj = new URL(url);
@@ -67,22 +74,38 @@ public class Overwatch {
         JSONObject compOverallstats = stats.getJSONObject("competitive").getJSONObject("overall_stats");
         JSONObject compGameStats = stats.getJSONObject("competitive").getJSONObject("game_stats");
         JSONObject quickGameStats = stats.getJSONObject("quickplay").getJSONObject("game_stats");
-        comprank = compOverallstats.getInt("comprank");
         try {
-            win_rate = compOverallstats.getInt("win_rate");
+            if (!compOverallstats.isNull("tank_comprank")){
+                comprankTank = compOverallstats.getInt("tank_comprank");
+            }
+            if (!compOverallstats.isNull("support_comprank")){
+                comprankSupport = compOverallstats.getInt("support_comprank");
+            }
+            if (!compOverallstats.isNull("damage_comprank")){
+                comprankDps = compOverallstats.getInt("damage_comprank");
+            }
+        } catch (Exception ignored){
+        }
+        try {
+            win_rate = compOverallstats.getDouble("win_rate");
         } catch (Exception ignored) {
         }
         try {
             compGamesPlayed = compGameStats.getInt("games_played");
             compGamesWon = compGameStats.getInt("games_won");
-            compTimePlayed = compGameStats.getInt("time_played");
+            compTimePlayed = compGameStats.getDouble("time_played");
 
             quickGamesWon = quickGameStats.getInt("games_won");
-            quickTimePlayed = quickGameStats.getInt("time_played");
-        } catch (Exception ignored) {
-        }
-        item = new OverwatchPlayerItem(player, comprank, win_rate, compGamesPlayed, quickTimePlayed, compTimePlayed, quickGamesWon, compGamesWon);
+            quickTimePlayed = quickGameStats.getDouble("time_played");
 
+            compGamesTied = compGameStats.getInt("games_tied");
+        } catch (Exception  e) {
+            e.printStackTrace();
+        }
+        if (win_rate == 0){
+            win_rate = compGamesWon / (compGamesPlayed - compGamesTied);
+        }
+        item = new OverwatchPlayerItem(player, comprankSupport, comprankTank, comprankDps, win_rate, compGamesPlayed, quickTimePlayed, compTimePlayed, quickGamesWon, compGamesWon);
 
         return item;
     }
@@ -93,9 +116,17 @@ public class Overwatch {
             Connection conn = DriverManager.getConnection("jdbc:mariadb://192.168.2.24:3306/overwatch",
                     KeyHolder.getMysqlUsername(), KeyHolder.getMysqlPassword());
             Statement stmt = conn.createStatement();
-            stmt.executeUpdate("INSERT INTO stats VALUES ('" + PowerData.getMysqlDateString(cal.getTimeInMillis()) + "', '" + item.getCompRank() + "', '" + item.getCompWinrate()
-                    + "', '" + item.getCompGamesPlayed() + "', '" + item.getQuickTimePlayed() + "', '" + item.getCompTimePlayed() +
-                    "', '" + item.getQuickGamesWon() + "', '" + item.getCompGamesWon() + "', '" + item.getPlayer() + "')");
+            if (item.getDamageComprank() == 0){
+                stmt.executeUpdate("INSERT INTO stats VALUES ('" + PowerData.getMysqlDateString(cal.getTimeInMillis()) + "', NULL" +
+                        ", '" + item.getTankComprank() + "', NULL, '" + item.getSupportComprank() + "', '" + item.getCompWinrate()
+                        + "', '" + item.getCompGamesPlayed() + "', '" + item.getQuickTimePlayed() + "', '" + item.getCompTimePlayed() +
+                        "', '" + item.getQuickGamesWon() + "', '" + item.getCompGamesWon() + "', '" + item.getPlayer() + "')");
+            } else {
+                stmt.executeUpdate("INSERT INTO stats VALUES ('" + PowerData.getMysqlDateString(cal.getTimeInMillis()) + "', NULL" +
+                        ", '" + item.getTankComprank() + "', '" + item.getDamageComprank() + "', '" + item.getSupportComprank() + "', '" + item.getCompWinrate()
+                        + "', '" + item.getCompGamesPlayed() + "', '" + item.getQuickTimePlayed() + "', '" + item.getCompTimePlayed() +
+                        "', '" + item.getQuickGamesWon() + "', '" + item.getCompGamesWon() + "', '" + item.getPlayer() + "')");
+            }
             stmt.close();
             conn.close();
         } catch (SQLException e) {
@@ -104,7 +135,7 @@ public class Overwatch {
 
     }
 
-    private static long millisToNextDay(Calendar calendar) {
+    public static long millisToNextDay(Calendar calendar) {
         int hours = calendar.get(Calendar.HOUR_OF_DAY);
         int minutes = calendar.get(Calendar.MINUTE);
         int seconds = calendar.get(Calendar.SECOND);
